@@ -1,0 +1,24 @@
+[2026-07-23 23:40:11]  Resuming from last checkpoint: C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train1\weights\last.pt
+[2026-07-23 23:40:11]  Dataset YAML  : C:\Users\Mohamed Walid\Desktop\Internship\Code\elpd_commercial.yaml
+[2026-07-23 23:40:11]  Output run    : C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train1
+[2026-07-23 23:40:11]  Epochs        : 40  |  Batch: 16  |  Imgsz: 640
+[2026-07-23 23:40:11]  ======================================================================
+[2026-07-23 23:40:30]  Training started ...
+[2026-07-23 23:40:30]  ======================================================================
+[2026-07-23 23:57:13]  Epoch  1/40  |  mAP50=0  mAP50-95=0  P=0  R=0  |  Elapsed=0:16:43  ETA=10:49:29  (~10:52:16 left)
+[2026-07-24 00:13:56]  Epoch  2/40  |  mAP50=0.9651  mAP50-95=0.8275  P=0.9743  R=0.8784  |  Elapsed=0:33:27  ETA=10:49:34  (~10:35:37 left)
+[2026-07-24 00:33:15]  Epoch  3/40  |  mAP50=0.9675  mAP50-95=0.8090  P=0.9429  R=0.8923  |  Elapsed=0:52:45  ETA=11:23:57  (~10:50:41 left)
+[2026-07-24 02:23:09]  Resuming from last checkpoint: C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train1\weights\last.pt
+[2026-07-24 02:23:09]  Dataset YAML  : C:\Users\Mohamed Walid\Desktop\Internship\Code\elpd_commercial.yaml
+[2026-07-24 02:23:09]  Output run    : C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train1
+[2026-07-24 02:23:09]  Epochs        : 40  |  Batch: 16  |  Imgsz: 640
+[2026-07-24 02:23:09]  ======================================================================
+[2026-07-24 02:23:20]  Training started ...
+[2026-07-24 02:23:20]  ======================================================================
+[2026-07-24 01:37:15]  Resuming from last checkpoint: C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train1\weights\last.pt
+[2026-07-24 01:37:15]  Dataset YAML  : C:\Users\Mohamed Walid\Desktop\Internship\Code\elpd_commercial.yaml
+[2026-07-24 01:37:15]  Output run    : C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train1
+[2026-07-24 01:37:15]  Epochs        : 40  |  Batch: 16  |  Imgsz: 640
+[2026-07-24 01:37:15]  ======================================================================
+[2026-07-24 01:37:37]  Training started ...
+[2026-07-24 01:37:37]  ======================================================================

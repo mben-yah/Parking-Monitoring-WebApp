@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PlateVision · Video Analysis</title>
+  <meta name="description" content="AI-powered license plate recognition from video — detect every plate with timestamps." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+
+  <style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #080b12;
+    --surface:   #0f1420;
+    --surface2:  #161d2e;
+    --glass:     rgba(255,255,255,0.035);
+    --border:    rgba(255,255,255,0.07);
+    --border-hi: rgba(99,179,237,0.45);
+    --accent:    #3b82f6;
+    --accent2:   #8b5cf6;
+    --success:   #10b981;
+    --warning:   #f59e0b;
+    --error:     #ef4444;
+    --text:      #e8edf8;
+    --muted:     #6b7a99;
+    --radius:    14px;
+    --shadow:    0 32px 80px rgba(0,0,0,0.7);
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+
+  /* ── Orbs ── */
+  .bg-orbs { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  .orb { position: absolute; border-radius: 50%; filter: blur(130px); opacity: 0.12; animation: float 14s ease-in-out infinite; }
+  .orb-1 { width: 700px; height: 700px; background: var(--accent);  top: -250px; left: -200px; }
+  .orb-2 { width: 550px; height: 550px; background: var(--accent2); bottom: -180px; right: -120px; animation-delay: -7s; }
+  .orb-3 { width: 350px; height: 350px; background: var(--success); top: 40%; left: 45%; animation-delay: -3.5s; opacity: 0.07; }
+  @keyframes float { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-45px) scale(1.06); } }
+
+  /* ── Layout ── */
+  .wrapper { position: relative; z-index: 1; max-width: 1040px; margin: 0 auto; padding: 48px 24px 96px; }
+
+  /* ── Header ── */
+  header { text-align: center; margin-bottom: 52px; }
+  .logo { display: inline-flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+  .logo-icon { width: 48px; height: 48px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border-radius: 14px; display: grid; place-items: center; font-size: 24px; box-shadow: 0 4px 24px rgba(59,130,246,0.45); }
+  .logo-text { font-size: 24px; font-weight: 800; background: linear-gradient(135deg, #fff 30%, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .nav-back { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); text-decoration: none; padding: 6px 14px; border: 1px solid var(--border); border-radius: 8px; transition: all 0.2s; margin-bottom: 24px; }
+  .nav-back:hover { color: var(--accent); border-color: var(--accent); }
+  h1 { font-size: clamp(28px,5vw,50px); font-weight: 800; line-height: 1.1; letter-spacing: -1.5px; margin-bottom: 14px; background: linear-gradient(135deg, #fff 50%, #64748b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .subtitle { font-size: 15px; color: var(--muted); max-width: 480px; margin: 0 auto; line-height: 1.65; }
+
+  /* ── Card ── */
+  .card { background: var(--glass); border: 1px solid var(--border); border-radius: 24px; padding: 32px; backdrop-filter: blur(24px); box-shadow: var(--shadow); margin-bottom: 20px; }
+
+  /* ── Drop Zone ── */
+  #drop-zone { border: 2px dashed var(--border); border-radius: var(--radius); padding: 56px 32px; text-align: center; cursor: pointer; transition: all 0.25s ease; user-select: none; }
+  #drop-zone:hover, #drop-zone.drag-over { border-color: var(--border-hi); background: rgba(59,130,246,0.05); transform: scale(1.005); }
+  #drop-zone.drag-over { box-shadow: 0 0 0 4px rgba(59,130,246,0.14); }
+  .drop-icon { font-size: 60px; margin-bottom: 18px; display: block; filter: drop-shadow(0 0 24px rgba(59,130,246,0.55)); animation: bob 3.5s ease-in-out infinite; }
+  @keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+  .drop-title { font-size: 19px; font-weight: 700; margin-bottom: 8px; }
+  .drop-sub { color: var(--muted); font-size: 13px; margin-bottom: 26px; }
+  #file-input { display: none; }
+  .btn-browse { display: inline-flex; align-items: center; gap: 8px; padding: 13px 30px; background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; font-size: 15px; font-weight: 600; border: none; border-radius: 10px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 22px rgba(59,130,246,0.45); }
+  .btn-browse:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(59,130,246,0.6); }
+
+  /* ── Options ── */
+  .options-row { display: flex; gap: 20px; flex-wrap: wrap; align-items: center; margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .option-group { display: flex; align-items: center; gap: 10px; }
+  .option-label { font-size: 13px; color: var(--muted); white-space: nowrap; }
+  select, input[type=range] { background: var(--surface2); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 6px 12px; font-size: 13px; cursor: pointer; outline: none; }
+  select:focus { border-color: var(--accent); }
+  #skip-val { font-size: 13px; color: var(--accent); font-weight: 600; min-width: 28px; }
+
+  .mode-toggle-group { display: flex; gap: 6px; }
+  .mode-btn {
+    padding: 6px 14px; border-radius: 8px; font-size: 13px; font-weight: 500;
+    border: 1px solid var(--border); background: transparent; color: var(--muted);
+    cursor: pointer; transition: all 0.18s; display: inline-flex; align-items: center; gap: 6px;
+  }
+  .mode-btn.active {
+    background: linear-gradient(135deg, rgba(59,130,246,0.2), rgba(139,92,246,0.2));
+    border-color: var(--accent); color: #fff; font-weight: 600;
+    box-shadow: 0 0 16px rgba(59,130,246,0.25);
+  }
+  .mode-btn:hover:not(.active) { border-color: var(--border-hi); color: var(--text); }
+
+  /* ── Video Preview ── */
+  #video-preview-wrap { display: none; margin-top: 24px; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); position: relative; background: #000; max-height: 280px; }
+  #video-preview { width: 100%; max-height: 280px; object-fit: contain; display: block; }
+  .video-meta { position: absolute; bottom: 0; left: 0; right: 0; padding: 10px 16px; background: linear-gradient(transparent, rgba(0,0,0,0.8)); font-size: 12px; color: var(--muted); display: flex; gap: 16px; }
+  .video-meta span { display: flex; align-items: center; gap: 4px; }
+
+  /* ── Analyse Button ── */
+  #analyse-btn { width: 100%; margin-top: 20px; padding: 16px; font-size: 16px; font-weight: 700; background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; border: none; border-radius: 12px; cursor: pointer; transition: all 0.25s; box-shadow: 0 4px 24px rgba(59,130,246,0.4); display: none; align-items: center; justify-content: center; gap: 10px; }
+  #analyse-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 10px 40px rgba(59,130,246,0.6); }
+  #analyse-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+  .spinner { width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.25); border-top-color:#fff; border-radius:50%; animation: spin 0.75s linear infinite; display:none; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── Progress ── */
+  #progress-wrap { display: none; margin-top: 20px; }
+  .progress-header { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+  #progress-track { height: 8px; background: var(--border); border-radius: 99px; overflow: hidden; }
+  #progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 99px; transition: width 0.3s ease; }
+  .progress-stats { display: flex; gap: 20px; margin-top: 10px; flex-wrap: wrap; }
+  .pstat { font-size: 12px; color: var(--muted); }
+  .pstat strong { color: var(--text); }
+
+  /* ── Two-column layout ── */
+  #results-layout { display: none; gap: 24px; margin-top: 0; }
+  @media (min-width: 720px) { #results-layout { display: none; grid-template-columns: 1fr 300px; } }
+  #results-layout.visible { display: grid; }
+  @media (max-width: 719px) { #results-layout.visible { display: flex; flex-direction: column; } }
+
+  /* ── Timeline ── */
+  #timeline-section { min-width: 0; }
+  .section-title { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; }
+  .btn-export { display: inline-flex; align-items: center; gap: 6px; padding: 5px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.25); color: var(--success); cursor: pointer; transition: all 0.2s; }
+  .btn-export:hover { background: rgba(16,185,129,0.18); }
+
+  #timeline { display: flex; flex-direction: column; gap: 10px; }
+
+  .tl-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; display: grid; grid-template-columns: 160px 1fr; transition: border-color 0.2s, box-shadow 0.2s; animation: slide-up 0.35s ease both; }
+  .tl-card:hover { border-color: var(--border-hi); box-shadow: 0 4px 24px rgba(0,0,0,0.4); }
+  @keyframes slide-up { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+  @media (max-width: 540px) { .tl-card { grid-template-columns: 1fr; } }
+
+  .tl-thumb { aspect-ratio: 16/9; background: #000; overflow: hidden; cursor: zoom-in; position: relative; }
+  .tl-thumb img { width:100%; height:100%; object-fit:cover; display:block; transition: transform 0.3s; }
+  .tl-thumb:hover img { transform: scale(1.06); }
+  .tl-ts { position: absolute; bottom: 6px; left: 6px; background: rgba(0,0,0,0.75); color: #fff; font-size: 11px; font-family: 'JetBrains Mono', monospace; padding: 2px 7px; border-radius: 5px; backdrop-filter: blur(4px); }
+
+  .tl-body { padding: 14px 18px; display: flex; flex-direction: column; gap: 8px; justify-content: center; }
+  .tl-plate { font-family: 'JetBrains Mono', monospace; font-size: clamp(16px,2.5vw,22px); font-weight: 700; letter-spacing: 4px; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .tl-plate.empty { font-size: 13px; background: none; -webkit-text-fill-color: var(--muted); letter-spacing: 0; }
+  .tl-conf-row { display: flex; align-items: center; gap: 8px; }
+  .tl-conf-bar { flex:1; height: 4px; background: var(--border); border-radius: 99px; overflow: hidden; }
+  .tl-conf-fill { height: 100%; border-radius: 99px; }
+  .fill-low  { background: var(--error); }
+  .fill-mid  { background: var(--warning); }
+  .fill-high { background: var(--success); }
+  .tl-conf-pct { font-size: 11px; font-weight: 600; min-width: 34px; text-align: right; }
+  .pct-low { color: var(--error); } .pct-mid { color: var(--warning); } .pct-high { color: var(--success); }
+  .tl-actions { display: flex; gap: 8px; align-items: center; margin-top: 4px; }
+  .tl-copy { padding: 3px 9px; border-radius: 6px; font-size: 11px; background: var(--glass); border: 1px solid var(--border); color: var(--muted); cursor: pointer; transition: all 0.18s; }
+  .tl-copy:hover { border-color: var(--accent); color: var(--accent); }
+  .tl-copy.copied { color: var(--success); border-color: var(--success); }
+  .tl-delete { padding: 3px 9px; border-radius: 6px; font-size: 11px; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.25); color: var(--error); cursor: pointer; transition: all 0.18s; }
+  .tl-delete:hover { background: rgba(239,68,68,0.2); border-color: var(--error); }
+
+  /* ── Unique Plates Sidebar ── */
+  #unique-section { }
+  #unique-list { display: flex; flex-direction: column; gap: 8px; }
+  .unique-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; animation: slide-up 0.3s ease; transition: border-color 0.2s; }
+  .unique-card:hover { border-color: var(--border-hi); }
+  .uc-plate { font-family: 'JetBrains Mono', monospace; font-size: 20px; font-weight: 700; letter-spacing: 4px; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom: 6px; }
+  .uc-meta { display: flex; gap: 10px; flex-wrap: wrap; }
+  .uc-badge { font-size: 11px; padding: 2px 8px; border-radius: 6px; background: var(--glass); border: 1px solid var(--border); color: var(--muted); }
+  .uc-badge strong { color: var(--text); }
+
+  /* ── Empty state ── */
+  .empty-state { text-align: center; padding: 40px 20px; color: var(--muted); font-size: 14px; }
+  .empty-icon { font-size: 40px; margin-bottom: 12px; opacity: 0.4; }
+
+  /* ── Lightbox ── */
+  #lightbox { display: none; position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.92); backdrop-filter: blur(10px); align-items: center; justify-content: center; cursor: zoom-out; animation: fade-in 0.2s ease; }
+  #lightbox.open { display: flex; }
+  @keyframes fade-in { from{opacity:0} to{opacity:1} }
+  #lightbox img { max-width: 92vw; max-height: 88vh; object-fit: contain; border-radius: 12px; box-shadow: 0 32px 100px rgba(0,0,0,0.8); }
+  #lightbox-close { position: absolute; top: 20px; right: 24px; font-size: 28px; color: #fff; cursor: pointer; opacity: 0.6; background: none; border: none; transition: opacity 0.2s; }
+  #lightbox-close:hover { opacity: 1; }
+
+  /* ── Toast ── */
+  #toast { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(60px); background: var(--surface2); border: 1px solid var(--border); padding: 12px 24px; border-radius: 10px; font-size: 14px; box-shadow: 0 8px 32px rgba(0,0,0,0.5); transition: transform 0.3s, opacity 0.3s; opacity: 0; z-index: 9999; pointer-events: none; }
+  #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+  /* ── Footer ── */
+  footer { text-align: center; margin-top: 72px; color: var(--muted); font-size: 13px; line-height: 2; }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  /* ── Scanning line animation on video thumb ── */
+  @keyframes scan { 0%{top:0} 100%{top:100%} }
+  .scanning::after { content:''; position:absolute; left:0; right:0; height:2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); animation: scan 1.2s linear infinite; }
+  </style>
+</head>
+<body>
+
+<div class="bg-orbs">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+
+<!-- Lightbox -->
+<div id="lightbox" role="dialog" aria-label="Frame viewer">
+  <button id="lightbox-close" aria-label="Close">✕</button>
+  <img id="lightbox-img" src="" alt="Detected plate frame" />
+</div>
+
+<!-- Toast -->
+<div id="toast" role="status" aria-live="polite"></div>
+
+<div class="wrapper">
+
+  <!-- Header -->
+  <header>
+    <a class="nav-back" href="/">← Back to Image Mode</a>
+    <div class="logo">
+      <div class="logo-icon">🎥</div>
+      <span class="logo-text">PlateVision</span>
+    </div>
+    <h1>Video Plate Analysis</h1>
+    <p class="subtitle">Upload a dashcam or surveillance video — our AI scans every frame and extracts all licence plates with timestamps.</p>
+  </header>
+
+  <!-- Upload Card -->
+  <div class="card">
+    <div id="drop-zone" role="button" tabindex="0" aria-label="Drop a video or click to browse">
+      <span class="drop-icon">🎬</span>
+      <p class="drop-title">Drag &amp; drop your video here</p>
+      <p class="drop-sub">MP4 · AVI · MOV · MKV · WebM · WMV</p>
+      <label for="file-input">
+        <span class="btn-browse">📂 &nbsp;Browse Video</span>
+      </label>
+      <input id="file-input" type="file" accept="video/*" />
+    </div>
+
+    <!-- Video preview -->
+    <div id="video-preview-wrap">
+      <video id="video-preview" controls muted playsinline></video>
+      <div class="video-meta">
+        <span>⏱ <span id="v-duration">—</span></span>
+        <span>📐 <span id="v-size">—</span></span>
+        <span>🎞 <span id="v-name">—</span></span>
+      </div>
+    </div>
+
+    <!-- Options -->
+    <div class="options-row">
+      <div class="option-group" style="align-items:center;">
+        <span class="option-label">Mode:</span>
+        <div class="mode-toggle-group" id="mode-group">
+          <button class="mode-btn active" id="mode-en" data-mode="english" type="button">
+            &#127468;&#127463; English Plates
+          </button>
+          <button class="mode-btn" id="mode-ar" data-mode="arabic" type="button">
+            &#127474;&#127462; Moroccan Plates
+          </button>
+        </div>
+        <span id="model-badge" style="font-size:11px;color:var(--success);background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);padding:4px 10px;border-radius:6px;margin-left:4px;">
+          &#127919; English YOLO &mdash; Auto best model
+        </span>
+      </div>
+      <div class="option-group">
+        <span class="option-label">OCR engine:</span>
+        <select id="engine-select">
+          <option value="paddleocr_ar">PaddleOCR / Fast-Plate</option>
+          <option value="easyocr_ar">EasyOCR Arabic</option>
+          <option value="easyocr_ar_en">EasyOCR Ar+En</option>
+        </select>
+      </div>
+      <div class="option-group">
+        <span class="option-label">Sample every</span>
+        <input type="range" id="skip-slider" min="5" max="60" value="15" step="5" style="width:110px" />
+        <span id="skip-val">15</span>
+        <span class="option-label">frames</span>
+      </div>
+      <div class="option-group" style="align-items:center;">
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;font-weight:600;color:var(--text);user-select:none;">
+          <input type="checkbox" id="save-db-check" checked style="width:16px;height:16px;accent-color:var(--accent);cursor:pointer;" />
+          <span>💾 Save Detections to DB</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Progress -->
+    <div id="progress-wrap">
+      <div class="progress-header">
+        <span id="progress-text">Analysing…</span>
+        <span id="progress-pct">0%</span>
+      </div>
+      <div id="progress-track"><div id="progress-fill"></div></div>
+      <div class="progress-stats">
+        <div class="pstat">Frame: <strong id="pstat-frame">0</strong></div>
+        <div class="pstat">Timestamp: <strong id="pstat-ts">0.00s</strong></div>
+        <div class="pstat">Plates found: <strong id="pstat-found">0</strong></div>
+      </div>
+    </div>
+
+    <!-- Analyse button -->
+    <button id="analyse-btn" aria-label="Start video analysis">
+      <div class="spinner" id="spinner"></div>
+      <span id="btn-label">⚡ &nbsp;Analyse Video</span>
+    </button>
+  </div>
+
+  <!-- Results (two-column) -->
+  <div id="results-layout">
+
+    <!-- Left: Timeline -->
+    <div id="timeline-section">
+      <div class="section-title">
+        Timeline
+        <button class="btn-export" id="export-btn">⬇ Export CSV</button>
+      </div>
+      <div id="timeline">
+        <div class="empty-state">
+          <div class="empty-icon">🎞</div>
+          Detected plates will appear here as the video is scanned.
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Unique plates -->
+    <div id="unique-section">
+      <div class="section-title">Unique Plates</div>
+      <div id="unique-list">
+        <div class="empty-state">
+          <div class="empty-icon">🔢</div>
+          Unique plates summary will appear here.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    Powered by <a href="https://github.com/ultralytics/ultralytics" target="_blank">YOLOv8</a> &amp; <a href="https://github.com/PaddlePaddle/PaddleOCR" target="_blank">PaddleOCR</a> &nbsp;·&nbsp; PlateVision Video
+  </footer>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════════════
+   STATE
+══════════════════════════════════════════════════════ */
+let selectedVideo = null;
+let timelineData  = [];   // for CSV export
+let eventSource   = null;
+let currentMode   = 'english';
+
+/* ══════════════════════════════════════════════════════
+   DOM REFS
+══════════════════════════════════════════════════════ */
+const dropZone       = document.getElementById('drop-zone');
+const fileInput      = document.getElementById('file-input');
+const videoPreview   = document.getElementById('video-preview');
+const videoWrap      = document.getElementById('video-preview-wrap');
+const analyseBtn     = document.getElementById('analyse-btn');
+const spinner        = document.getElementById('spinner');
+const btnLabel       = document.getElementById('btn-label');
+const progressWrap   = document.getElementById('progress-wrap');
+const progressFill   = document.getElementById('progress-fill');
+const progressText   = document.getElementById('progress-text');
+const progressPct    = document.getElementById('progress-pct');
+const pstatFrame     = document.getElementById('pstat-frame');
+const pstatTs        = document.getElementById('pstat-ts');
+const pstatFound     = document.getElementById('pstat-found');
+const skipSlider     = document.getElementById('skip-slider');
+const skipVal        = document.getElementById('skip-val');
+const timeline       = document.getElementById('timeline');
+const uniqueList     = document.getElementById('unique-list');
+const resultsLayout  = document.getElementById('results-layout');
+const exportBtn      = document.getElementById('export-btn');
+const lightbox       = document.getElementById('lightbox');
+const lightboxImg    = document.getElementById('lightbox-img');
+const lightboxClose  = document.getElementById('lightbox-close');
+const toastEl        = document.getElementById('toast');
+const modeBtnEn      = document.getElementById('mode-en');
+const modeBtnAr      = document.getElementById('mode-ar');
+const modelBadge     = document.getElementById('model-badge');
+
+/* ── Mode selector ── */
+if (modeBtnEn && modeBtnAr) {
+  modeBtnEn.addEventListener('click', () => {
+    currentMode = 'english';
+    modeBtnEn.classList.add('active');
+    modeBtnAr.classList.remove('active');
+    modelBadge.innerHTML = '🎯 English YOLO &mdash; Auto best model';
+  });
+  modeBtnAr.addEventListener('click', () => {
+    currentMode = 'arabic';
+    modeBtnAr.classList.add('active');
+    modeBtnEn.classList.remove('active');
+    modelBadge.innerHTML = '🎯 Moroccan YOLO &mdash; Auto best model';
+  });
+}
+
+/* ── Slider label ── */
+skipSlider.addEventListener('input', () => { skipVal.textContent = skipSlider.value; });
+
+/* ══════════════════════════════════════════════════════
+   DRAG & DROP
+══════════════════════════════════════════════════════ */
+['dragenter','dragover'].forEach(e =>
+  dropZone.addEventListener(e, ev => { ev.preventDefault(); dropZone.classList.add('drag-over'); })
+);
+['dragleave','drop'].forEach(e =>
+  dropZone.addEventListener(e, ev => { ev.preventDefault(); dropZone.classList.remove('drag-over'); })
+);
+dropZone.addEventListener('drop', ev => loadVideo(ev.dataTransfer.files[0]));
+dropZone.addEventListener('keydown', e => { if (e.key==='Enter'||e.key===' ') fileInput.click(); });
+fileInput.addEventListener('change', () => { if (fileInput.files[0]) loadVideo(fileInput.files[0]); fileInput.value=''; });
+
+function loadVideo(file) {
+  if (!file || !file.type.startsWith('video/')) { showToast('⚠️ Please select a video file.'); return; }
+  selectedVideo = file;
+
+  const url = URL.createObjectURL(file);
+  videoPreview.src = url;
+  videoPreview.load();
+  videoWrap.style.display = 'block';
+  analyseBtn.style.display = 'flex';
+
+  document.getElementById('v-name').textContent = truncate(file.name, 28);
+  document.getElementById('v-size').textContent = formatBytes(file.size);
+
+  videoPreview.addEventListener('loadedmetadata', () => {
+    document.getElementById('v-duration').textContent = formatTime(videoPreview.duration);
+  }, { once: true });
+}
+
+/* ══════════════════════════════════════════════════════
+   ANALYSE
+══════════════════════════════════════════════════════ */
+analyseBtn.addEventListener('click', startAnalysis);
+
+async function startAnalysis() {
+  if (!selectedVideo) return;
+  if (eventSource) { eventSource.close(); eventSource = null; }
+
+  // Reset UI
+  analyseBtn.disabled = true;
+  spinner.style.display = 'block';
+  btnLabel.textContent = 'Analysing…';
+  progressWrap.style.display = 'block';
+  setProgress(0);
+  pstatFound.textContent = '0';
+
+  timeline.innerHTML = '<div class="empty-state"><div class="empty-icon" style="animation:bob 1.2s ease-in-out infinite">🔍</div>Scanning frames…</div>';
+  uniqueList.innerHTML = '';
+  resultsLayout.classList.add('visible');
+  timelineData = [];
+  let firstResult = true;
+
+  // Build FormData
+  const form = new FormData();
+  form.append('video', selectedVideo);
+  form.append('mode', currentMode);
+  form.append('frame_skip', skipSlider.value);
+  form.append('engine', document.getElementById('engine-select').value);
+  form.append('save_db', document.getElementById('save-db-check').checked ? 'true' : 'false');
+
+  // POST to get SSE stream
+  // We use fetch + ReadableStream to handle SSE manually
+  const resp = await fetch('/predict_video', { method: 'POST', body: form });
+  if (!resp.ok) {
+    const err = await resp.json().catch(() => ({ error: 'Server error' }));
+    showToast('❌ ' + (err.error || 'Server error'));
+    resetBtn();
+    return;
+  }
+
+  const reader = resp.body.getReader();
+  const decoder = new TextDecoder();
+  let buf = '';
+
+  async function pump() {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buf += decoder.decode(value, { stream: true });
+      // Parse SSE lines
+      let lines = buf.split('\n');
+      buf = lines.pop(); // keep incomplete line
+      for (const line of lines) {
+        if (line.startsWith('data: ')) {
+          try {
+            const evt = JSON.parse(line.slice(6));
+            handleEvent(evt, { firstResult: () => { if (firstResult) { timeline.innerHTML=''; firstResult=false; } } });
+          } catch (_) {}
+        }
+      }
+    }
+    resetBtn();
+  }
+
+  pump().catch(err => {
+    showToast('❌ Stream error: ' + err.message);
+    resetBtn();
+  });
+}
+
+function handleEvent(evt, { firstResult }) {
+  if (evt.type === 'meta') {
+    progressText.textContent = `Video: ${formatTime(evt.duration)} · ${evt.total_frames} frames`;
+  }
+  else if (evt.type === 'progress') {
+    setProgress(evt.pct);
+    pstatFrame.textContent = evt.frame;
+    pstatTs.textContent    = evt.timestamp_s + 's';
+    progressPct.textContent = evt.pct.toFixed(1) + '%';
+  }
+  else if (evt.type === 'plate') {
+    firstResult();
+    appendTimelineCard(evt);
+    pstatFound.textContent = parseInt(pstatFound.textContent || '0') + 1;
+    timelineData.push(evt);
+  }
+  else if (evt.type === 'done') {
+    setProgress(100);
+    progressText.textContent = '✅ Done!';
+    progressPct.textContent  = '100%';
+    renderUniquePlates(evt.unique_plates);
+    
+    if (evt.unique_plates && evt.unique_plates.length > 0) {
+      // Clear noisy intermediate frame cards and show ONLY the clean character-voted consensus cards
+      timeline.innerHTML = '';
+      cardCount = 0;
+      
+      const summaryBanner = document.createElement('div');
+      summaryBanner.className = 'summary-box';
+      summaryBanner.style.marginBottom = '20px';
+      summaryBanner.style.background = 'rgba(16,185,129,0.08)';
+      summaryBanner.style.borderColor = 'rgba(16,185,129,0.3)';
+      summaryBanner.innerHTML = `
+        <h4 style="color:#10b981;font-size:15px;">🎯 Character-Level Majority Consensus Active</h4>
+        <p style="color:#9ca3af;font-size:12px;margin-top:4px;">
+          Showing <strong>${evt.unique_plates.length}</strong> unique consensus plate(s). Raw frame-by-frame OCR fluctuations have been filtered out.
+        </p>`;
+      timeline.appendChild(summaryBanner);
+
+      evt.unique_plates.forEach(p => {
+        appendConsensusCard(p);
+      });
+    } else if (timelineData.length === 0) {
+      timeline.innerHTML = '<div class="empty-state"><div class="empty-icon">🚫</div>No plates detected in this video.</div>';
+    }
+  }
+  else if (evt.type === 'error') {
+    showToast('❌ ' + evt.message);
+    resetBtn();
+  }
+}
+
+/* ══════════════════════════════════════════════════════
+   APPEND TIMELINE CARD
+══════════════════════════════════════════════════════ */
+function confClass(conf) {
+  if (conf >= 0.75) return 'high';
+  if (conf >= 0.4)  return 'mid';
+  return 'low';
+}
+
+let cardCount = 0;
+function appendTimelineCard(evt) {
+  const card = document.createElement('div');
+  card.className = 'tl-card';
+  card.style.animationDelay = `${Math.min(cardCount++ * 0.05, 0.3)}s`;
+
+  const plate = evt.plate_text || '';
+  const conf  = evt.confidence != null ? evt.confidence : null;
+  const pct   = conf != null ? (conf * 100).toFixed(1) : null;
+  const cls   = pct ? confClass(conf) : 'mid';
+
+  const confBar = pct ? `
+    <div class="tl-conf-row">
+      <div class="tl-conf-bar"><div class="tl-conf-fill fill-${cls}" style="width:${pct}%"></div></div>
+      <span class="tl-conf-pct pct-${cls}">${pct}%</span>
+    </div>` : '';
+
+  card.innerHTML = `
+    <div class="tl-thumb" role="button" tabindex="0" aria-label="Expand frame">
+      <img src="${evt.annotated_b64}" alt="Frame at ${evt.timestamp_s}s" loading="lazy" />
+      <span class="tl-ts">⏱ ${formatTime(evt.timestamp_s)}</span>
+    </div>
+    <div class="tl-body">
+      ${plate
+        ? `<div class="tl-plate">${escHtml(plate)}</div>`
+        : `<div class="tl-plate empty">No plate text</div>`}
+      ${confBar}
+      <div class="tl-actions">
+        ${plate ? `<button class="tl-copy" data-text="${escHtml(plate)}">📋 Copy</button>` : ''}
+        <button class="tl-delete" title="Delete this detection">🗑 Delete</button>
+      </div>
+    </div>`;
+
+  // Lightbox
+  const thumb = card.querySelector('.tl-thumb');
+  thumb.addEventListener('click', () => openLightbox(evt.annotated_b64));
+  thumb.addEventListener('keydown', e => { if(e.key==='Enter') openLightbox(evt.annotated_b64); });
+
+  // Copy
+  const copyBtn = card.querySelector('.tl-copy');
+  if (copyBtn) {
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(copyBtn.dataset.text).then(() => {
+        copyBtn.textContent = '✓ Copied!';
+        copyBtn.classList.add('copied');
+        setTimeout(() => { copyBtn.textContent = '📋 Copy'; copyBtn.classList.remove('copied'); }, 2000);
+      });
+    });
+  }
+
+  // Delete
+  const delBtn = card.querySelector('.tl-delete');
+  if (delBtn) {
+    delBtn.addEventListener('click', () => {
+      if (!confirm(`Delete detection "${evt.plate_text || 'this card'}"?`)) return;
+
+      if (evt.db_id) {
+        fetch(`/db/detections/${encodeURIComponent(evt.db_id)}`, { method: 'DELETE' }).catch(() => {});
+      }
+
+      card.style.opacity = '0';
+      card.style.transform = 'scale(0.95)';
+      card.style.transition = 'all 0.22s ease';
+      setTimeout(() => {
+        card.remove();
+        timelineData = timelineData.filter(item => item !== evt);
+        const countEl = document.getElementById('pstat-found');
+        if (countEl) {
+          const curr = parseInt(countEl.textContent || '0');
+          if (curr > 0) countEl.textContent = curr - 1;
+        }
+        showToast('🗑 Detection deleted');
+      }, 220);
+    });
+  }
+
+  timeline.appendChild(card);
+  card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+/* ══════════════════════════════════════════════════════
+   APPEND CONSENSUS CARD (Clean Character Voted Output)
+══════════════════════════════════════════════════════ */
+function appendConsensusCard(p) {
+  const card = document.createElement('div');
+  card.className = 'tl-card';
+  card.style.animationDelay = `${Math.min(cardCount++ * 0.05, 0.3)}s`;
+
+  const plate = p.plate_text || '';
+  const conf  = p.confidence != null ? p.confidence : 0.85;
+  const pct   = (conf * 100).toFixed(1);
+  const cls   = confClass(conf);
+
+  const thumbHtml = p.annotated_b64 ? `
+    <div class="tl-thumb" role="button" tabindex="0" aria-label="Expand frame">
+      <img src="${p.annotated_b64}" alt="${escHtml(plate)}" loading="lazy" />
+      <span class="tl-ts">⏱ ${formatTime(p.first_seen || 0)}</span>
+    </div>` : '';
+
+  card.innerHTML = `
+    ${thumbHtml}
+    <div class="tl-body">
+      <div class="tl-plate">${escHtml(plate)}</div>
+      <div style="display:flex;gap:8px;align-items:center;margin:6px 0;">
+        <span class="uc-badge" style="background:rgba(59,130,246,0.15);color:#3b82f6;border:1px solid rgba(59,130,246,0.3);">
+          👁 <strong>${p.count}</strong> frame reads
+        </span>
+        <span class="uc-badge" style="background:rgba(255,255,255,0.06);color:#9ca3af;">
+          ⏱ <strong>${formatTime(p.first_seen || 0)} - ${formatTime(p.last_seen || 0)}</strong>
+        </span>
+      </div>
+      <div class="tl-conf-row">
+        <div class="tl-conf-bar"><div class="tl-conf-fill fill-${cls}" style="width:${pct}%"></div></div>
+        <span class="tl-conf-pct pct-${cls}">${pct}%</span>
+      </div>
+      <div class="tl-actions">
+        ${plate ? `<button class="tl-copy" data-text="${escHtml(plate)}">📋 Copy Plate</button>` : ''}
+        ${p.db_id ? `<button class="tl-delete" title="Delete from DB">🗑 Delete</button>` : ''}
+      </div>
+    </div>`;
+
+  if (p.annotated_b64) {
+    const thumb = card.querySelector('.tl-thumb');
+    if (thumb) {
+      thumb.addEventListener('click', () => openLightbox(p.annotated_b64));
+    }
+  }
+
+  const copyBtn = card.querySelector('.tl-copy');
+  if (copyBtn) {
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(copyBtn.dataset.text).then(() => {
+        copyBtn.textContent = '✓ Copied!';
+        copyBtn.classList.add('copied');
+        setTimeout(() => { copyBtn.textContent = '📋 Copy Plate'; copyBtn.classList.remove('copied'); }, 2000);
+      });
+    });
+  }
+
+  const delBtn = card.querySelector('.tl-delete');
+  if (delBtn) {
+    delBtn.addEventListener('click', () => {
+      if (!confirm(`Delete consensus record "${plate}"?`)) return;
+      if (p.db_id) {
+        fetch(`/db/detections/${encodeURIComponent(p.db_id)}`, { method: 'DELETE' }).catch(() => {});
+      }
+      card.remove();
+      showToast('🗑 Detection deleted');
+    });
+  }
+
+  timeline.appendChild(card);
+}
+
+/* ══════════════════════════════════════════════════════
+   UNIQUE PLATES SIDEBAR
+══════════════════════════════════════════════════════ */
+function renderUniquePlates(plates) {
+  if (!plates || plates.length === 0) {
+    uniqueList.innerHTML = '<div class="empty-state"><div class="empty-icon">🚫</div>None found.</div>';
+    return;
+  }
+  uniqueList.innerHTML = '';
+  plates.forEach(p => {
+    const uc = document.createElement('div');
+    uc.className = 'unique-card';
+    uc.innerHTML = `
+      <div class="uc-plate">${escHtml(p.plate_text)}</div>
+      <div class="uc-meta">
+        <span class="uc-badge">👁 <strong>${p.count}</strong> detections</span>
+        <span class="uc-badge">⏱ <strong>${formatTime(p.first_seen)}</strong></span>
+      </div>`;
+    uniqueList.appendChild(uc);
+  });
+}
+
+/* ══════════════════════════════════════════════════════
+   EXPORT CSV
+══════════════════════════════════════════════════════ */
+exportBtn.addEventListener('click', () => {
+  if (timelineData.length === 0) { showToast('Nothing to export yet.'); return; }
+  const header = 'frame,timestamp_s,plate_text,confidence,bbox\n';
+  const rows = timelineData.map(r =>
+    `${r.frame},${r.timestamp_s},"${(r.plate_text||'').replace(/"/g,'""')}",${r.confidence!=null?r.confidence.toFixed(4):''},"${(r.bbox||[]).join(' ')}"`
+  ).join('\n');
+  const blob = new Blob([header + rows], { type: 'text/csv' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'plate_timeline.csv';
+  a.click();
+  showToast('✅ CSV exported!');
+});
+
+/* ══════════════════════════════════════════════════════
+   PROGRESS
+══════════════════════════════════════════════════════ */
+function setProgress(pct) {
+  progressFill.style.width = Math.min(pct, 100) + '%';
+}
+
+/* ══════════════════════════════════════════════════════
+   RESET
+══════════════════════════════════════════════════════ */
+function resetBtn() {
+  analyseBtn.disabled = false;
+  spinner.style.display = 'none';
+  btnLabel.textContent = '⚡ Analyse Video';
+}
+
+/* ══════════════════════════════════════════════════════
+   LIGHTBOX
+══════════════════════════════════════════════════════ */
+function openLightbox(src) { lightboxImg.src = src; lightbox.classList.add('open'); document.body.style.overflow='hidden'; }
+function closeLightbox() { lightbox.classList.remove('open'); document.body.style.overflow=''; }
+lightboxClose.addEventListener('click', closeLightbox);
+lightbox.addEventListener('click', e => { if(e.target===lightbox) closeLightbox(); });
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeLightbox(); });
+
+/* ══════════════════════════════════════════════════════
+   TOAST
+══════════════════════════════════════════════════════ */
+let toastTimer;
+function showToast(msg, dur=3000) {
+  toastEl.textContent = msg;
+  toastEl.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toastEl.classList.remove('show'), dur);
+}
+
+/* ══════════════════════════════════════════════════════
+   UTILS
+══════════════════════════════════════════════════════ */
+function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function truncate(s, n) { return s.length > n ? s.slice(0, n-1) + '…' : s; }
+function formatBytes(b) { if(b<1024) return b+'B'; if(b<1048576) return (b/1024).toFixed(1)+'KB'; return (b/1048576).toFixed(1)+'MB'; }
+function formatTime(s) {
+  if (s == null) return '—';
+  const m = Math.floor(s/60), sec = Math.floor(s%60);
+  return m > 0 ? `${m}:${String(sec).padStart(2,'0')}` : `${s.toFixed ? s.toFixed(2) : s}s`;
+}
+</script>
+</body>
+</html>

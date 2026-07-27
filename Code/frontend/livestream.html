@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PlateVision — Live Stream</title>
+  <meta name="description" content="Real-time license plate recognition from IP Webcam with MongoDB storage" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+
+<style>
+:root {
+  --bg:         #0a0d12;
+  --surface:    #111520;
+  --card:       #161c28;
+  --border:     rgba(255,255,255,0.08);
+  --border-hi:  rgba(255,255,255,0.18);
+  --text:       #e8ecf4;
+  --muted:      #6b7280;
+  --accent:     #3b82f6;
+  --accent2:    #8b5cf6;
+  --success:    #10b981;
+  --warning:    #f59e0b;
+  --error:      #ef4444;
+  --glass:      rgba(255,255,255,0.04);
+  --radius:     14px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── Background glow ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 10%, rgba(59,130,246,0.10) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 35% at 80% 80%, rgba(139,92,246,0.09) 0%, transparent 60%);
+}
+
+/* ── Nav ── */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; gap: 14px;
+  padding: 0 28px; height: 58px;
+  background: rgba(10,13,18,0.85);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 17px; text-decoration: none; color: var(--text); }
+.nav-logo .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 10px var(--accent); }
+.nav-links { display: flex; gap: 6px; margin-left: 8px; }
+.nav-link {
+  font-size: 13px; padding: 5px 13px; border-radius: 8px;
+  color: var(--muted); text-decoration: none; transition: all 0.2s;
+  border: 1px solid transparent;
+}
+.nav-link:hover { color: var(--text); border-color: var(--border); }
+.nav-link.active { color: var(--text); background: var(--glass); border-color: var(--border-hi); }
+.nav-spacer { flex: 1; }
+/* Supervisor button in nav */
+.supervisor-btn {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 13px; font-weight: 600; padding: 5px 14px;
+  border-radius: 9px; text-decoration: none;
+  background: rgba(239,68,68,0.1);
+  border: 1px solid rgba(239,68,68,0.3);
+  color: #ef4444;
+  transition: all 0.2s;
+  margin-right: 8px;
+}
+.supervisor-btn:hover {
+  background: rgba(239,68,68,0.2);
+  border-color: rgba(239,68,68,0.5);
+  box-shadow: 0 0 14px rgba(239,68,68,0.25);
+  transform: translateY(-1px);
+}
+.supervisor-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #ef4444;
+  animation: sv-pulse 1.6s ease-in-out infinite;
+}
+@keyframes sv-pulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.6); }
+  50%      { box-shadow: 0 0 0 5px rgba(239,68,68,0); }
+}
+.status-pill {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 12px; font-weight: 600; padding: 4px 12px;
+  border-radius: 20px; border: 1px solid var(--border);
+  background: var(--glass); color: var(--muted);
+  transition: all 0.3s;
+}
+.status-pill .dot-live { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); }
+.status-pill.live { color: var(--success); border-color: rgba(16,185,129,0.3); background: rgba(16,185,129,0.08); }
+.status-pill.live .dot-live { background: var(--success); animation: pulse-dot 1.2s ease-in-out infinite; }
+@keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(0.7)} }
+
+/* ── Layout ── */
+.page { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; padding: 28px 24px 60px; }
+
+.page-header { margin-bottom: 24px; }
+.page-header h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; }
+.page-header p { color: var(--muted); font-size: 14px; margin-top: 4px; }
+
+/* ── Device config card ── */
+.device-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px 24px;
+  margin-bottom: 22px;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 12px;
+}
+.device-label { font-size: 13px; font-weight: 600; color: var(--muted); min-width: 60px; }
+.device-input {
+  flex: 1; min-width: 220px;
+  background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+  border-radius: 9px; padding: 8px 14px; font-family: 'JetBrains Mono', monospace;
+  font-size: 13px; color: var(--text); outline: none; transition: border-color 0.2s;
+}
+.device-input:focus { border-color: var(--accent); }
+.device-name-input {
+  width: 160px;
+  background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+  border-radius: 9px; padding: 8px 12px;
+  font-size: 13px; color: var(--text); outline: none; transition: border-color 0.2s;
+}
+.device-name-input:focus { border-color: var(--accent); }
+.btn-connect {
+  padding: 9px 24px; border-radius: 10px; border: none; cursor: pointer;
+  font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff; transition: all 0.2s; box-shadow: 0 2px 14px rgba(59,130,246,0.35);
+}
+.btn-connect:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(59,130,246,0.5); }
+.btn-connect:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.btn-disconnect {
+  padding: 9px 20px; border-radius: 10px; border: 1px solid rgba(239,68,68,0.3);
+  background: rgba(239,68,68,0.08); color: var(--error);
+  font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s;
+}
+.btn-disconnect:hover { background: rgba(239,68,68,0.15); }
+.help-text { font-size: 11px; color: var(--muted); margin-left: 4px; }
+
+/* ── Main grid ── */
+.main-grid {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+@media (max-width: 900px) { .main-grid { grid-template-columns: 1fr; } }
+
+/* ── Video panel ── */
+.video-panel {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden;
+  position: relative;
+}
+.video-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 18px; border-bottom: 1px solid var(--border);
+}
+.video-header h3 { font-size: 14px; font-weight: 600; }
+.video-stats { display: flex; gap: 14px; }
+.vstat { font-size: 12px; color: var(--muted); }
+.vstat span { color: var(--text); font-weight: 600; }
+.video-wrap {
+  position: relative; background: #000;
+  display: flex; align-items: center; justify-content: center;
+  min-height: 340px;
+}
+#stream-img {
+  width: 100%; height: 100%; object-fit: contain; display: block;
+  max-height: 480px;
+}
+.video-placeholder {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 12px; color: var(--muted);
+}
+.video-placeholder .icon { font-size: 40px; opacity: 0.5; }
+.video-placeholder p { font-size: 13px; }
+
+/* ── Detection log ── */
+.log-panel {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); display: flex; flex-direction: column;
+  max-height: 540px;
+}
+.log-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 18px; border-bottom: 1px solid var(--border); flex-shrink: 0;
+}
+.log-header h3 { font-size: 14px; font-weight: 600; }
+.btn-clear-log {
+  font-size: 11px; color: var(--muted); background: none; border: none;
+  cursor: pointer; padding: 3px 8px; border-radius: 6px;
+  transition: color 0.2s;
+}
+.btn-clear-log:hover { color: var(--error); }
+#detection-log {
+  flex: 1; overflow-y: auto; padding: 10px 14px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+#detection-log::-webkit-scrollbar { width: 4px; }
+#detection-log::-webkit-scrollbar-thumb { background: var(--border-hi); border-radius: 2px; }
+.log-item {
+  background: var(--glass); border: 1px solid var(--border);
+  border-radius: 10px; padding: 10px 14px;
+  animation: slideIn 0.25s ease;
+}
+@keyframes slideIn { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+.log-plate {
+  font-family: 'JetBrains Mono', monospace; font-size: 18px; font-weight: 700;
+  color: var(--text); letter-spacing: 1px;
+}
+.log-meta { display: flex; gap: 10px; margin-top: 5px; flex-wrap: wrap; }
+.log-chip {
+  font-size: 10px; padding: 2px 8px; border-radius: 5px;
+  background: rgba(255,255,255,0.06); color: var(--muted); border: 1px solid var(--border);
+}
+.log-chip.conf-high { color: var(--success); border-color: rgba(16,185,129,0.3); background: rgba(16,185,129,0.07); }
+.log-chip.conf-mid  { color: var(--warning); border-color: rgba(245,158,11,0.3); background: rgba(245,158,11,0.07); }
+.log-chip.conf-low  { color: var(--error);   border-color: rgba(239,68,68,0.3);   background: rgba(239,68,68,0.07); }
+.log-thumb { width: 100%; border-radius: 7px; margin-top: 8px; object-fit: cover; max-height: 80px; cursor: pointer; }
+.log-empty { color: var(--muted); font-size: 13px; text-align: center; padding: 30px 0; }
+
+/* ── Stats bar ── */
+.stats-row {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
+  margin-bottom: 24px;
+}
+.stat-tile {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 18px 20px; text-align: center;
+}
+.stat-num { font-size: 28px; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+.stat-lbl { font-size: 11px; color: var(--muted); margin-top: 3px; text-transform: uppercase; letter-spacing: 0.5px; }
+.blue   { color: var(--accent); }
+.green  { color: var(--success); }
+.yellow { color: var(--warning); }
+.purple { color: var(--accent2); }
+
+/* ── History table ── */
+.history-panel {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden;
+}
+.history-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px; border-bottom: 1px solid var(--border);
+}
+.history-header h3 { font-size: 15px; font-weight: 600; }
+.btn-refresh {
+  font-size: 12px; padding: 5px 14px; border-radius: 8px;
+  background: var(--glass); border: 1px solid var(--border);
+  color: var(--muted); cursor: pointer; transition: all 0.2s;
+}
+.btn-refresh:hover { color: var(--text); border-color: var(--border-hi); }
+.btn-export-csv {
+  font-size: 12px; padding: 5px 14px; border-radius: 8px;
+  background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.25);
+  color: var(--accent); cursor: pointer; transition: all 0.2s;
+}
+.btn-export-csv:hover { background: rgba(59,130,246,0.2); }
+.history-actions { display: flex; gap: 8px; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+thead th {
+  text-align: left; padding: 11px 16px;
+  border-bottom: 1px solid var(--border);
+  color: var(--muted); font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
+}
+tbody tr { border-bottom: 1px solid rgba(255,255,255,0.04); transition: background 0.15s; }
+tbody tr:hover { background: rgba(255,255,255,0.03); }
+tbody td { padding: 10px 16px; }
+.td-plate { font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: 14px; }
+.td-source { font-size: 11px; }
+.badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 10px; padding: 2px 8px; border-radius: 5px;
+  font-weight: 600;
+}
+.badge-ls  { background: rgba(59,130,246,0.1); color: var(--accent); border: 1px solid rgba(59,130,246,0.25); }
+.badge-img { background: rgba(16,185,129,0.1); color: var(--success); border: 1px solid rgba(16,185,129,0.25); }
+.badge-vid { background: rgba(245,158,11,0.1); color: var(--warning); border: 1px solid rgba(245,158,11,0.25); }
+#history-body td { vertical-align: middle; }
+.no-data { padding: 32px; text-align: center; color: var(--muted); font-size: 13px; }
+
+/* ── Toast ── */
+.toast {
+  position: fixed; bottom: 24px; right: 24px; z-index: 999;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 12px 18px;
+  font-size: 13px; box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+  animation: toastIn 0.3s ease;
+  display: none;
+}
+.toast.show { display: block; }
+@keyframes toastIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── Lightbox ── */
+#lightbox {
+  display: none; position: fixed; inset: 0; z-index: 999;
+  background: rgba(0,0,0,0.88); align-items: center; justify-content: center;
+  cursor: zoom-out;
+}
+#lightbox.open { display: flex; }
+#lightbox img { max-width: 90vw; max-height: 85vh; border-radius: 10px; box-shadow: 0 20px 60px rgba(0,0,0,0.7); }
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav class="nav">
+  <a class="nav-logo" href="/">
+    <span class="dot"></span> PlateVision
+  </a>
+  <div class="nav-links">
+    <a class="nav-link" href="/">📷 Images</a>
+    <a class="nav-link active" href="/livestream">📡 Live Stream</a>
+    <a class="nav-link" href="/video">🎞 Video</a>
+    <a class="nav-link" href="/dashboard">📊 Dashboard</a>
+    <a class="nav-link" href="/db">🗄 DB</a>
+    <a class="nav-link" href="/supervisor">👮 Supervisor</a>
+    <a class="nav-link" href="/logs">📋 Logs</a>
+  </div>
+  <span class="nav-spacer"></span>
+  <a href="/supervisor" class="supervisor-btn" id="supervisor-nav-btn">
+    <span class="supervisor-dot"></span>
+    🛡 Supervisor
+  </a>
+  <div class="status-pill" id="status-pill">
+    <div class="dot-live"></div>
+    <span id="status-text">Disconnected</span>
+  </div>
+</nav>
+
+<!-- Page -->
+<div class="page">
+  <div class="page-header">
+    <h1>📡 Live Stream — IP Webcam</h1>
+    <p>Connect your phone's IP Webcam app to detect plates in real time. Results are saved to MongoDB automatically.</p>
+  </div>
+
+  <!-- Supervisor quick-access -->
+  <a href="/supervisor" id="supervisor-card" style="
+    display:flex; align-items:center; gap:16px;
+    background:rgba(239,68,68,0.07); border:1px solid rgba(239,68,68,0.25);
+    border-radius:14px; padding:14px 20px; margin-bottom:18px;
+    text-decoration:none; color:var(--text); transition:all 0.2s;
+  " onmouseover="this.style.background='rgba(239,68,68,0.13)';this.style.borderColor='rgba(239,68,68,0.45)'"
+     onmouseout="this.style.background='rgba(239,68,68,0.07)';this.style.borderColor='rgba(239,68,68,0.25)'">
+    <div style="font-size:28px;flex-shrink:0">🛡</div>
+    <div style="flex:1">
+      <div style="font-size:14px;font-weight:700;color:#ef4444">Parking Supervisor Panel</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:2px">
+        Add or remove verified vehicles · flag unwanted plates · view real-time intrusion alerts
+      </div>
+    </div>
+    <div id="sv-alert-badge" style="
+      display:none; align-items:center; gap:6px; flex-shrink:0;
+      background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.4);
+      border-radius:20px; padding:4px 12px; font-size:12px; font-weight:700; color:#ef4444;
+    ">
+      <span style="width:7px;height:7px;border-radius:50%;background:#ef4444;display:inline-block;animation:sv-pulse 1.2s ease-in-out infinite"></span>
+      <span id="sv-alert-count">0</span> alert<span id="sv-alert-s">s</span>
+    </div>
+    <div style="color:var(--muted);font-size:18px;flex-shrink:0">→</div>
+  </a>
+
+  <!-- Device config -->
+  <div class="device-card">
+    <span class="device-label">Device</span>
+    <input id="device-name" class="device-name-input" type="text" value="IP Webcam" placeholder="Name" />
+    <input id="device-url" class="device-input" type="url"
+           placeholder="http://192.168.x.x:8080/video" value="http://192.168.x.x:8080/video" />
+    <button id="btn-connect" class="btn-connect">⚡ Connect</button>
+    <button id="btn-disconnect" class="btn-disconnect" style="display:none;">✕ Disconnect</button>
+    <span class="help-text">Open IP Webcam → Start server → copy the URL shown on your phone</span>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-tile"><div class="stat-num blue"  id="s-frames">0</div><div class="stat-lbl">Frames</div></div>
+    <div class="stat-tile"><div class="stat-num green" id="s-plates">0</div><div class="stat-lbl">Plates Found</div></div>
+    <div class="stat-tile"><div class="stat-num yellow" id="s-unique">0</div><div class="stat-lbl">Unique Plates</div></div>
+    <div class="stat-tile"><div class="stat-num purple" id="s-model">—</div><div class="stat-lbl">Model</div></div>
+  </div>
+
+  <!-- Main grid -->
+  <div class="main-grid">
+
+    <!-- Video feed -->
+    <div class="video-panel">
+      <div class="video-header">
+        <h3>📹 Live Feed</h3>
+        <div class="video-stats">
+          <span class="vstat">FPS: <span id="vfps">—</span></span>
+          <span class="vstat">Session: <span id="vsession" style="font-family:'JetBrains Mono',monospace;font-size:11px;">—</span></span>
+        </div>
+      </div>
+      <div class="video-wrap">
+        <div class="video-placeholder" id="video-placeholder">
+          <div class="icon">📡</div>
+          <p>Enter device URL above and click Connect</p>
+        </div>
+        <img id="stream-img" src="" alt="Live stream" style="display:none;" />
+      </div>
+    </div>
+
+    <!-- Detection log -->
+    <div class="log-panel">
+      <div class="log-header">
+        <h3>🔍 Real-time Detections</h3>
+        <button class="btn-clear-log" id="btn-clear-log">Clear</button>
+      </div>
+      <div id="detection-log">
+        <p class="log-empty">Detections will appear here during the stream</p>
+      </div>
+    </div>
+
+  </div><!-- /main-grid -->
+
+  <!-- DB history -->
+  <div class="history-panel">
+    <div class="history-header">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <h3>🗄 Detection History</h3>
+        <span id="db-backend-badge" style="font-size:11px;padding:2px 10px;border-radius:6px;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.25);color:var(--accent);">Loading…</span>
+        <span id="db-total-badge" style="font-size:11px;padding:2px 10px;border-radius:6px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);color:var(--success);display:none;"></span>
+      </div>
+      <div class="history-actions">
+        <button class="btn-refresh" id="btn-refresh-history">↻ Refresh</button>
+        <button class="btn-export-csv" id="btn-export-csv">⬇ Export CSV</button>
+      </div>
+    </div>
+    <div style="overflow-x:auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>Plate</th>
+            <th>Confidence</th>
+            <th>Source</th>
+            <th>Model</th>
+            <th>Device</th>
+            <th>Timestamp</th>
+          </tr>
+        </thead>
+        <tbody id="history-body">
+          <tr><td colspan="6" class="no-data">Loading history…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div><!-- /page -->
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Lightbox -->
+<div id="lightbox" onclick="this.classList.remove('open')">
+  <img id="lightbox-img" src="" alt="Plate" />
+</div>
+
+<script>
+/* ══════════════════════════════════════════
+   STATE
+══════════════════════════════════════════ */
+let connected    = false;
+let eventSource  = null;
+let statusTimer  = null;
+let historyData  = [];
+let uniquePlates = new Set();
+let fpsTimer     = null;
+let lastFrame    = 0;
+
+/* ══════════════════════════════════════════
+   DOM REFS
+══════════════════════════════════════════ */
+const btnConnect    = document.getElementById('btn-connect');
+const btnDisconnect = document.getElementById('btn-disconnect');
+const deviceUrl     = document.getElementById('device-url');
+const deviceName    = document.getElementById('device-name');
+const streamImg     = document.getElementById('stream-img');
+const placeholder   = document.getElementById('video-placeholder');
+const detLog        = document.getElementById('detection-log');
+const statusPill    = document.getElementById('status-pill');
+const statusTxt     = document.getElementById('status-text');
+const histBody      = document.getElementById('history-body');
+const toast         = document.getElementById('toast');
+const lightbox      = document.getElementById('lightbox');
+const lightboxImg   = document.getElementById('lightbox-img');
+
+/* ══════════════════════════════════════════
+   CONNECT / DISCONNECT
+══════════════════════════════════════════ */
+btnConnect.addEventListener('click', async () => {
+  const url  = deviceUrl.value.trim();
+  const name = deviceName.value.trim() || 'IP Webcam';
+  if (!url || url.includes('x.x')) { showToast('⚠️ Please enter a valid IP Webcam URL'); return; }
+
+  btnConnect.disabled = true;
+  btnConnect.textContent = 'Connecting…';
+
+  try {
+    const res  = await fetch('/stream/connect', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ url, name })
+    });
+    const data = await res.json();
+    if (!res.ok || data.error) throw new Error(data.error || 'Connection failed');
+
+    connected = true;
+    onConnected(data);
+    showToast('✅ Connected to ' + name);
+  } catch (err) {
+    showToast('❌ ' + err.message);
+    btnConnect.disabled   = false;
+    btnConnect.textContent = '⚡ Connect';
+  }
+});
+
+btnDisconnect.addEventListener('click', async () => {
+  await fetch('/stream/disconnect', { method: 'POST' });
+  onDisconnected();
+  showToast('🔌 Disconnected');
+});
+
+function onConnected(data) {
+  connected = true;
+  // Show stream
+  streamImg.src         = '/stream/feed?' + Date.now();
+  streamImg.style.display = 'block';
+  placeholder.style.display = 'none';
+  // Buttons
+  btnConnect.style.display    = 'none';
+  btnDisconnect.style.display = 'block';
+  // Status pill
+  statusPill.classList.add('live');
+  statusTxt.textContent = '● Live';
+  // Session / model
+  document.getElementById('vsession').textContent = (data.session_id || '—').slice(0, 8) + '…';
+  document.getElementById('s-model').textContent  = data.model || '—';
+  // SSE events
+  startEventStream();
+  // Status polling
+  statusTimer = setInterval(pollStatus, 3000);
+}
+
+function onDisconnected() {
+  connected = false;
+  streamImg.style.display   = 'none';
+  placeholder.style.display = 'flex';
+  btnConnect.disabled       = false;
+  btnConnect.textContent    = '⚡ Connect';
+  btnConnect.style.display    = 'block';
+  btnDisconnect.style.display = 'none';
+  statusPill.classList.remove('live');
+  statusTxt.textContent = 'Disconnected';
+  if (eventSource) { eventSource.close(); eventSource = null; }
+  if (statusTimer)  { clearInterval(statusTimer);  statusTimer  = null; }
+}
+
+/* ══════════════════════════════════════════
+   SSE — DETECTION EVENTS
+══════════════════════════════════════════ */
+function startEventStream() {
+  if (eventSource) eventSource.close();
+  eventSource = new EventSource('/stream/events');
+  eventSource.onmessage = e => {
+    try {
+      const ev = JSON.parse(e.data);
+      if (ev.type === 'plate') handlePlateEvent(ev);
+    } catch (_) {}
+  };
+  eventSource.onerror = () => {
+    if (!connected) { eventSource.close(); eventSource = null; }
+  };
+}
+
+function handlePlateEvent(ev) {
+  // Stats
+  uniquePlates.add(ev.plate_text);
+  document.getElementById('s-plates').textContent = ev.frame || '—';
+  document.getElementById('s-unique').textContent = uniquePlates.size;
+
+  // Append to log (newest first)
+  const emptyMsg = detLog.querySelector('.log-empty');
+  if (emptyMsg) emptyMsg.remove();
+
+  const conf  = ev.confidence || 0;
+  const level = conf >= 0.75 ? 'conf-high' : conf >= 0.45 ? 'conf-mid' : 'conf-low';
+  const ts    = new Date(ev.timestamp).toLocaleTimeString();
+
+  const item = document.createElement('div');
+  item.className = 'log-item';
+  item.innerHTML = `
+    <div class="log-plate">${escHtml(ev.plate_text)}</div>
+    <div class="log-meta">
+      <span class="log-chip ${level}">${(conf*100).toFixed(1)}%</span>
+      <span class="log-chip">${escHtml(ev.model || '—')}</span>
+      <span class="log-chip">${ts}</span>
+    </div>
+    ${ev.annotated ? `<img class="log-thumb" src="${ev.annotated}" alt="frame" loading="lazy" />` : ''}
+  `;
+  if (ev.annotated) {
+    item.querySelector('.log-thumb').addEventListener('click', () => {
+      lightboxImg.src = ev.annotated;
+      lightbox.classList.add('open');
+    });
+  }
+  detLog.prepend(item);
+
+  // Trim to last 50 items
+  while (detLog.children.length > 50) detLog.removeChild(detLog.lastChild);
+}
+
+/* ══════════════════════════════════════════
+   STATUS POLLING
+══════════════════════════════════════════ */
+async function pollStatus() {
+  try {
+    const res  = await fetch('/stream/status');
+    const data = await res.json();
+    document.getElementById('s-frames').textContent = data.frame_count  || 0;
+    document.getElementById('s-plates').textContent = data.plates_found || 0;
+    document.getElementById('s-model').textContent  = data.model        || '—';
+    if (!data.connected && connected) onDisconnected();
+  } catch (_) {}
+}
+
+/* ══════════════════════════════════════════
+   MONGODB HISTORY
+══════════════════════════════════════════ */
+async function loadHistory() {
+  // Load DB stats (backend name + totals)
+  try {
+    const sr = await fetch('/db/stats');
+    const ss = await sr.json();
+    const badge = document.getElementById('db-backend-badge');
+    const totBadge = document.getElementById('db-total-badge');
+    if (badge) {
+      badge.textContent = ss.backend || 'DB';
+      if ((ss.backend||'').includes('MontyDB')) {
+        badge.style.background = 'rgba(245,158,11,0.1)';
+        badge.style.borderColor = 'rgba(245,158,11,0.3)';
+        badge.style.color = 'var(--warning)';
+      } else {
+        badge.style.background = 'rgba(16,185,129,0.1)';
+        badge.style.borderColor = 'rgba(16,185,129,0.3)';
+        badge.style.color = 'var(--success)';
+      }
+    }
+    if (totBadge && ss.total != null) {
+      totBadge.textContent = ss.total + ' records';
+      totBadge.style.display = 'inline-block';
+    }
+  } catch (_) {}
+
+  // Load detections — use /db/detections which covers ALL sources
+  try {
+    const res  = await fetch('/db/detections?limit=200');
+    const data = await res.json();
+    historyData = data.detections || [];
+    renderHistory();
+  } catch (err) {
+    histBody.innerHTML = `<tr><td colspan="6" class="no-data">Failed to load: ${err.message}</td></tr>`;
+  }
+}
+
+function renderHistory() {
+  if (!historyData.length) {
+    histBody.innerHTML = '<tr><td colspan="6" class="no-data">No detections recorded yet</td></tr>';
+    return;
+  }
+  histBody.innerHTML = historyData.map(d => {
+    const ts     = d.timestamp ? new Date(d.timestamp).toLocaleString() : '—';
+    const conf   = d.confidence != null ? (d.confidence * 100).toFixed(1) + '%' : '—';
+    const srcBadge = d.source === 'livestream' ? 'badge-ls' : d.source === 'video' ? 'badge-vid' : 'badge-img';
+    const srcLabel = d.source === 'livestream' ? '📡 Live' : d.source === 'video' ? '🎞 Video' : '📷 Image';
+    return `<tr>
+      <td class="td-plate">${escHtml(d.plate_text || '—')}</td>
+      <td>${conf}</td>
+      <td><span class="badge ${srcBadge}">${srcLabel}</span></td>
+      <td style="font-size:11px;color:var(--muted)">${escHtml(d.model_used || '—')}</td>
+      <td style="font-size:11px;color:var(--muted)">${escHtml(d.device || d.source_url || '—')}</td>
+      <td style="font-size:11px;color:var(--muted)">${ts}</td>
+    </tr>`;
+  }).join('');
+}
+
+document.getElementById('btn-refresh-history').addEventListener('click', loadHistory);
+
+document.getElementById('btn-export-csv').addEventListener('click', () => {
+  if (!historyData.length) { showToast('No data to export'); return; }
+  const header = 'Plate,Confidence,Source,Model,Device,Timestamp\n';
+  const rows = historyData.map(d =>
+    [d.plate_text, d.confidence, d.source, d.model_used, d.device||d.source_url, d.timestamp].map(v => `"${(v||'').toString().replace(/"/g,'""')}"`).join(',')
+  ).join('\n');
+  const blob = new Blob([header + rows], { type: 'text/csv;charset=utf-8;' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = `platevision_detections_${Date.now()}.csv`; a.click();
+});
+
+/* ══════════════════════════════════════════
+   CLEAR LOG
+══════════════════════════════════════════ */
+document.getElementById('btn-clear-log').addEventListener('click', () => {
+  detLog.innerHTML = '<p class="log-empty">Log cleared</p>';
+  uniquePlates.clear();
+  document.getElementById('s-unique').textContent = 0;
+});
+
+/* ══════════════════════════════════════════
+   UTILS
+══════════════════════════════════════════ */
+function escHtml(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function showToast(msg, dur=3000) {
+  toast.textContent = msg; toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), dur);
+}
+
+/* ══════════════════════════════════════════
+   INIT
+══════════════════════════════════════════ */
+loadHistory();
+
+// Restore last URL from localStorage
+const savedUrl = localStorage.getItem('ipwebcam_url');
+if (savedUrl) deviceUrl.value = savedUrl;
+deviceUrl.addEventListener('change', () => localStorage.setItem('ipwebcam_url', deviceUrl.value));
+
+// ── Supervisor alert badge ──────────────────────────────────────────
+async function fetchSupervisorAlerts() {
+  try {
+    const r = await fetch('/api/parking/stats');
+    const s = await r.json();
+    const count = s.alerts_unacked || 0;
+    const badge = document.getElementById('sv-alert-badge');
+    const countEl = document.getElementById('sv-alert-count');
+    const pluralEl = document.getElementById('sv-alert-s');
+    if (badge) {
+      if (count > 0) {
+        countEl.textContent = count;
+        pluralEl.textContent = count === 1 ? '' : 's';
+        badge.style.display = 'flex';
+      } else {
+        badge.style.display = 'none';
+      }
+    }
+  } catch (_) {}
+}
+fetchSupervisorAlerts();
+setInterval(fetchSupervisorAlerts, 15000);
+</script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+matplotlib
+pandas
+numpy
+cv2
+opencv-python
+os
+ultralytics
+easyocr
+torch 
+torchvision 
+torchaudio

@@ -1,0 +1,9 @@
+# ELPD Dataset Configuration
+path: C:/Users/Mohamed Walid/Desktop/Internship/Code/ELPD_Dataset
+
+train: images/train
+val:   images/val
+
+nc: 1
+names:
+  0: license_plate

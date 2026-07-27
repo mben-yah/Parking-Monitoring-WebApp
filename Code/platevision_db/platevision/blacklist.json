@@ -1,0 +1,3 @@
+[
+{"plate_text": "99999 W 01", "reason": "Overdue fees", "added_by": "supervisor", "added_at": {"$date": 1784390233582}, "_id": {"$oid": "6a5ba2592820eb94b41bfd9b"}, "owner": "John Doe", "updated": {"$date": 1784696961505}}
+]

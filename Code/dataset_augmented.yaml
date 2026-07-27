@@ -1,0 +1,8 @@
+path: C:/Users/Mohamed Walid/Desktop/Internship/Code/Dataset_Augmented
+
+train: images/train
+val:   images/val
+
+nc: 1
+names:
+  0: license_plate

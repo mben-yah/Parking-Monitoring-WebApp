@@ -1,0 +1,6 @@
+path: C:/Users/Mohamed Walid/Desktop/Internship/Code/Ar_Dataset_Split
+train: images/train
+val:   images/val
+
+nc: 1
+names: ['plate']

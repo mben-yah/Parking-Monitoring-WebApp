@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PlateVision · License Plate Recognition</title>
+  <meta name="description" content="AI-powered license plate recognition. Upload car photos and get plate numbers instantly." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+
+  <style>
+  /* ═══════════════════════════════════════════════
+     TOKENS & RESET
+  ═══════════════════════════════════════════════ */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #080b12;
+    --surface:   #0f1420;
+    --surface2:  #161d2e;
+    --glass:     rgba(255,255,255,0.035);
+    --border:    rgba(255,255,255,0.07);
+    --border-hi: rgba(99,179,237,0.45);
+    --accent:    #3b82f6;
+    --accent2:   #8b5cf6;
+    --success:   #10b981;
+    --warning:   #f59e0b;
+    --error:     #ef4444;
+    --text:      #e8edf8;
+    --muted:     #6b7a99;
+    --radius:    14px;
+    --shadow:    0 32px 80px rgba(0,0,0,0.7);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+
+  /* ═══════════════════════════════════════════════
+     BACKGROUND ORBS
+  ═══════════════════════════════════════════════ */
+  .bg-orbs { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  .orb { position: absolute; border-radius: 50%; filter: blur(130px); opacity: 0.12; animation: float 14s ease-in-out infinite; }
+  .orb-1 { width: 700px; height: 700px; background: var(--accent);  top: -250px; left: -200px; }
+  .orb-2 { width: 550px; height: 550px; background: var(--accent2); bottom: -180px; right: -120px; animation-delay: -7s; }
+  .orb-3 { width: 350px; height: 350px; background: var(--success); top: 40%; left: 45%; animation-delay: -3.5s; opacity: 0.07; }
+
+  @keyframes float {
+    0%,100% { transform: translateY(0) scale(1); }
+    50%      { transform: translateY(-45px) scale(1.06); }
+  }
+
+  /* ═══════════════════════════════════════════════
+     LAYOUT
+  ═══════════════════════════════════════════════ */
+  .wrapper { position: relative; z-index: 1; max-width: 960px; margin: 0 auto; padding: 48px 24px 96px; }
+
+  /* ═══════════════════════════════════════════════
+     HEADER
+  ═══════════════════════════════════════════════ */
+  header { text-align: center; margin-bottom: 64px; }
+
+  .logo { display: inline-flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+  .logo-icon {
+    width: 48px; height: 48px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 14px;
+    display: grid; place-items: center; font-size: 24px;
+    box-shadow: 0 4px 24px rgba(59,130,246,0.45);
+  }
+  .logo-text { font-size: 24px; font-weight: 800; background: linear-gradient(135deg, #fff 30%, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+  h1 { font-size: clamp(30px, 5vw, 54px); font-weight: 800; line-height: 1.1; letter-spacing: -1.5px; margin-bottom: 16px; background: linear-gradient(135deg, #fff 50%, #64748b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .subtitle { font-size: 16px; color: var(--muted); max-width: 440px; margin: 0 auto; line-height: 1.65; }
+
+  /* ═══════════════════════════════════════════════
+     STATS BAR
+  ═══════════════════════════════════════════════ */
+  #stats-bar {
+    display: none;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+    animation: slide-up 0.4s ease;
+  }
+  @media (max-width: 600px) { #stats-bar { grid-template-columns: repeat(2,1fr); } }
+
+  .stat-tile {
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    backdrop-filter: blur(20px);
+    text-align: center;
+  }
+  .stat-value { font-size: 28px; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+  .stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; }
+  .stat-value.blue   { background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .stat-value.green  { color: var(--success); }
+  .stat-value.yellow { color: var(--warning); }
+  .stat-value.red    { color: var(--error); }
+
+  /* ═══════════════════════════════════════════════
+     CARD
+  ═══════════════════════════════════════════════ */
+  .card {
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 36px;
+    backdrop-filter: blur(24px);
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
+  }
+
+  /* ═══════════════════════════════════════════════
+     DROP ZONE
+  ═══════════════════════════════════════════════ */
+  #drop-zone {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 60px 32px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    user-select: none;
+  }
+  #drop-zone:hover, #drop-zone.drag-over {
+    border-color: var(--border-hi);
+    background: rgba(59,130,246,0.05);
+    transform: scale(1.005);
+  }
+  #drop-zone.drag-over { box-shadow: 0 0 0 4px rgba(59,130,246,0.14), inset 0 0 30px rgba(59,130,246,0.04); }
+
+  .drop-icon { font-size: 60px; margin-bottom: 18px; display: block; filter: drop-shadow(0 0 24px rgba(59,130,246,0.55)); animation: bob 3.5s ease-in-out infinite; }
+  @keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+
+  .drop-title { font-size: 19px; font-weight: 700; margin-bottom: 8px; }
+  .drop-sub   { color: var(--muted); font-size: 13px; margin-bottom: 26px; }
+  #file-input { display: none; }
+
+  .btn-browse {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 13px 30px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff; font-size: 15px; font-weight: 600;
+    border: none; border-radius: 10px; cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 22px rgba(59,130,246,0.45);
+  }
+  .btn-browse:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(59,130,246,0.6); }
+  .btn-browse:active { transform: scale(0.97); }
+
+  /* ── Options row ── */
+  .options-row {
+    display: flex; gap: 16px; flex-wrap: wrap; align-items: center;
+    margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--border);
+  }
+  .option-label { font-size: 13px; color: var(--muted); white-space: nowrap; }
+  .toggle-group { display: flex; gap: 6px; flex-wrap: wrap; }
+  .engine-toggle {
+    padding: 6px 14px; border-radius: 8px; font-size: 13px; font-weight: 500;
+    border: 1px solid var(--border); background: transparent; color: var(--muted);
+    cursor: pointer; transition: all 0.18s;
+  }
+  .engine-toggle.active {
+    background: rgba(59,130,246,0.15); border-color: var(--accent); color: var(--text);
+  }
+  .engine-toggle:hover:not(.active) { border-color: var(--border-hi); color: var(--text); }
+
+  /* ═══════════════════════════════════════════════
+     PROGRESS BAR
+  ═══════════════════════════════════════════════ */
+  #progress-wrap { display: none; margin-top: 20px; }
+  #progress-label { font-size: 13px; color: var(--muted); margin-bottom: 8px; display: flex; justify-content: space-between; }
+  #progress-track { height: 6px; background: var(--border); border-radius: 99px; overflow: hidden; }
+  #progress-fill  { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 99px; transition: width 0.3s ease; }
+
+  /* ═══════════════════════════════════════════════
+     PREVIEW GRID
+  ═══════════════════════════════════════════════ */
+  #preview-section { display: none; margin-top: 28px; }
+  .preview-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .preview-header h3 { font-size: 13px; font-weight: 600; color: var(--muted); }
+  .btn-clear { background: none; border: 1px solid var(--border); color: var(--muted); padding: 5px 12px; border-radius: 8px; font-size: 12px; cursor: pointer; transition: all 0.2s; }
+  .btn-clear:hover { border-color: var(--error); color: var(--error); }
+
+  #preview-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; }
+
+  .preview-item { position: relative; border-radius: 10px; overflow: hidden; aspect-ratio: 4/3; border: 2px solid var(--border); transition: border-color 0.2s, transform 0.2s; }
+  .preview-item:hover { transform: scale(1.03); }
+  .preview-item.processing { border-color: var(--accent); }
+  .preview-item.done  { border-color: var(--success); }
+  .preview-item.error { border-color: var(--error); }
+
+  .preview-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  .preview-badge {
+    position: absolute; bottom: 4px; left: 4px; right: 4px;
+    background: rgba(0,0,0,0.78); border-radius: 6px;
+    padding: 3px 6px; font-size: 10px; text-align: center;
+    backdrop-filter: blur(4px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .preview-item.processing .preview-badge { color: var(--accent); }
+  .preview-item.done  .preview-badge { color: var(--success); }
+  .preview-item.error .preview-badge { color: var(--error); }
+
+  /* ── Remove btn on each thumbnail ── */
+  .preview-remove {
+    position: absolute; top: 4px; right: 4px;
+    width: 20px; height: 20px; border-radius: 50%;
+    background: rgba(0,0,0,0.7); border: none; color: #fff;
+    font-size: 11px; cursor: pointer; display: none; place-items: center;
+    transition: background 0.2s;
+  }
+  .preview-item:hover .preview-remove { display: grid; }
+  .preview-remove:hover { background: var(--error); }
+
+  /* ═══════════════════════════════════════════════
+     ANALYSE BUTTON
+  ═══════════════════════════════════════════════ */
+  #analyse-btn {
+    width: 100%; margin-top: 20px; padding: 16px;
+    font-size: 16px; font-weight: 700;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff; border: none; border-radius: 12px; cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 24px rgba(59,130,246,0.4);
+    display: none; align-items: center; justify-content: center; gap: 10px;
+  }
+  #analyse-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 10px 40px rgba(59,130,246,0.6); }
+  #analyse-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+  .spinner { width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.25); border-top-color: #fff; border-radius: 50%; animation: spin 0.75s linear infinite; display: none; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ═══════════════════════════════════════════════
+     RESULTS HEADER + EXPORT
+  ═══════════════════════════════════════════════ */
+  #results-section { display: none; }
+  .results-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+  .results-title { font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+  .btn-export {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 16px; border-radius: 9px; font-size: 13px; font-weight: 600;
+    background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.25);
+    color: var(--success); cursor: pointer; transition: all 0.2s;
+  }
+  .btn-export:hover { background: rgba(16,185,129,0.18); transform: translateY(-1px); }
+
+  /* ═══════════════════════════════════════════════
+     RESULT CARD
+  ═══════════════════════════════════════════════ */
+  .result-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    overflow: hidden;
+    margin-bottom: 14px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    animation: slide-up 0.4s ease both;
+  }
+  .result-card:hover { border-color: var(--border-hi); box-shadow: 0 8px 40px rgba(0,0,0,0.4); }
+
+  @keyframes slide-up { from { opacity:0; transform:translateY(22px); } to { opacity:1; transform:translateY(0); } }
+
+  .result-inner { display: grid; grid-template-columns: 220px 1fr; }
+  @media (max-width: 580px) { .result-inner { grid-template-columns: 1fr; } }
+
+  /* ── Image side ── */
+  .result-img-wrap { position: relative; aspect-ratio: 4/3; background: #000; overflow: hidden; cursor: zoom-in; }
+  .result-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.35s ease; }
+  .result-img-wrap:hover img { transform: scale(1.04); }
+  .zoom-hint { position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.65); color: #fff; font-size: 11px; padding: 3px 8px; border-radius: 6px; backdrop-filter: blur(4px); opacity: 0; transition: opacity 0.2s; }
+  .result-img-wrap:hover .zoom-hint { opacity: 1; }
+
+  /* ── Body side ── */
+  .result-body { padding: 22px 26px; display: flex; flex-direction: column; justify-content: center; gap: 14px; }
+  .result-meta { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px; }
+  .result-filename { font-size: 12px; color: var(--muted); }
+  .result-ts { font-size: 11px; color: var(--muted); opacity: 0.6; }
+
+  /* ── Plate number ── */
+  .plate-wrap { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .plate-frame {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 18px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+  .plate-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(20px, 3.5vw, 30px);
+    font-weight: 700; letter-spacing: 5px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .plate-number.no-detect { font-size: 16px; background: none; -webkit-text-fill-color: var(--muted); letter-spacing: 0; }
+
+  .btn-copy {
+    padding: 5px 10px; border-radius: 7px; font-size: 12px;
+    background: var(--glass); border: 1px solid var(--border);
+    color: var(--muted); cursor: pointer; transition: all 0.18s;
+    white-space: nowrap;
+  }
+  .btn-copy:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-copy.copied { color: var(--success); border-color: var(--success); }
+
+  /* ── Confidence bar ── */
+  .conf-row { display: flex; align-items: center; gap: 10px; }
+  .conf-label { font-size: 12px; color: var(--muted); min-width: 60px; }
+  .conf-track { flex: 1; height: 5px; background: var(--border); border-radius: 99px; overflow: hidden; }
+  .conf-fill { height: 100%; border-radius: 99px; transition: width 0.6s ease; }
+  .conf-pct { font-size: 12px; font-weight: 600; min-width: 38px; text-align: right; }
+  /* colour scale: red → amber → green */
+  .conf-fill[data-conf-level="low"]  { background: var(--error); }
+  .conf-fill[data-conf-level="mid"]  { background: var(--warning); }
+  .conf-fill[data-conf-level="high"] { background: var(--success); }
+  .conf-pct[data-conf-level="low"]   { color: var(--error); }
+  .conf-pct[data-conf-level="mid"]   { color: var(--warning); }
+  .conf-pct[data-conf-level="high"]  { color: var(--success); }
+
+  /* ── Model badge (which model detected) ── */
+  .model-badge-card {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11px; font-weight: 600; padding: 4px 12px;
+    border-radius: 8px; border: 1px solid rgba(139,92,246,0.35);
+    background: rgba(139,92,246,0.1); color: #a78bfa;
+  }
+
+  /* ── Mode toggle buttons ── */
+  .mode-toggle-group { display: flex; gap: 6px; }
+  .mode-btn {
+    padding: 6px 16px; border-radius: 9px; border: 1px solid var(--border);
+    background: var(--glass); color: var(--muted); font-size: 13px;
+    font-family: inherit; cursor: pointer; transition: all 0.2s;
+  }
+  .mode-btn:hover  { border-color: var(--border-hi); color: var(--text); }
+  .mode-btn.active {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-color: transparent; color: #fff; font-weight: 600;
+    box-shadow: 0 2px 12px rgba(59,130,246,0.4);
+  }
+
+  /* ── Morocco plate detail rows ── */
+  .plate-detail-row {
+    display: flex; flex-wrap: wrap; gap: 8px; margin-top: 2px;
+  }
+  .plate-chip {
+    font-size: 11px; padding: 3px 10px; border-radius: 7px;
+    background: var(--glass); border: 1px solid var(--border);
+    color: var(--muted);
+  }
+  .plate-chip strong { color: var(--text); font-size: 13px; font-family: 'JetBrains Mono', monospace; }
+  .engine-dot.e2 { background: var(--accent2); }
+  .engine-label { color: var(--muted); }
+  .engine-value { font-family: 'JetBrains Mono', monospace; font-weight: 600; color: var(--text); }
+
+  /* ── Error card ── */
+  .error-msg { color: var(--error); font-size: 14px; padding: 12px 16px; background: rgba(239,68,68,0.07); border-radius: 10px; border: 1px solid rgba(239,68,68,0.18); }
+
+  /* ═══════════════════════════════════════════════
+     LIGHTBOX
+  ═══════════════════════════════════════════════ */
+  #lightbox {
+    display: none; position: fixed; inset: 0; z-index: 1000;
+    background: rgba(0,0,0,0.92); backdrop-filter: blur(10px);
+    align-items: center; justify-content: center; cursor: zoom-out;
+    animation: fade-in 0.2s ease;
+  }
+  #lightbox.open { display: flex; }
+  @keyframes fade-in { from { opacity:0; } to { opacity:1; } }
+  #lightbox img { max-width: 92vw; max-height: 88vh; object-fit: contain; border-radius: 12px; box-shadow: 0 32px 100px rgba(0,0,0,0.8); }
+  #lightbox-close { position: absolute; top: 20px; right: 24px; font-size: 28px; color: #fff; cursor: pointer; opacity: 0.6; transition: opacity 0.2s; background: none; border: none; }
+  #lightbox-close:hover { opacity: 1; }
+
+  /* ═══════════════════════════════════════════════
+     TOAST
+  ═══════════════════════════════════════════════ */
+  #toast {
+    position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(60px);
+    background: var(--surface2); border: 1px solid var(--border);
+    padding: 12px 24px; border-radius: 10px; font-size: 14px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0; z-index: 9999; pointer-events: none; white-space: nowrap;
+  }
+  #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+  /* ═══════════════════════════════════════════════
+     FOOTER
+  ═══════════════════════════════════════════════ */
+  footer { text-align: center; margin-top: 72px; color: var(--muted); font-size: 13px; line-height: 2; }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<!-- Background orbs -->
+<div class="bg-orbs">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+
+<!-- Lightbox -->
+<div id="lightbox" role="dialog" aria-label="Image viewer">
+  <button id="lightbox-close" aria-label="Close">✕</button>
+  <img id="lightbox-img" src="" alt="Full-size plate view" />
+</div>
+
+<!-- Toast -->
+<div id="toast" role="status" aria-live="polite"></div>
+
+<div class="wrapper">
+
+  <!-- ── Header ── -->
+  <header>
+    <div class="logo">
+      <div class="logo-icon">🚗</div>
+      <span class="logo-text">PlateVision</span>
+    </div>
+    <h1>License Plate Recognition</h1>
+    <p class="subtitle">Drop one or more car photos — our AI detects and reads every plate number instantly.</p>
+    <a href="/video" style="display:inline-flex;align-items:center;gap:8px;margin-top:18px;padding:9px 22px;border-radius:10px;font-size:14px;font-weight:600;background:rgba(139,92,246,0.12);border:1px solid rgba(139,92,246,0.3);color:#a78bfa;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.background='rgba(139,92,246,0.22)'" onmouseout="this.style.background='rgba(139,92,246,0.12)'">🎥 &nbsp;Try Video Mode</a>
+    <a href="/livestream" style="display:inline-flex;align-items:center;gap:8px;margin-top:18px;margin-left:10px;padding:9px 22px;border-radius:10px;font-size:14px;font-weight:600;background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.3);color:#60a5fa;text-decoration:none;" onmouseover="this.style.background='rgba(59,130,246,0.22)'" onmouseout="this.style.background='rgba(59,130,246,0.12)'">&#128225; &nbsp;Live Stream</a>
+    <a href="/supervisor" style="display:inline-flex;align-items:center;gap:8px;margin-top:18px;margin-left:10px;padding:9px 22px;border-radius:10px;font-size:14px;font-weight:600;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.3);color:#34d399;text-decoration:none;" onmouseover="this.style.background='rgba(16,185,129,0.22)'" onmouseout="this.style.background='rgba(16,185,129,0.12)'">🛡️ &nbsp;Manage Clients &amp; Vehicles</a>
+  </header>
+
+  <!-- ── Stats bar (shown after first run) ── -->
+  <div id="stats-bar">
+    <div class="stat-tile"><div class="stat-value blue" id="stat-total">0</div><div class="stat-label">Images</div></div>
+    <div class="stat-tile"><div class="stat-value green" id="stat-detected">0</div><div class="stat-label">Detected</div></div>
+    <div class="stat-tile"><div class="stat-value yellow" id="stat-avg-conf">—</div><div class="stat-label">Avg. Confidence</div></div>
+    <div class="stat-tile"><div class="stat-value red" id="stat-failed">0</div><div class="stat-label">Failed</div></div>
+  </div>
+
+  <!-- ── Upload card ── -->
+  <div class="card">
+
+    <!-- Drop zone -->
+    <div id="drop-zone" role="button" tabindex="0" aria-label="Drop images or click to browse">
+      <span class="drop-icon">🔍</span>
+      <p class="drop-title">Drag &amp; drop your images here</p>
+      <p class="drop-sub">JPG · PNG · BMP · TIFF · WebP — multiple files supported</p>
+      <label for="file-input">
+        <span class="btn-browse">📂 &nbsp;Browse Files</span>
+      </label>
+      <input id="file-input" type="file" accept="image/*" multiple />
+    </div>
+
+    <!-- Mode selector + model badge -->
+    <div class="options-row" style="flex-wrap:wrap;gap:8px;">
+      <span class="option-label">Mode:</span>
+      <div class="mode-toggle-group" id="mode-group">
+        <button class="mode-btn active" id="mode-en" data-mode="english">
+          &#127468;&#127463; English Plates
+        </button>
+        <button class="mode-btn" id="mode-ar" data-mode="arabic">
+          &#127474;&#127462; Moroccan Plates
+        </button>
+      </div>
+      <span id="model-badge" style="font-size:11px;color:var(--success);background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);padding:3px 10px;border-radius:6px;">
+        &#127919; Auto &mdash; best available model
+      </span>
+      <a href="/supervisor" style="color:var(--muted,#6b7280);text-decoration:none;font-size:13px;padding:5px 12px;border-radius:8px;transition:color 0.2s;" onmouseover="this.style.color='#e8ecf4'" onmouseout="this.style.color='#6b7280'">🛡️ Supervisor</a>
+      <a href="/db" style="color:var(--muted,#6b7280);text-decoration:none;font-size:13px;padding:5px 12px;border-radius:8px;transition:color 0.2s;" onmouseover="this.style.color='#e8ecf4'" onmouseout="this.style.color='#6b7280'">🗄 DB Admin</a><a href="/logs" target="_blank" style="margin-left:auto;font-size:11px;color:var(--text-muted);text-decoration:none;padding:3px 10px;">&#128279; Live Logs</a>
+    </div>
+
+    <!-- Arabic info banner (shown only in Arabic mode) -->
+    <div id="arabic-info" style="display:none;margin:4px 0 -4px;padding:10px 16px;border-radius:10px;background:rgba(251,191,36,0.07);border:1px solid rgba(251,191,36,0.2);font-size:12px;color:#fbbf24;line-height:1.7;">
+      &#127474;&#127462; <strong>Morocco plate format:</strong>
+      &nbsp; <span style="font-family:'JetBrains Mono',monospace">Sequence | Arabic&nbsp;Letter | Region&nbsp;Code</span>
+      &nbsp;&mdash;&nbsp; e.g.&nbsp;<code style="background:rgba(255,255,255,0.08);padding:1px 6px;border-radius:4px;">12345&nbsp;|&nbsp;&#1576;&nbsp;|&nbsp;06&nbsp;(Casablanca)</code>
+    </div>
+
+    <!-- Thumbnail previews -->
+    <div id="preview-section">
+      <div class="preview-header">
+        <h3 id="preview-count">0 image(s) selected</h3>
+        <button class="btn-clear" id="clear-btn">&times; &nbsp;Clear all</button>
+      </div>
+      <div id="preview-grid"></div>
+    </div>
+
+    <!-- Progress -->
+    <div id="progress-wrap">
+      <div id="progress-label">
+        <span id="progress-text">Processing&hellip;</span>
+        <span id="progress-pct">0 / 0</span>
+      </div>
+      <div id="progress-track"><div id="progress-fill"></div></div>
+    </div>
+
+    <!-- Analyse button -->
+    <button id="analyse-btn" aria-label="Run plate recognition">
+      <div class="spinner" id="spinner"></div>
+      <span id="btn-label">&#9889; &nbsp;Recognise Plates</span>
+    </button>
+  </div>
+
+  <!-- ── Results ── -->
+  <div id="results-section">
+    <div class="results-header">
+      <p class="results-title" id="results-title">Recognition Results</p>
+      <button class="btn-export" id="export-btn">⬇ &nbsp;Export CSV</button>
+    </div>
+    <div id="results-grid"></div>
+  </div>
+
+  <footer>
+    Powered by <a href="https://github.com/ultralytics/ultralytics" target="_blank">YOLOv8</a> &amp;
+    <a href="https://github.com/JaidedAI/EasyOCR" target="_blank">EasyOCR</a> &amp;
+    <a href="https://github.com/ankandrew/fast-plate-ocr" target="_blank">fast-plate-ocr</a>
+    &nbsp;&middot;&nbsp; PlateVision
+  </footer>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════════════
+   STATE
+══════════════════════════════════════════════════════ */
+let selectedFiles  = [];
+let sessionResults = [];
+let activeMode     = 'english';  // 'english' | 'arabic'
+
+/* ══════════════════════════════════════════════════════
+   MODE SELECTOR
+══════════════════════════════════════════════════════ */
+document.getElementById('mode-group').addEventListener('click', e => {
+  const btn = e.target.closest('.mode-btn');
+  if (!btn) return;
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  activeMode = btn.dataset.mode;
+  const isAr = activeMode === 'arabic';
+  document.getElementById('arabic-info').style.display = isAr ? 'block' : 'none';
+  document.getElementById('btn-label').textContent = isAr
+    ? '⚡\u00a0Analyse Moroccan Plates' : '⚡\u00a0Recognise Plates';
+});
+
+/* ══════════════════════════════════════════════════════
+   DOM REFS
+══════════════════════════════════════════════════════ */
+const dropZone       = document.getElementById('drop-zone');
+const fileInput      = document.getElementById('file-input');
+const previewSection = document.getElementById('preview-section');
+const previewCount   = document.getElementById('preview-count');
+const previewGrid    = document.getElementById('preview-grid');
+const analyseBtn     = document.getElementById('analyse-btn');
+const spinner        = document.getElementById('spinner');
+const btnLabel       = document.getElementById('btn-label');
+const clearBtn       = document.getElementById('clear-btn');
+const resultsSection = document.getElementById('results-section');
+const resultsGrid    = document.getElementById('results-grid');
+const progressWrap   = document.getElementById('progress-wrap');
+const progressFill   = document.getElementById('progress-fill');
+const progressText   = document.getElementById('progress-text');
+const progressPct    = document.getElementById('progress-pct');
+const statsBar       = document.getElementById('stats-bar');
+const exportBtn      = document.getElementById('export-btn');
+const lightbox       = document.getElementById('lightbox');
+const lightboxImg    = document.getElementById('lightbox-img');
+const lightboxClose  = document.getElementById('lightbox-close');
+const toastEl        = document.getElementById('toast');
+
+/* ══════════════════════════════════════════════════════
+   ENGINE TOGGLES
+══════════════════════════════════════════════════════ */
+document.querySelectorAll('.engine-toggle').forEach(btn => {
+  btn.addEventListener('click', () => {
+    btn.classList.toggle('active');
+    btn.setAttribute('aria-pressed', btn.classList.contains('active'));
+  });
+});
+
+function getActiveEngines() {
+  return [...document.querySelectorAll('.engine-toggle.active')].map(b => b.dataset.engine);
+}
+
+/* ══════════════════════════════════════════════════════
+   DRAG & DROP
+══════════════════════════════════════════════════════ */
+['dragenter','dragover'].forEach(e =>
+  dropZone.addEventListener(e, ev => { ev.preventDefault(); dropZone.classList.add('drag-over'); })
+);
+['dragleave','drop'].forEach(e =>
+  dropZone.addEventListener(e, ev => { ev.preventDefault(); dropZone.classList.remove('drag-over'); })
+);
+dropZone.addEventListener('drop', ev => addFiles(ev.dataTransfer.files));
+dropZone.addEventListener('keydown', e => { if (e.key==='Enter'||e.key===' ') fileInput.click(); });
+fileInput.addEventListener('change', () => { addFiles(fileInput.files); fileInput.value=''; });
+
+/* ══════════════════════════════════════════════════════
+   ADD FILES
+══════════════════════════════════════════════════════ */
+const IMAGE_TYPES = ['image/jpeg','image/png','image/bmp','image/tiff','image/webp','image/gif'];
+
+function addFiles(fileList) {
+  [...fileList].forEach(f => {
+    if (IMAGE_TYPES.includes(f.type) && !selectedFiles.find(x => x.name===f.name && x.size===f.size))
+      selectedFiles.push(f);
+  });
+  renderPreviews();
+}
+
+/* ══════════════════════════════════════════════════════
+   RENDER THUMBNAILS
+══════════════════════════════════════════════════════ */
+function renderPreviews() {
+  previewGrid.innerHTML = '';
+  selectedFiles.forEach((file, idx) => {
+    const url  = URL.createObjectURL(file);
+    const item = document.createElement('div');
+    item.className = 'preview-item';
+    item.id = `preview-${idx}`;
+
+    const removeBtn = document.createElement('button');
+    removeBtn.className = 'preview-remove';
+    removeBtn.innerHTML = '✕';
+    removeBtn.title = 'Remove';
+    removeBtn.addEventListener('click', e => { e.stopPropagation(); removeFile(idx); });
+
+    item.innerHTML = `<img src="${url}" alt="${escHtml(file.name)}" />
+                      <div class="preview-badge" id="badge-${idx}">${truncate(file.name,15)}</div>`;
+    item.appendChild(removeBtn);
+    previewGrid.appendChild(item);
+  });
+
+  const show = selectedFiles.length > 0;
+  previewSection.style.display = show ? 'block' : 'none';
+  analyseBtn.style.display     = show ? 'flex'  : 'none';
+  previewCount.textContent = `${selectedFiles.length} image(s) selected`;
+  progressWrap.style.display = 'none';
+}
+
+function removeFile(idx) {
+  selectedFiles.splice(idx, 1);
+  renderPreviews();
+}
+
+/* ══════════════════════════════════════════════════════
+   CLEAR
+══════════════════════════════════════════════════════ */
+clearBtn.addEventListener('click', () => { selectedFiles = []; renderPreviews(); });
+
+/* ══════════════════════════════════════════════════════
+   ANALYSE
+══════════════════════════════════════════════════════ */
+analyseBtn.addEventListener('click', runRecognition);
+
+async function runRecognition() {
+  if (selectedFiles.length === 0) return;
+
+  // Reset UI
+  analyseBtn.disabled = true;
+  spinner.style.display = 'block';
+  btnLabel.textContent = 'Analysing…';
+  resultsSection.style.display = 'block';
+  resultsGrid.innerHTML = '';
+  progressWrap.style.display = 'block';
+  setProgress(0, selectedFiles.length);
+
+  // Stats accumulators
+  let detected = 0, failed = 0, totalConf = 0, confCount = 0;
+  const batchResults = [];
+
+  for (let idx = 0; idx < selectedFiles.length; idx++) {
+    const file  = selectedFiles[idx];
+    const item  = document.getElementById(`preview-${idx}`);
+    const badge = document.getElementById(`badge-${idx}`);
+
+    if (item)  item.classList.add('processing');
+    if (badge) badge.textContent = '⏳ Running…';
+    progressText.textContent = `Processing ${file.name}…`;
+    setProgress(idx, selectedFiles.length);
+
+    try {
+      const form     = new FormData();
+      const endpoint = activeMode === 'arabic' ? '/predict_arabic' : '/predict';
+      form.append('image', file);
+
+      const resp = await fetch(endpoint, { method: 'POST', body: form });
+      const data = await resp.json();
+      if (data.error) throw new Error(data.error);
+
+      if (item)  { item.classList.remove('processing'); item.classList.add('done'); }
+
+      if (activeMode === 'arabic') {
+        const display = data.plate_display || '—';
+        if (badge) badge.textContent = display;
+        if (data.detected) detected++;
+        if (data.confidence != null) { totalConf += data.confidence; confCount++; }
+        const row = { file: file.name, plate: display, confidence: data.confidence, model: data.model_used || '' };
+        batchResults.push(row);
+        appendArabicResult(file, data, idx);
+      } else {
+        if (badge) badge.textContent = data.plate_text || '—';
+        if (data.plate_text) detected++;
+        if (data.confidence != null) { totalConf += data.confidence; confCount++; }
+        const row = { file: file.name, plate: data.plate_text || '', confidence: data.confidence, model: data.model_used || '' };
+        batchResults.push(row);
+        appendResult(file, data, idx);
+      }
+
+    } catch (err) {
+      if (item)  { item.classList.remove('processing'); item.classList.add('error'); }
+      if (badge) badge.textContent = '❌ Error';
+      failed++;
+      batchResults.push({ file: file.name, plate: '', confidence: null, error: err.message });
+      appendError(file, err.message, idx);
+    }
+  }
+
+  // Final progress
+  setProgress(selectedFiles.length, selectedFiles.length);
+  progressText.textContent = 'Done!';
+
+  // Update stats bar
+  const avgConf = confCount > 0 ? (totalConf / confCount * 100).toFixed(1) + '%' : '—';
+  document.getElementById('stat-total').textContent    = selectedFiles.length;
+  document.getElementById('stat-detected').textContent = detected;
+  document.getElementById('stat-avg-conf').textContent = avgConf;
+  document.getElementById('stat-failed').textContent   = failed;
+  statsBar.style.display = 'grid';
+
+  // Results title
+  document.getElementById('results-title').textContent =
+    `Recognition Results — ${selectedFiles.length} image(s)`;
+
+  // Accumulate for export
+  sessionResults.push(...batchResults);
+
+  analyseBtn.disabled = false;
+  spinner.style.display = 'none';
+  const modeLabel = activeMode === 'arabic' ? '\u26a1\u00a0Analyse Moroccan Plates' : '\u26a1\u00a0Recognise Plates';
+  btnLabel.textContent = modeLabel;
+}
+
+function setProgress(done, total) {
+  const pct = total > 0 ? Math.round(done / total * 100) : 0;
+  progressFill.style.width = pct + '%';
+  progressPct.textContent  = `${done} / ${total}`;
+}
+
+/* ══════════════════════════════════════════════════════
+   APPEND RESULT CARD
+══════════════════════════════════════════════════════ */
+function confLevel(conf) {
+  if (conf == null) return 'mid';
+  if (conf >= 0.75) return 'high';
+  if (conf >= 0.45) return 'mid';
+  return 'low';
+}
+
+function appendResult(file, data, idx) {
+  const originalUrl = URL.createObjectURL(file);
+  const imgSrc = data.annotated_image || originalUrl;
+
+  const plate = data.plate_text || '';
+  const conf  = data.confidence;
+  const pct   = conf != null ? (conf * 100).toFixed(1) : null;
+  const level = confLevel(conf);
+  const ocr   = data.ocr_results || {};
+  const ts    = new Date().toLocaleTimeString();
+
+  const card = document.createElement('div');
+  card.className = 'result-card';
+  card.style.animationDelay = `${idx * 0.07}s`;
+
+  // Confidence bar HTML
+  const confBar = pct ? `
+    <div class="conf-row">
+      <span class="conf-label">Confidence</span>
+      <div class="conf-track"><div class="conf-fill" data-conf-level="${level}" style="width:${pct}%"></div></div>
+      <span class="conf-pct" data-conf-level="${level}">${pct}%</span>
+    </div>` : '';
+
+  // Model badge (which model fired)
+  const modelBadge = data.model_label
+    ? `<div class="model-badge-card">🧠 ${escHtml(data.model_label)}</div>`
+    : '';
+
+  card.innerHTML = `
+    <div class="result-inner">
+      <div class="result-img-wrap" data-src="${imgSrc}" role="button" tabindex="0" aria-label="Expand image">
+        <img src="${imgSrc}" alt="Detected plate" />
+        <span class="zoom-hint">🔍 Click to expand</span>
+      </div>
+      <div class="result-body">
+        <div class="result-meta">
+          <span class="result-filename">${escHtml(file.name)}</span>
+          <span class="result-ts">${ts}</span>
+        </div>
+        <div class="plate-wrap">
+          <div class="plate-frame">
+            ${plate
+              ? `<span class="plate-number">${escHtml(plate)}</span>`
+              : `<span class="plate-number no-detect">No plate detected</span>`}
+          </div>
+          ${plate ? `<button class="btn-copy" data-text="${escHtml(plate)}" title="Copy to clipboard">📋 Copy</button>` : ''}
+        </div>
+        ${confBar}
+        ${modelBadge}
+      </div>
+    </div>`;
+  // Lightbox on image click
+  const imgWrap = card.querySelector('.result-img-wrap');
+  imgWrap.addEventListener('click', () => openLightbox(imgSrc));
+  imgWrap.addEventListener('keydown', e => { if(e.key==='Enter') openLightbox(imgSrc); });
+
+  // Copy button
+  const copyBtn = card.querySelector('.btn-copy');
+  if (copyBtn) {
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(copyBtn.dataset.text).then(() => {
+        copyBtn.textContent = '✓ Copied!';
+        copyBtn.classList.add('copied');
+        setTimeout(() => { copyBtn.textContent = '📋 Copy'; copyBtn.classList.remove('copied'); }, 2000);
+      });
+    });
+  }
+
+  resultsGrid.appendChild(card);
+  card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+/* ══════════════════════════════════════════════════════
+   APPEND ERROR CARD
+══════════════════════════════════════════════════════ */
+function appendError(file, message, idx) {
+  const card = document.createElement('div');
+  card.className = 'result-card';
+  card.style.animationDelay = `${idx * 0.07}s`;
+  card.innerHTML = `
+    <div class="result-body" style="padding:22px 26px">
+      <div class="result-filename">${escHtml(file.name)}</div>
+      <div class="error-msg">❌ ${escHtml(message)}</div>
+    </div>`;
+  resultsGrid.appendChild(card);
+}
+
+/* ══════════════════════════════════════════════════════
+   LIGHTBOX
+══════════════════════════════════════════════════════ */
+
+/* APPEND ARABIC / MOROCCO RESULT CARD */
+function appendArabicResult(file, data, idx) {
+  const originalUrl = URL.createObjectURL(file);
+  const imgSrc  = data.annotated_image || originalUrl;
+  const p       = data.parsed || {};
+  const display = data.plate_display || String.fromCharCode(8212);
+  const conf    = data.confidence;
+  const pct     = conf != null ? (conf * 100).toFixed(1) : null;
+  const level   = conf == null ? 'mid' : conf >= 0.75 ? 'high' : conf >= 0.45 ? 'mid' : 'low';
+  const ts      = new Date().toLocaleTimeString();
+
+  const confBar = pct ? '<div class="conf-row"><span class="conf-label">Confidence</span><div class="conf-track"><div class="conf-fill" data-conf-level="' + level + '" style="width:' + pct + '%"></div></div><span class="conf-pct" data-conf-level="' + level + '">' + pct + '%</span></div>' : '';
+
+  const chipsArr = [];
+  if (p.left_seq)    chipsArr.push('<div class="plate-chip">Seq <strong>' + escHtml(p.left_seq) + '</strong></div>');
+  if (p.letter)      chipsArr.push('<div class="plate-chip">Letter <strong>' + escHtml(p.letter) + '</strong> <span style="color:var(--muted);font-size:10px;">(' + escHtml(p.letter_latin||'?') + ')</span></div>');
+  if (p.region_code) chipsArr.push('<div class="plate-chip">Region <strong>' + escHtml(p.region_code) + '</strong></div>');
+  if (p.city && p.city !== 'Unknown') chipsArr.push('<div class="plate-chip">&#128205; ' + escHtml(p.city) + '</div>');
+  const chips = chipsArr.join('');
+
+  const modelBadge = data.model_label ? '<div class="model-badge-card">&#129504; ' + escHtml(data.model_label) + '</div>' : '';
+
+  const card = document.createElement('div');
+  card.className = 'result-card';
+  card.style.animationDelay = (idx * 0.07) + 's';
+
+  const detectedHtml = data.detected
+    ? '<span class="plate-number">' + escHtml(display) + '</span>'
+    : '<span class="plate-number no-detect">No plate detected</span>';
+  const copyHtml = data.detected ? '<button class="btn-copy" data-text="' + escHtml(display) + '" title="Copy">&#128203; Copy</button>' : '';
+  const chipsHtml = chips ? '<div class="plate-detail-row">' + chips + '</div>' : '';
+
+  card.innerHTML = '<div class="result-inner"><div class="result-img-wrap" role="button" tabindex="0"><img src="' + imgSrc + '" alt="Plate"/><span class="zoom-hint">&#128269; Click to expand</span></div><div class="result-body"><div class="result-meta"><span class="result-filename">' + escHtml(file.name) + '</span><span class="result-ts">' + ts + '</span></div><div class="plate-wrap"><div class="plate-frame">' + detectedHtml + '</div>' + copyHtml + '</div>' + confBar + chipsHtml + modelBadge + '</div></div>';
+
+  const imgWrap = card.querySelector('.result-img-wrap');
+  imgWrap.addEventListener('click', function() { openLightbox(imgSrc); });
+  const copyBtn = card.querySelector('.btn-copy');
+  if (copyBtn) {
+    copyBtn.addEventListener('click', function() {
+      navigator.clipboard.writeText(copyBtn.dataset.text).then(function() {
+        copyBtn.textContent = 'Copied!'; copyBtn.classList.add('copied');
+        setTimeout(function() { copyBtn.textContent = 'Copy'; copyBtn.classList.remove('copied'); }, 2000);
+      });
+    });
+  }
+  resultsGrid.appendChild(card);
+  card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+function openLightbox(src) {
+  lightboxImg.src = src;
+  lightbox.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  lightbox.classList.remove('open');
+  document.body.style.overflow = '';
+  lightboxImg.src = '';
+}
+lightboxClose.addEventListener('click', closeLightbox);
+lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+/* ══════════════════════════════════════════════════════
+   CSV EXPORT
+══════════════════════════════════════════════════════ */
+exportBtn.addEventListener('click', () => {
+  if (sessionResults.length === 0) { showToast('Nothing to export yet.'); return; }
+
+  // Gather all column keys
+  const keys = [...new Set(sessionResults.flatMap(r => Object.keys(r)))];
+  const rows = [keys.join(',')];
+  sessionResults.forEach(r => {
+    rows.push(keys.map(k => `"${String(r[k] ?? '').replace(/"/g,'""')}"`).join(','));
+  });
+
+  const blob = new Blob([rows.join('\n')], { type: 'text/csv' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url;
+  a.download = `platevision_${Date.now()}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('✅ CSV exported!');
+});
+
+/* ══════════════════════════════════════════════════════
+   TOAST
+══════════════════════════════════════════════════════ */
+let toastTimer;
+function showToast(msg) {
+  toastEl.textContent = msg;
+  toastEl.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toastEl.classList.remove('show'), 3000);
+}
+
+/* ══════════════════════════════════════════════════════
+   UTILS
+══════════════════════════════════════════════════════ */
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function truncate(str, n) { return str.length > n ? str.slice(0,n-1)+'…' : str; }
+</script>
+</body>
+</html>

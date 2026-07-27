@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PlateVision — DB Admin</title>
+  <meta name="description" content="Browse all plate detections stored in the PlateVision database" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+:root {
+  --bg: #0a0d12; --surface: #111520; --card: #161c28;
+  --border: rgba(255,255,255,0.08); --border-hi: rgba(255,255,255,0.18);
+  --text: #e8ecf4; --muted: #6b7280;
+  --accent: #3b82f6; --accent2: #8b5cf6;
+  --success: #10b981; --warning: #f59e0b; --error: #ef4444;
+  --glass: rgba(255,255,255,0.04); --radius: 14px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+body::before {
+  content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(ellipse 60% 40% at 10% 10%, rgba(59,130,246,0.09) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 35% at 90% 85%, rgba(139,92,246,0.08) 0%, transparent 60%);
+}
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; gap: 14px; padding: 0 28px; height: 58px;
+  background: rgba(10,13,18,0.88); backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 17px; text-decoration: none; color: var(--text); }
+.nav-logo .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 10px var(--accent); }
+.nav-links { display: flex; gap: 6px; }
+.nav-link { font-size: 13px; padding: 5px 13px; border-radius: 8px; color: var(--muted); text-decoration: none; transition: all 0.2s; border: 1px solid transparent; }
+.nav-link:hover { color: var(--text); border-color: var(--border); }
+.nav-link.active { color: var(--text); background: var(--glass); border-color: var(--border-hi); }
+.nav-spacer { flex: 1; }
+.db-badge {
+  font-size: 12px; padding: 3px 12px; border-radius: 20px;
+  background: var(--glass); border: 1px solid var(--border); color: var(--muted);
+}
+
+/* ── Layout ── */
+.page { position: relative; z-index: 1; max-width: 1500px; margin: 0 auto; padding: 28px 24px 60px; }
+.page-header { margin-bottom: 24px; display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.page-header h1 { font-size: 24px; font-weight: 700; letter-spacing: -0.4px; }
+.page-header p { color: var(--muted); font-size: 13px; margin-top: 4px; }
+
+/* ── KPI row ── */
+.kpi-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-bottom: 24px; }
+@media (max-width: 900px) { .kpi-row { grid-template-columns: repeat(2, 1fr); } }
+.kpi {
+  background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 18px 20px; text-align: center;
+}
+.kpi-num { font-size: 28px; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+.kpi-lbl { font-size: 11px; color: var(--muted); margin-top: 3px; text-transform: uppercase; letter-spacing: 0.5px; }
+.blue   { color: var(--accent); }
+.green  { color: var(--success); }
+.yellow { color: var(--warning); }
+.purple { color: var(--accent2); }
+.red    { color: var(--error); }
+
+/* ── Filter bar ── */
+.filter-bar {
+  display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+  background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 14px 18px; margin-bottom: 20px;
+}
+.filter-bar label { font-size: 12px; color: var(--muted); white-space: nowrap; }
+.filter-select, .filter-input {
+  background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+  border-radius: 8px; padding: 6px 12px; font-size: 13px; color: var(--text);
+  outline: none; transition: border-color 0.2s;
+}
+.filter-select:focus, .filter-input:focus { border-color: var(--accent); }
+.filter-input { min-width: 180px; }
+.btn-apply {
+  padding: 7px 18px; border-radius: 9px; border: none; cursor: pointer;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff; font-size: 13px; font-weight: 600; transition: all 0.2s;
+}
+.btn-apply:hover { opacity: 0.9; transform: translateY(-1px); }
+.btn-clear {
+  padding: 7px 14px; border-radius: 9px; background: var(--glass);
+  border: 1px solid var(--border); color: var(--muted); font-size: 13px;
+  cursor: pointer; transition: all 0.2s;
+}
+.btn-clear:hover { color: var(--text); border-color: var(--border-hi); }
+.filter-spacer { flex: 1; }
+.btn-export {
+  padding: 7px 16px; border-radius: 9px; border: 1px solid rgba(16,185,129,0.3);
+  background: rgba(16,185,129,0.08); color: var(--success); font-size: 13px;
+  font-weight: 600; cursor: pointer; transition: all 0.2s;
+}
+.btn-export:hover { background: rgba(16,185,129,0.15); }
+
+/* ── Table panel ── */
+.table-panel { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.table-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 20px; border-bottom: 1px solid var(--border);
+}
+.table-header h3 { font-size: 14px; font-weight: 600; }
+.record-count { font-size: 12px; color: var(--muted); }
+.table-wrap { overflow-x: auto; max-height: 600px; overflow-y: auto; }
+.table-wrap::-webkit-scrollbar { width: 5px; height: 5px; }
+.table-wrap::-webkit-scrollbar-thumb { background: var(--border-hi); border-radius: 3px; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+thead { position: sticky; top: 0; z-index: 2; }
+thead th {
+  text-align: left; padding: 11px 16px;
+  background: var(--surface); border-bottom: 1px solid var(--border);
+  color: var(--muted); font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
+  cursor: pointer; user-select: none; white-space: nowrap;
+}
+thead th:hover { color: var(--text); }
+thead th.sorted { color: var(--accent); }
+tbody tr { border-bottom: 1px solid rgba(255,255,255,0.04); transition: background 0.15s; }
+tbody tr:hover { background: rgba(255,255,255,0.03); }
+tbody td { padding: 10px 16px; vertical-align: middle; }
+.td-plate { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 14px; letter-spacing: 0.5px; }
+.td-conf { font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+.conf-hi { color: var(--success); }
+.conf-md { color: var(--warning); }
+.conf-lo { color: var(--error); }
+.badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 10px; padding: 2px 8px; border-radius: 5px; font-weight: 600;
+}
+.badge-ls  { background: rgba(59,130,246,0.1);  color: var(--accent);  border: 1px solid rgba(59,130,246,0.25); }
+.badge-img { background: rgba(16,185,129,0.1);  color: var(--success); border: 1px solid rgba(16,185,129,0.25); }
+.badge-vid { background: rgba(245,158,11,0.1);  color: var(--warning); border: 1px solid rgba(245,158,11,0.25); }
+.badge-ar  { background: rgba(139,92,246,0.1);  color: var(--accent2); border: 1px solid rgba(139,92,246,0.25); }
+.no-data { padding: 40px; text-align: center; color: var(--muted); font-size: 13px; }
+
+/* ── Pagination ── */
+.pagination { display: flex; align-items: center; gap: 8px; padding: 14px 20px; border-top: 1px solid var(--border); }
+.page-btn {
+  padding: 5px 12px; border-radius: 7px; font-size: 12px;
+  background: var(--glass); border: 1px solid var(--border); color: var(--muted);
+  cursor: pointer; transition: all 0.2s;
+}
+.page-btn:hover:not(:disabled) { color: var(--text); border-color: var(--border-hi); }
+.page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.page-btn.current { background: rgba(59,130,246,0.12); border-color: rgba(59,130,246,0.3); color: var(--accent); }
+.page-info { font-size: 12px; color: var(--muted); flex: 1; text-align: center; }
+
+/* ── Toast ── */
+.toast { position: fixed; bottom: 24px; right: 24px; z-index: 999; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px 18px; font-size: 13px; box-shadow: 0 8px 30px rgba(0,0,0,0.4); display: none; }
+.toast.show { display: block; animation: toastIn 0.3s ease; }
+@keyframes toastIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-logo" href="/"><span class="dot"></span> PlateVision</a>
+  <div class="nav-links">
+    <a class="nav-link" href="/">📷 Images</a>
+    <a class="nav-link" href="/livestream">📡 Live Stream</a>
+    <a class="nav-link" href="/video">🎞 Video</a>
+    <a class="nav-link" href="/dashboard">📊 Dashboard</a>
+    <a class="nav-link active" href="/db">🗄 DB Admin</a>
+    <a class="nav-link" href="/supervisor">👮 Supervisor</a>
+    <a class="nav-link" href="/logs">📋 Logs</a>
+  </div>
+  <span class="nav-spacer"></span>
+  <span class="db-badge" id="nav-db-badge">Connecting…</span>
+</nav>
+
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h1>🗄 Detection Database</h1>
+      <p>All plate reads — images, video, and live stream — stored persistently.</p>
+    </div>
+  </div>
+
+  <!-- KPI row -->
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-num blue"   id="k-total">—</div><div class="kpi-lbl">Total Records</div></div>
+    <div class="kpi"><div class="kpi-num green"  id="k-img">—</div><div class="kpi-lbl">From Images</div></div>
+    <div class="kpi"><div class="kpi-num yellow" id="k-vid">—</div><div class="kpi-lbl">From Video</div></div>
+    <div class="kpi"><div class="kpi-num purple" id="k-live">—</div><div class="kpi-lbl">From Livestream</div></div>
+    <div class="kpi"><div class="kpi-num red"    id="k-backend">—</div><div class="kpi-lbl">Storage Backend</div></div>
+  </div>
+
+  <!-- Filter bar -->
+  <div class="filter-bar">
+    <label>Source</label>
+    <select id="f-source" class="filter-select">
+      <option value="">All</option>
+      <option value="image">Image</option>
+      <option value="video">Video</option>
+      <option value="livestream">Livestream</option>
+    </select>
+    <label>Plate contains</label>
+    <input id="f-plate" class="filter-input" type="text" placeholder="e.g. ABC" />
+    <label>Min conf</label>
+    <select id="f-conf" class="filter-select">
+      <option value="0">Any</option>
+      <option value="0.45">≥ 45%</option>
+      <option value="0.75">≥ 75%</option>
+      <option value="0.90">≥ 90%</option>
+    </select>
+    <label>Limit</label>
+    <select id="f-limit" class="filter-select">
+      <option value="100">100</option>
+      <option value="500">500</option>
+      <option value="1000">1000</option>
+    </select>
+    <button class="btn-apply" id="btn-apply">Apply</button>
+    <button class="btn-clear" id="btn-clear-filters">Clear</button>
+    <span class="filter-spacer"></span>
+    <button class="btn-wipe-db" id="btn-wipe-db" onclick="clearDatabase()" style="padding:7px 16px;border-radius:9px;border:1px solid rgba(239,68,68,0.3);background:rgba(239,68,68,0.1);color:var(--error);font-size:13px;font-weight:600;cursor:pointer;margin-right:8px;">🗑 Clear Database</button>
+    <button class="btn-export" id="btn-export-csv">⬇ Export CSV</button>
+  </div>
+
+  <!-- Table -->
+  <div class="table-panel">
+    <div class="table-header">
+      <h3>Records</h3>
+      <span class="record-count" id="record-count">—</span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th data-col="plate_text">Plate ↕</th>
+            <th data-col="confidence">Conf ↕</th>
+            <th>Source</th>
+            <th>Mode</th>
+            <th data-col="model_used">Model ↕</th>
+            <th>File / Device</th>
+            <th data-col="timestamp">Timestamp ↕</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="db-tbody">
+          <tr><td colspan="8" class="no-data">Loading…</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination" id="pagination" style="display:none;">
+      <button class="page-btn" id="btn-prev">← Prev</button>
+      <span class="page-info" id="page-info"></span>
+      <button class="page-btn" id="btn-next">Next →</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ── State ── */
+let allData    = [];
+let filtered   = [];
+let sortCol    = 'timestamp';
+let sortDir    = -1;  // -1 desc, 1 asc
+let page       = 0;
+const PAGE_SZ  = 50;
+
+/* ── Load ── */
+async function loadStats() {
+  try {
+    const r = await fetch('/db/stats');
+    const s = await r.json();
+    document.getElementById('k-total').textContent   = s.total ?? 0;
+    document.getElementById('k-img').textContent     = (s.by_source || {}).image       ?? 0;
+    document.getElementById('k-vid').textContent     = (s.by_source || {}).video       ?? 0;
+    document.getElementById('k-live').textContent    = (s.by_source || {}).livestream  ?? 0;
+    document.getElementById('k-backend').textContent = (s.backend || '—').split(' ')[0];
+    const navBadge = document.getElementById('nav-db-badge');
+    if (navBadge) {
+      navBadge.textContent = s.backend || 'DB';
+      if ((s.backend || '').includes('MontyDB')) {
+        navBadge.style.color = '#f59e0b';
+        navBadge.style.borderColor = 'rgba(245,158,11,0.3)';
+      } else {
+        navBadge.style.color = '#10b981';
+        navBadge.style.borderColor = 'rgba(16,185,129,0.3)';
+      }
+    }
+  } catch (e) { console.warn('stats error', e); }
+}
+
+async function loadData() {
+  const limit = document.getElementById('f-limit').value || 100;
+  const source = document.getElementById('f-source').value || '';
+  let url = `/db/detections?limit=${limit}`;
+  if (source) url += `&source=${source}`;
+  try {
+    const r = await fetch(url);
+    const d = await r.json();
+    allData = d.detections || [];
+    applyFilter();
+  } catch (e) {
+    document.getElementById('db-tbody').innerHTML = `<tr><td colspan="7" class="no-data">Error: ${e.message}</td></tr>`;
+  }
+}
+
+function applyFilter() {
+  const plateQ = document.getElementById('f-plate').value.trim().toUpperCase();
+  const confMin = parseFloat(document.getElementById('f-conf').value || 0);
+
+  filtered = allData.filter(d => {
+    if (plateQ && !(d.plate_text || '').toUpperCase().includes(plateQ)) return false;
+    if (confMin > 0 && (d.confidence || 0) < confMin) return false;
+    return true;
+  });
+
+  // Sort
+  filtered.sort((a, b) => {
+    const av = a[sortCol] ?? '';
+    const bv = b[sortCol] ?? '';
+    if (av < bv) return sortDir;
+    if (av > bv) return -sortDir;
+    return 0;
+  });
+
+  page = 0;
+  renderTable();
+}
+
+function renderTable() {
+  const tbody = document.getElementById('db-tbody');
+  document.getElementById('record-count').textContent = `${filtered.length} record${filtered.length !== 1 ? 's' : ''}`;
+
+  const start = page * PAGE_SZ;
+  const slice = filtered.slice(start, start + PAGE_SZ);
+
+  if (!slice.length) {
+    tbody.innerHTML = '<tr><td colspan="8" class="no-data">No records match the current filters</td></tr>';
+    document.getElementById('pagination').style.display = 'none';
+    return;
+  }
+
+  tbody.innerHTML = slice.map(d => {
+    const conf   = d.confidence != null ? d.confidence : null;
+    const confPct = conf != null ? (conf * 100).toFixed(1) + '%' : '—';
+    const confCls = conf == null ? '' : conf >= 0.75 ? 'conf-hi' : conf >= 0.45 ? 'conf-md' : 'conf-lo';
+    const ts = d.timestamp ? new Date(d.timestamp).toLocaleString() : '—';
+    const src = d.source || 'unknown';
+    const srcBadge = src === 'livestream' ? 'badge-ls' : src === 'video' ? 'badge-vid' : 'badge-img';
+    const srcLabel = src === 'livestream' ? '📡' : src === 'video' ? '🎞' : '📷';
+    const isAr = (d.mode === 'arabic') || (d.model_used || '').includes('arabic');
+    const modeBadge = isAr ? '<span class="badge badge-ar">AR</span>' : '';
+    const fileOrDev = (d.source_url || d.device || '').slice(-30) || '—';
+    const recId = d._id ? String(d._id) : '';
+    return `<tr>
+      <td class="td-plate">${escHtml(d.plate_text || '—')}</td>
+      <td class="td-conf ${confCls}">${confPct}</td>
+      <td><span class="badge ${srcBadge}">${srcLabel} ${escHtml(src)}</span></td>
+      <td>${modeBadge}</td>
+      <td style="font-size:11px;color:var(--muted)">${escHtml(d.model_used || '—')}</td>
+      <td style="font-size:11px;color:var(--muted);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${escHtml(d.source_url||d.device||'')}">${escHtml(fileOrDev)}</td>
+      <td style="font-size:11px;color:var(--muted);white-space:nowrap">${ts}</td>
+      <td>
+        <button onclick="deleteSingleRecord('${recId}', '${escHtml(d.plate_text||'')}')" style="padding:3px 8px;border-radius:6px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.25);color:var(--error);font-size:11px;cursor:pointer;transition:all 0.2s;">🗑 Delete</button>
+      </td>
+    </tr>`;
+  }).join('');
+
+  // Pagination
+  const totalPages = Math.ceil(filtered.length / PAGE_SZ);
+  if (totalPages > 1) {
+    document.getElementById('pagination').style.display = 'flex';
+    document.getElementById('page-info').textContent = `Page ${page + 1} of ${totalPages}`;
+    document.getElementById('btn-prev').disabled = page === 0;
+    document.getElementById('btn-next').disabled = page >= totalPages - 1;
+  } else {
+    document.getElementById('pagination').style.display = 'none';
+  }
+}
+
+/* ── Sort ── */
+document.querySelectorAll('thead th[data-col]').forEach(th => {
+  th.addEventListener('click', () => {
+    const col = th.dataset.col;
+    if (sortCol === col) { sortDir *= -1; }
+    else { sortCol = col; sortDir = -1; }
+    document.querySelectorAll('thead th').forEach(t => t.classList.remove('sorted'));
+    th.classList.add('sorted');
+    applyFilter();
+  });
+});
+
+/* ── Filter controls ── */
+document.getElementById('btn-apply').addEventListener('click', () => { loadData(); loadStats(); });
+document.getElementById('btn-clear-filters').addEventListener('click', () => {
+  document.getElementById('f-source').value = '';
+  document.getElementById('f-plate').value = '';
+  document.getElementById('f-conf').value = '0';
+  document.getElementById('f-limit').value = '100';
+  loadData();
+});
+document.getElementById('f-plate').addEventListener('keydown', e => { if (e.key === 'Enter') applyFilter(); });
+
+/* ── Pagination ── */
+document.getElementById('btn-prev').addEventListener('click', () => { if (page > 0) { page--; renderTable(); } });
+document.getElementById('btn-next').addEventListener('click', () => { page++; renderTable(); });
+
+/* ── Export CSV ── */
+document.getElementById('btn-export-csv').addEventListener('click', () => {
+  if (!filtered.length) { showToast('No data to export'); return; }
+  const header = 'Plate,Confidence,Source,Mode,Model,File/Device,Timestamp\n';
+  const rows = filtered.map(d => [
+    d.plate_text, d.confidence != null ? (d.confidence*100).toFixed(1)+'%' : '',
+    d.source, (d.mode === 'arabic') ? 'Arabic' : 'English',
+    d.model_used, d.source_url || d.device || '',
+    d.timestamp
+  ].map(v => `"${String(v||'').replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob([header + rows], { type: 'text/csv;charset=utf-8;' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `platevision_db_${Date.now()}.csv`;
+  a.click();
+  showToast(`✅ Exported ${filtered.length} records`);
+});
+
+/* ── Deletion Handlers ── */
+async function deleteSingleRecord(id, plateText) {
+  if (!id) return;
+  if (!confirm(`Delete record for plate "${plateText || id}"?`)) return;
+  try {
+    const r = await fetch(`/db/detections/${encodeURIComponent(id)}`, { method: 'DELETE' });
+    const data = await r.json();
+    if (data.ok) {
+      showToast(`🗑 Record ${plateText} deleted`);
+      loadData();
+      loadStats();
+    } else {
+      showToast(`❌ Error: ${data.error || 'Failed to delete'}`);
+    }
+  } catch (err) {
+    showToast(`❌ Error: ${err.message}`);
+  }
+}
+
+async function clearDatabase() {
+  const currentSource = document.getElementById('f-source').value || '';
+  const scopeMsg = currentSource ? `all ${currentSource.toUpperCase()} records` : 'ALL detection records';
+  if (!confirm(`⚠️ Are you sure you want to delete ${scopeMsg} from the database? This cannot be undone.`)) return;
+
+  try {
+    const url = `/db/detections/clear` + (currentSource ? `?source=${encodeURIComponent(currentSource)}` : '');
+    const r = await fetch(url, { method: 'POST' });
+    const data = await r.json();
+    if (data.ok) {
+      showToast(`🗑 Deleted ${data.deleted} record(s)`);
+      loadData();
+      loadStats();
+    } else {
+      showToast(`❌ Error: ${data.error || 'Failed to clear database'}`);
+    }
+  } catch (err) {
+    showToast(`❌ Error: ${err.message}`);
+  }
+}
+
+/* ── Util ── */
+function escHtml(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function showToast(msg, dur=3000) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), dur);
+}
+
+/* ── Init ── */
+loadStats();
+loadData();
+// Auto-refresh stats every 30s
+setInterval(() => { loadStats(); }, 30000);
+</script>
+</body>
+</html>

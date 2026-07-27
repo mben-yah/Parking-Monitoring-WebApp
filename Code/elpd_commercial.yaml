@@ -1,0 +1,6 @@
+path: C:/Users/Mohamed Walid/Desktop/Internship/Code/ELPD_Commercial
+train: images/train
+val:   images/val
+nc: 1
+names:
+  0: license_plate

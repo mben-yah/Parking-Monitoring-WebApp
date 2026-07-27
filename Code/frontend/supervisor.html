@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>PlateVision — Client & Vehicle Registration Manager</title>
+  <meta name="description" content="Manually add and manage vehicle plates, assigned owners, authorization status, and real-time alerts."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#0a0d12;--surface:#111520;--card:#161c28;
+  --border:rgba(255,255,255,0.08);--border-hi:rgba(255,255,255,0.18);
+  --text:#e8ecf4;--muted:#6b7280;
+  --accent:#3b82f6;--accent2:#8b5cf6;
+  --success:#10b981;--warning:#f59e0b;--error:#ef4444;
+  --glass:rgba(255,255,255,0.04);--radius:14px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 70% 50% at 15% 5%,rgba(16,185,129,.07) 0%,transparent 60%),
+    radial-gradient(ellipse 60% 40% at 85% 90%,rgba(59,130,246,.08) 0%,transparent 60%);
+}
+
+/* ── Nav ── */
+.nav{position:sticky;top:0;z-index:200;display:flex;align-items:center;gap:12px;padding:0 24px;height:58px;background:rgba(10,13,18,.92);backdrop-filter:blur(18px);border-bottom:1px solid var(--border)}
+.nav-logo{display:flex;align-items:center;gap:9px;font-weight:700;font-size:17px;text-decoration:none;color:var(--text)}
+.nav-logo .dot{width:10px;height:10px;border-radius:50%;background:var(--success);box-shadow:0 0 10px var(--success)}
+.nav-links{display:flex;gap:4px}
+.nav-link{font-size:13px;padding:5px 12px;border-radius:8px;color:var(--muted);text-decoration:none;transition:all .2s;border:1px solid transparent}
+.nav-link:hover{color:var(--text);border-color:var(--border)}
+.nav-link.active{color:var(--text);background:var(--glass);border-color:var(--border-hi)}
+.nav-spacer{flex:1}
+.alert-pill{display:flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.3);color:var(--error);cursor:pointer;transition:all .2s}
+.alert-pill:hover{background:rgba(239,68,68,.2)}
+.alert-pill .pulse{width:7px;height:7px;border-radius:50%;background:var(--error);animation:breathe 1.5s ease-in-out infinite}
+@keyframes breathe{0%,100%{box-shadow:0 0 6px var(--error)}50%{box-shadow:0 0 18px var(--error),0 0 30px rgba(239,68,68,.4)}}
+.alert-pill.hidden{display:none}
+
+/* ── Alert banner ── */
+#alert-banner{
+  display:none;position:relative;z-index:10;
+  margin:16px 24px 0;border-radius:var(--radius);
+  background:rgba(239,68,68,.08);
+  border:1px solid rgba(239,68,68,.4);
+  padding:16px 22px;
+  animation:pulse-border 1.8s ease-in-out infinite;
+}
+@keyframes pulse-border{
+  0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.35)}
+  50%{box-shadow:0 0 0 10px rgba(239,68,68,0)}
+}
+#alert-banner.show{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.banner-icon{font-size:24px;flex-shrink:0}
+.banner-text{flex:1}
+.banner-title{font-size:15px;font-weight:700;color:var(--error)}
+.banner-sub{font-size:12px;color:rgba(239,68,68,.75);margin-top:2px}
+.banner-actions{display:flex;gap:8px;flex-shrink:0}
+.btn-ack-all{padding:7px 16px;border-radius:9px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.4);color:var(--error);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-ack-all:hover{background:rgba(239,68,68,.25)}
+.btn-view-alerts{padding:7px 16px;border-radius:9px;background:rgba(239,68,68,.8);border:none;color:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
+
+/* ── Page layout ── */
+.page{position:relative;z-index:1;max-width:1400px;margin:0 auto;padding:24px 24px 60px}
+.page-header{margin-bottom:20px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px}
+.page-header h1{font-size:26px;font-weight:800;letter-spacing:-.5px}
+.page-header p{color:var(--muted);font-size:13px;margin-top:4px}
+
+/* ── KPI row ── */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+@media(max-width:900px){.kpi-row{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;text-align:center;transition:border-color .2s}
+.kpi:hover{border-color:var(--border-hi)}
+.kpi-num{font-size:30px;font-weight:700;font-family:'JetBrains Mono',monospace;line-height:1}
+.kpi-lbl{font-size:11px;color:var(--muted);margin-top:5px;text-transform:uppercase;letter-spacing:.5px}
+.col-green{color:var(--success)}.col-red{color:var(--error)}.col-amber{color:var(--warning)}.col-muted{color:var(--muted)}
+
+/* ── Manual Registration Form Card ── */
+.registration-card{
+  background:var(--card);border:1px solid var(--border-hi);
+  border-radius:var(--radius);padding:24px;margin-bottom:24px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.3);
+}
+.card-header-title{font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px;margin-bottom:16px;color:var(--text)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
+@media(max-width:900px){.form-grid{grid-template-columns:1fr}}
+
+.field-group{display:flex;flex-direction:column;gap:6px}
+.field-group label{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.field-group input, .field-group select, .field-group textarea{
+  background:rgba(255,255,255,.05);border:1px solid var(--border);
+  border-radius:9px;padding:10px 14px;font-size:14px;color:var(--text);outline:none;
+  transition:all .2s;font-family:'Inter',sans-serif;
+}
+.field-group input:focus, .field-group select:focus, .field-group textarea:focus{
+  border-color:var(--accent);box-shadow:0 0 0 3px rgba(59,130,246,0.15);
+}
+
+/* Segmented status toggle */
+.status-segmented{display:flex;background:rgba(0,0,0,0.25);border:1px solid var(--border);border-radius:9px;padding:3px;gap:3px}
+.status-opt{
+  flex:1;text-align:center;padding:8px;font-size:13px;font-weight:600;border-radius:7px;
+  cursor:pointer;user-select:none;transition:all .2s;color:var(--muted);
+}
+.status-opt.opt-auth.active{background:rgba(16,185,129,0.2);color:var(--success);border:1px solid rgba(16,185,129,0.4)}
+.status-opt.opt-unauth.active{background:rgba(239,68,68,0.2);color:var(--error);border:1px solid rgba(239,68,68,0.4)}
+
+.btn-submit-reg{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;border:none;border-radius:10px;padding:12px 24px;
+  font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;
+}
+.btn-submit-reg:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(59,130,246,0.4)}
+
+/* ── Content Grid ── */
+.content-grid{display:grid;grid-template-columns:1.8fr 1.2fr;gap:20px}
+@media(max-width:1000px){.content-grid{grid-template-columns:1fr}}
+
+.panel{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);display:flex;flex-direction:column;min-height:500px;overflow:hidden}
+.panel-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px}
+.panel-title{font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px}
+
+.table-wrap{flex:1;overflow-y:auto}
+.table-wrap::-webkit-scrollbar{width:4px}
+.table-wrap::-webkit-scrollbar-thumb{background:var(--border-hi);border-radius:2px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{position:sticky;top:0;text-align:left;padding:11px 16px;background:var(--surface);border-bottom:1px solid var(--border);color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.5px;z-index:1}
+tbody tr{border-bottom:1px solid rgba(255,255,255,.04);transition:background .15s}
+tbody tr:hover{background:rgba(255,255,255,.03)}
+tbody td{padding:10px 16px;vertical-align:middle}
+
+.td-plate{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;color:var(--text)}
+.td-owner{font-weight:600;color:#60a5fa}
+.td-muted{font-size:12px;color:var(--muted)}
+.td-ts{font-size:11px;color:var(--muted);white-space:nowrap}
+.no-data{padding:40px;text-align:center;color:var(--muted);font-size:13px}
+
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:3px 9px;border-radius:6px;font-weight:700}
+.badge-auth{background:rgba(16,185,129,.12);color:var(--success);border:1px solid rgba(16,185,129,.3)}
+.badge-unauth{background:rgba(239,68,68,.12);color:var(--error);border:1px solid rgba(239,68,68,.3)}
+.badge-unknown{background:rgba(245,158,11,.12);color:var(--warning);border:1px solid rgba(245,158,11,.3)}
+.badge-ls{background:rgba(59,130,246,.1);color:var(--accent);border:1px solid rgba(59,130,246,.25)}
+.badge-vid{background:rgba(245,158,11,.08);color:var(--warning);border:1px solid rgba(245,158,11,.2)}
+.badge-img{background:rgba(16,185,129,.1);color:var(--success);border:1px solid rgba(16,185,129,.25)}
+
+.btn-action{padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;border:1px solid transparent}
+.btn-toggle-unauth{background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.3);color:var(--error)}
+.btn-toggle-unauth:hover{background:rgba(239,68,68,.25)}
+.btn-toggle-auth{background:rgba(16,185,129,.1);border-color:rgba(16,185,129,.3);color:var(--success)}
+.btn-toggle-auth:hover{background:rgba(16,185,129,.25)}
+.btn-del{background:rgba(255,255,255,.05);border-color:var(--border);color:var(--muted)}
+.btn-del:hover{background:rgba(239,68,68,.2);color:var(--error);border-color:rgba(239,68,68,.4)}
+.btn-ack{padding:4px 10px;border-radius:6px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);color:var(--success);font-size:11px;cursor:pointer;transition:all .2s;white-space:nowrap}
+.btn-ack:hover{background:rgba(16,185,129,.25)}
+
+.filter-tabs{display:flex;gap:6px;padding:12px 18px;border-bottom:1px solid var(--border)}
+.tab-btn{padding:5px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--muted);transition:all .2s}
+.tab-btn.active{background:var(--glass);border-color:var(--border-hi);color:var(--text)}
+
+.search-input{background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:8px;padding:5px 12px;font-size:12px;color:var(--text);outline:none;margin-left:auto;width:180px}
+.search-input:focus{border-color:var(--accent)}
+
+/* ── Toast ── */
+#toast{position:fixed;bottom:24px;right:24px;z-index:999;min-width:280px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:13px 18px;font-size:13px;box-shadow:0 8px 30px rgba(0,0,0,.5);display:none}
+#toast.show{display:block;animation:toastIn .3s ease}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+#toast.err{border-color:rgba(239,68,68,.4);background:rgba(239,68,68,.12)}
+#toast.ok{border-color:rgba(16,185,129,.4);background:rgba(16,185,129,.12)}
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav class="nav">
+  <a class="nav-logo" href="/"><span class="dot"></span> PlateVision</a>
+  <div class="nav-links">
+    <a class="nav-link" href="/">📷 Images</a>
+    <a class="nav-link" href="/livestream">📡 Live</a>
+    <a class="nav-link" href="/video">🎞 Video</a>
+    <a class="nav-link" href="/dashboard">📊 Dashboard</a>
+    <a class="nav-link" href="/db">🗄 DB</a>
+    <a class="nav-link active" href="/supervisor">🛡 Supervisor (Clients & Vehicles)</a>
+    <a class="nav-link" href="/logs">📋 Logs</a>
+  </div>
+  <span class="nav-spacer"></span>
+  <div class="alert-pill hidden" id="nav-alert-pill" onclick="document.getElementById('alerts-panel').scrollIntoView({behavior:'smooth'})">
+    <div class="pulse"></div>
+    <span id="nav-alert-count">0</span> Alert<span id="nav-alert-s">s</span>
+  </div>
+</nav>
+
+<!-- Alert banner -->
+<div id="alert-banner">
+  <div class="banner-icon">🚨</div>
+  <div class="banner-text">
+    <div class="banner-title" id="banner-title">Unauthorized vehicle detected!</div>
+    <div class="banner-sub" id="banner-sub">Unacknowledged alerts require your attention</div>
+  </div>
+  <div class="banner-actions">
+    <button class="btn-ack-all" onclick="acknowledgeAll()">✓ Acknowledge All</button>
+    <button class="btn-view-alerts" onclick="document.getElementById('alerts-panel').scrollIntoView({behavior:'smooth'})">View Alerts ↓</button>
+  </div>
+</div>
+
+<!-- Page -->
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h1>🛡 Client & Vehicle Authorization Manager</h1>
+      <p>Add vehicle plate numbers with corresponding owner names and set their authorization status (Authorized vs Flagged).</p>
+    </div>
+  </div>
+
+  <!-- KPI row -->
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-num col-green" id="k-wl">—</div><div class="kpi-lbl">🟢 Authorized (Whitelisted)</div></div>
+    <div class="kpi"><div class="kpi-num col-red"   id="k-bl">—</div><div class="kpi-lbl">🔴 Unauthorized (Flagged)</div></div>
+    <div class="kpi"><div class="kpi-num col-amber" id="k-ua">—</div><div class="kpi-lbl">⚠ Pending Alerts</div></div>
+    <div class="kpi"><div class="kpi-num col-muted" id="k-at">—</div><div class="kpi-lbl">Total Alerts Logged</div></div>
+  </div>
+
+  <!-- ── Registration Form Card ── -->
+  <div class="registration-card">
+    <div class="card-header-title">
+      <span>➕ Add / Register Client Vehicle</span>
+    </div>
+    <form id="reg-form" onsubmit="handleRegistration(event)">
+      <div class="form-grid">
+        <div class="field-group">
+          <label for="reg-plate">Plate Number *</label>
+          <input id="reg-plate" type="text" placeholder="e.g. 12345 ب 6 or ABC-1234" required autocomplete="off"/>
+        </div>
+        <div class="field-group">
+          <label for="reg-owner">Owner Name *</label>
+          <input id="reg-owner" type="text" placeholder="e.g. Mohamed Walid / John Doe" required autocomplete="off"/>
+        </div>
+        <div class="field-group">
+          <label>Authorization Status *</label>
+          <div class="status-segmented">
+            <div class="status-opt opt-auth active" id="opt-auth" onclick="setStatusOption('authorized')">
+              🟢 Authorized
+            </div>
+            <div class="status-opt opt-unauth" id="opt-unauth" onclick="setStatusOption('unauthorized')">
+              🔴 Unauthorized
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-grid" style="grid-template-columns: 2fr 1fr;">
+        <div class="field-group">
+          <label for="reg-notes">Notes / Reason</label>
+          <input id="reg-notes" type="text" placeholder="e.g. Resident Bay #14, VIP, or Overdue Fees / Banned"/>
+        </div>
+        <div class="field-group" style="justify-content:flex-end">
+          <button type="submit" class="btn-submit-reg">💾 Save Vehicle Registration</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- ── Main Content Grid ── -->
+  <div class="content-grid">
+
+    <!-- Registered Vehicles Panel -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">📋 Vehicle & Client Directory</div>
+      </div>
+      <div class="filter-tabs">
+        <button class="tab-btn active" id="tab-all" onclick="setDirTab('all')">All Vehicles</button>
+        <button class="tab-btn" id="tab-auth" onclick="setDirTab('auth')">🟢 Authorized Only</button>
+        <button class="tab-btn" id="tab-unauth" onclick="setDirTab('unauth')">🔴 Unauthorized Only</button>
+        <input class="search-input" id="dir-search" type="text" placeholder="🔍 Search plate/owner…" oninput="renderDirectory()"/>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Plate</th>
+              <th>Owner Name</th>
+              <th>Status</th>
+              <th>Notes / Reason</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="dir-tbody">
+            <tr><td colspan="5" class="no-data">Loading vehicle directory…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Live Alerts Panel -->
+    <div class="panel" id="alerts-panel">
+      <div class="panel-header">
+        <div class="panel-title">🚨 Real-time Intrusion Alerts</div>
+        <button class="btn-ack-all-sm" style="padding:4px 10px;border-radius:6px;background:rgba(239,68,68,.12);color:var(--error);border:1px solid rgba(239,68,68,.3);font-weight:600;cursor:pointer;" onclick="acknowledgeAll()">✓ Ack All</button>
+      </div>
+      <div class="filter-tabs">
+        <button class="tab-btn active" id="t-all" onclick="setAlertFilter(false)">All Alerts</button>
+        <button class="tab-btn" id="t-unack" onclick="setAlertFilter(true)">Pending Only</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Plate</th>
+              <th>Type</th>
+              <th>Source</th>
+              <th>Time</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="al-tbody">
+            <tr><td colspan="5" class="no-data">Loading alerts…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /content-grid -->
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* ── State ── */
+let wlData = [], blData = [], alData = [];
+let currentStatusOpt = 'authorized';
+let dirTab = 'all';
+let alertUnackOnly = false;
+let sseAlertSource = null;
+let audioCtx = null;
+
+/* ── Util ── */
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function fmtTs(ts){ return ts ? new Date(ts).toLocaleString() : '—'; }
+function toast(msg, type='ok', dur=3500){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'show ' + type;
+  clearTimeout(t._timer);
+  t._timer = setTimeout(()=>t.classList.remove('show'), dur);
+}
+function beep(){
+  try{
+    if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.frequency.value = 880; gain.gain.setValueAtTime(.3, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(.001, audioCtx.currentTime + .6);
+    osc.start(); osc.stop(audioCtx.currentTime + .6);
+  }catch(e){}
+}
+
+/* ── Form Status Toggle Option ── */
+function setStatusOption(opt){
+  currentStatusOpt = opt;
+  document.getElementById('opt-auth').classList.toggle('active', opt === 'authorized');
+  document.getElementById('opt-unauth').classList.toggle('active', opt === 'unauthorized');
+}
+
+/* ── Handle Registration Submission ── */
+async function handleRegistration(e){
+  e.preventDefault();
+  const plate = document.getElementById('reg-plate').value.trim();
+  const owner = document.getElementById('reg-owner').value.trim();
+  const notes = document.getElementById('reg-notes').value.trim();
+
+  if(!plate){ toast('Please enter a plate number','err'); return; }
+  if(!owner){ toast('Please enter owner name','err'); return; }
+
+  const endpoint = currentStatusOpt === 'authorized' ? '/api/parking/whitelist' : '/api/parking/blacklist';
+  const bodyData = currentStatusOpt === 'authorized' 
+    ? { plate_text: plate, owner: owner, notes: notes }
+    : { plate_text: plate, owner: owner, reason: notes };
+
+  try {
+    const r = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(bodyData)
+    });
+    if(!r.ok) throw new Error(await r.text());
+    
+    toast(`✅ Registered ${plate} (${owner}) as ${currentStatusOpt.toUpperCase()}`, 'ok');
+    document.getElementById('reg-form').reset();
+    setStatusOption('authorized');
+    loadAll();
+  } catch(err) {
+    toast('Error saving registration: ' + err.message, 'err');
+  }
+}
+
+/* ── Directory Tabs & Rendering ── */
+function setDirTab(tab){
+  dirTab = tab;
+  document.getElementById('tab-all').classList.toggle('active', tab==='all');
+  document.getElementById('tab-auth').classList.toggle('active', tab==='auth');
+  document.getElementById('tab-unauth').classList.toggle('active', tab==='unauth');
+  renderDirectory();
+}
+
+function renderDirectory(){
+  const tbody = document.getElementById('dir-tbody');
+  const searchQ = (document.getElementById('dir-search').value || '').trim().toLowerCase();
+
+  // Combine whitelist (authorized) and blacklist (unauthorized)
+  let items = [];
+  wlData.forEach(item => {
+    items.push({
+      plate_text: item.plate_text,
+      owner: item.owner || '—',
+      status: 'authorized',
+      notes: item.notes || '—',
+      added_at: item.added_at
+    });
+  });
+  blData.forEach(item => {
+    items.push({
+      plate_text: item.plate_text,
+      owner: item.owner || '—',
+      status: 'unauthorized',
+      notes: item.reason || '—',
+      added_at: item.added_at
+    });
+  });
+
+  // Filter by Tab
+  if(dirTab === 'auth') items = items.filter(i => i.status === 'authorized');
+  if(dirTab === 'unauth') items = items.filter(i => i.status === 'unauthorized');
+
+  // Filter by Search
+  if(searchQ){
+    items = items.filter(i => 
+      i.plate_text.toLowerCase().includes(searchQ) || 
+      i.owner.toLowerCase().includes(searchQ) ||
+      i.notes.toLowerCase().includes(searchQ)
+    );
+  }
+
+  if(!items.length){
+    tbody.innerHTML = '<tr><td colspan="5" class="no-data">No vehicle registrations found</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = items.map(d => {
+    const isAuth = d.status === 'authorized';
+    const badgeHtml = isAuth 
+      ? '<span class="badge badge-auth">🟢 Authorized</span>'
+      : '<span class="badge badge-unauth">🔴 Unauthorized</span>';
+    
+    const toggleBtnHtml = isAuth
+      ? `<button class="btn-action btn-toggle-unauth" onclick="toggleStatus('${esc(d.plate_text)}', '${esc(d.owner)}', 'unauthorized')">Flag Unauthorized</button>`
+      : `<button class="btn-action btn-toggle-auth" onclick="toggleStatus('${esc(d.plate_text)}', '${esc(d.owner)}', 'authorized')">Authorize</button>`;
+
+    return `<tr>
+      <td class="td-plate">${esc(d.plate_text)}</td>
+      <td class="td-owner">${esc(d.owner)}</td>
+      <td>${badgeHtml}</td>
+      <td class="td-muted">${esc(d.notes)}</td>
+      <td>
+        <div style="display:flex;gap:6px;align-items:center;">
+          ${toggleBtnHtml}
+          <button class="btn-action btn-del" onclick="deleteVehicle('${esc(d.plate_text)}', '${d.status}')">🗑 Delete</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+async function toggleStatus(plate, owner, targetStatus){
+  const endpoint = targetStatus === 'authorized' ? '/api/parking/whitelist' : '/api/parking/blacklist';
+  const bodyData = targetStatus === 'authorized'
+    ? { plate_text: plate, owner: owner, notes: 'Status toggled to Authorized' }
+    : { plate_text: plate, owner: owner, reason: 'Status toggled to Unauthorized' };
+
+  try {
+    await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(bodyData)
+    });
+    toast(`Updated ${plate} to ${targetStatus.toUpperCase()}`, 'ok');
+    loadAll();
+  } catch(e) {
+    toast('Failed to update status', 'err');
+  }
+}
+
+async function deleteVehicle(plate, currentStatus){
+  if(!confirm(`Delete registration for plate ${plate}?`)) return;
+  const endpoint = currentStatus === 'authorized' ? '/api/parking/whitelist/' : '/api/parking/blacklist/';
+  try {
+    await fetch(endpoint + encodeURIComponent(plate), { method: 'DELETE' });
+    toast(`Deleted ${plate}`, 'ok');
+    loadAll();
+  } catch(e) {
+    toast('Failed to delete', 'err');
+  }
+}
+
+/* ── Load Stats, Whitelist, Blacklist, Alerts ── */
+async function loadStats(){
+  try{
+    const r = await fetch('/api/parking/stats');
+    const s = await r.json();
+    document.getElementById('k-wl').textContent = s.whitelist_count ?? 0;
+    document.getElementById('k-bl').textContent = s.blacklist_count ?? 0;
+    document.getElementById('k-ua').textContent = s.alerts_unacked ?? 0;
+    document.getElementById('k-at').textContent = s.alerts_total   ?? 0;
+    updateAlertBanner(s.alerts_unacked ?? 0);
+  }catch(e){ console.warn('stats err',e); }
+}
+
+function updateAlertBanner(count){
+  const banner = document.getElementById('alert-banner');
+  const pill   = document.getElementById('nav-alert-pill');
+  const countEl= document.getElementById('nav-alert-count');
+  if(count > 0){
+    banner.classList.add('show');
+    pill.classList.remove('hidden');
+    countEl.textContent = count;
+    document.getElementById('nav-alert-s').textContent = count === 1 ? '' : 's';
+    document.getElementById('banner-title').textContent =
+      count === 1 ? '⚠ 1 unauthorized vehicle detected!' : `⚠ ${count} unauthorized vehicles detected!`;
+  } else {
+    banner.classList.remove('show');
+    pill.classList.add('hidden');
+  }
+}
+
+async function loadAll(){
+  await Promise.all([loadStats(), loadWhitelist(), loadBlacklist(), loadAlerts()]);
+}
+
+async function loadWhitelist(){
+  try{
+    const r = await fetch('/api/parking/whitelist');
+    const d = await r.json();
+    wlData = d.whitelist || [];
+    renderDirectory();
+  }catch(e){}
+}
+
+async function loadBlacklist(){
+  try{
+    const r = await fetch('/api/parking/blacklist');
+    const d = await r.json();
+    blData = d.blacklist || [];
+    renderDirectory();
+  }catch(e){}
+}
+
+/* ── Alerts ── */
+function setAlertFilter(unack){
+  alertUnackOnly = unack;
+  document.getElementById('t-all').classList.toggle('active',!unack);
+  document.getElementById('t-unack').classList.toggle('active',unack);
+  loadAlerts();
+}
+async function loadAlerts(){
+  try{
+    const url = '/api/parking/alerts?limit=100'+(alertUnackOnly?'&unack_only=true':'');
+    const r = await fetch(url);
+    const d = await r.json();
+    alData = d.alerts || [];
+    renderAlerts();
+  }catch(e){ document.getElementById('al-tbody').innerHTML='<tr><td colspan="5" class="no-data">Error loading alerts</td></tr>'; }
+}
+function renderAlerts(){
+  const tbody = document.getElementById('al-tbody');
+  if(!alData.length){ tbody.innerHTML='<tr><td colspan="5" class="no-data">No intrusion alerts recorded</td></tr>'; return; }
+  tbody.innerHTML = alData.map(d=>{
+    const typeCls  = d.alert_type==='blacklisted'?'badge-unauth':'badge-unknown';
+    const typeLabel= d.alert_type==='blacklisted'?'🚫 BLACKLISTED':'⚠ UNKNOWN';
+    const srcCls   = d.source==='livestream'?'badge-ls':d.source==='video'?'badge-vid':'badge-img';
+    const srcLabel = d.source==='livestream'?'📡':d.source==='video'?'🎞':'📷';
+    const ackBtn   = d.acknowledged
+      ? '<span style="color:var(--success);font-size:11px">✓ Acked</span>'
+      : `<button class="btn-ack" onclick="acknowledgeAlert('${d._id}')">Ack</button>`;
+    const rowStyle = d.acknowledged ? 'opacity:.5' : '';
+    return `<tr style="${rowStyle}">
+      <td class="td-plate">${esc(d.plate_text)}</td>
+      <td><span class="badge ${typeCls}">${typeLabel}</span></td>
+      <td><span class="badge ${srcCls}">${srcLabel} ${esc(d.source||'')}</span></td>
+      <td class="td-ts">${fmtTs(d.timestamp)}</td>
+      <td>${ackBtn}</td>
+    </tr>`;
+  }).join('');
+}
+async function acknowledgeAlert(id){
+  await fetch('/api/parking/alerts/'+id+'/acknowledge',{method:'POST'});
+  toast('Alert acknowledged','ok'); loadAll();
+}
+async function acknowledgeAll(){
+  await fetch('/api/parking/alerts/acknowledge-all',{method:'POST'});
+  toast('All alerts acknowledged','ok'); loadAll();
+}
+
+/* ── SSE real-time alerts ── */
+function startAlertSSE(){
+  if(sseAlertSource) sseAlertSource.close();
+  sseAlertSource = new EventSource('/api/parking/alert-stream');
+  sseAlertSource.onmessage = (e)=>{
+    try{
+      const data = JSON.parse(e.data);
+      if(data.type==='alert'){
+        beep();
+        const plate = data.plate_text || '';
+        const type  = data.alert_type || 'unknown';
+        const emoji = type==='blacklisted'?'🚫':'⚠';
+        toast(`${emoji} Alert: ${plate} (${type}) via ${data.source||''}`, 'err', 6000);
+        loadAll();
+      }
+    }catch(err){}
+  };
+  sseAlertSource.onerror = ()=>{
+    sseAlertSource.close();
+    setTimeout(startAlertSSE, 5000);
+  };
+}
+
+/* ── Init ── */
+loadAll();
+startAlertSSE();
+setInterval(loadStats, 10000);
+</script>
+</body>
+</html>
