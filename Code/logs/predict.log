@@ -3565,3 +3565,86 @@ pytesseract.pytesseract.TesseractNotFoundError: tesseract is not installed or it
 2026-07-26 01:04:54  INFO      English pipeline weights path: C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train33\weights\best.pt
 2026-07-26 01:04:54  INFO        [OK] Weights file exists (18001 KB)
 2026-07-26 01:04:54  INFO      Available models: ['english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-07-27 11:29:38  INFO      ============================================================
+2026-07-27 11:29:38  INFO      PlateVision server starting
+2026-07-27 11:29:38  INFO      Log file: C:\Users\Mohamed Walid\Desktop\Internship\Code\logs\predict.log
+2026-07-27 11:29:38  INFO      ============================================================
+2026-07-27 11:29:41  INFO      English pipeline weights path: C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train33\weights\best.pt
+2026-07-27 11:29:41  INFO        [OK] Weights file exists (18001 KB)
+2026-07-27 11:29:41  INFO      Available models: ['english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-07-27 14:07:47  INFO      [14:07:47.952] -- /predict request received --
+2026-07-27 14:07:47  INFO      [14:07:47.952] File: '3504226256_0a63cb93d2_b.jpg'
+2026-07-27 14:07:47  INFO      [14:07:47.952] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmpyweb7333.jpg  (206689 bytes)
+2026-07-27 14:08:17  INFO      [14:07:47.952] Trying 4 model(s): ['english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-07-27 14:08:17  INFO      [14:07:47.952] Trying model: english_train33 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train33\weights\best.pt)
+2026-07-27 14:08:18  INFO      [14:07:47.952]   english_train33: box conf=0.656 xyxy=[226,206,692,395]
+2026-07-27 14:08:26  INFO      [14:07:47.952]   english_train33: OCR result = '8678GS'
+2026-07-27 14:08:26  INFO      [14:07:47.952] SUCCESS via english_train33: plate='8678GS'  conf=0.656
+2026-07-27 14:08:27  INFO      [14:07:47.952] -- /predict done --
+2026-07-27 14:08:27  INFO      [14:08:27.768] -- /predict request received --
+2026-07-27 14:08:27  INFO      [14:08:27.768] File: 'images (1).jpg'
+2026-07-27 14:08:27  INFO      [14:08:27.768] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmp3f0_j75s.jpg  (27004 bytes)
+2026-07-27 14:08:27  INFO      [14:08:27.768] Trying 4 model(s): ['english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-07-27 14:08:27  INFO      [14:08:27.768] Trying model: english_train33 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train33\weights\best.pt)
+2026-07-27 14:08:28  INFO      [14:08:27.768]   english_train33: no boxes — skipping
+2026-07-27 14:08:28  INFO      [14:08:27.768] Trying model: english_train32 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train32\weights\best.pt)
+2026-07-27 14:08:29  INFO      [14:08:27.768]   english_train32: box conf=0.329 xyxy=[0,0,654,305]
+2026-07-27 14:08:37  INFO      [14:08:27.768]   english_train32: OCR result = '9155UZ'
+2026-07-27 14:08:37  INFO      [14:08:27.768] SUCCESS via english_train32: plate='9155UZ'  conf=0.329
+2026-07-27 14:08:38  INFO      [14:08:27.768] -- /predict done --
+2026-07-27 14:08:38  INFO      [14:08:38.201] -- /predict request received --
+2026-07-27 14:08:38  INFO      [14:08:38.201] File: 'images (2).jpg'
+2026-07-27 14:08:38  INFO      [14:08:38.201] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmpxnm2o7my.jpg  (18592 bytes)
+2026-07-27 14:08:38  INFO      [14:08:38.201] Trying 4 model(s): ['english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-07-27 14:08:38  INFO      [14:08:38.201] Trying model: english_train33 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train33\weights\best.pt)
+2026-07-27 14:08:38  INFO      [14:08:38.201]   english_train33: box conf=0.160 xyxy=[121,97,542,282]
+2026-07-27 14:08:46  INFO      [14:08:38.201]   english_train33: OCR result = '12.9198'
+2026-07-27 14:08:46  INFO      [14:08:38.201] SUCCESS via english_train33: plate='12.9198'  conf=0.160
+2026-07-27 14:08:46  INFO      [14:08:38.201] -- /predict done --
+2026-07-27 14:08:47  INFO      [14:08:47.244] -- /predict request received --
+2026-07-27 14:08:47  INFO      [14:08:47.244] File: 'images (3).jpg'
+2026-07-27 14:08:47  INFO      [14:08:47.244] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmp5n0nahja.jpg  (35902 bytes)
+2026-07-27 14:08:47  INFO      [14:08:47.244] Trying 4 model(s): ['english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-07-27 14:08:47  INFO      [14:08:47.244] Trying model: english_train33 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train33\weights\best.pt)
+2026-07-27 14:08:47  INFO      [14:08:47.244]   english_train33: box conf=0.443 xyxy=[62,127,430,315]
+2026-07-27 14:08:55  INFO      [14:08:47.244]   english_train33: OCR result = 'BBVS8DG'
+2026-07-27 14:08:55  INFO      [14:08:47.244] SUCCESS via english_train33: plate='BBVS8DG'  conf=0.443
+2026-07-27 14:08:56  INFO      [14:08:47.244] -- /predict done --
+2026-07-27 14:08:56  INFO      [14:08:56.436] -- /predict request received --
+2026-07-27 14:08:56  INFO      [14:08:56.436] File: 'images (4).jpg'
+2026-07-27 14:08:56  INFO      [14:08:56.436] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmpfey_mx9h.jpg  (28619 bytes)
+2026-07-27 14:08:56  INFO      [14:08:56.436] Trying 4 model(s): ['english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-07-27 14:08:56  INFO      [14:08:56.436] Trying model: english_train33 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train33\weights\best.pt)
+2026-07-27 14:08:57  INFO      [14:08:56.436]   english_train33: box conf=0.614 xyxy=[133,89,484,238]
+2026-07-27 14:09:05  INFO      [14:08:56.436]   english_train33: OCR result = '6 R MH XZ6502'
+2026-07-27 14:09:05  INFO      [14:08:56.436] SUCCESS via english_train33: plate='6 R MH XZ6502'  conf=0.614
+2026-07-27 14:09:06  INFO      [14:08:56.436] -- /predict done --
+2026-07-27 14:09:06  INFO      [14:09:06.614] -- /predict request received --
+2026-07-27 14:09:06  INFO      [14:09:06.614] File: 'images.jpg'
+2026-07-27 14:09:06  INFO      [14:09:06.614] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmp66hkyo1j.jpg  (39447 bytes)
+2026-07-27 14:09:06  INFO      [14:09:06.614] Trying 4 model(s): ['english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-07-27 14:09:06  INFO      [14:09:06.614] Trying model: english_train33 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train33\weights\best.pt)
+2026-07-27 14:09:07  INFO      [14:09:06.614]   english_train33: box conf=0.656 xyxy=[203,251,368,319]
+2026-07-27 14:09:14  INFO      [14:09:06.614]   english_train33: OCR result = 'AAA 00|3'
+2026-07-27 14:09:14  INFO      [14:09:06.614] SUCCESS via english_train33: plate='AAA 00|3'  conf=0.656
+2026-07-27 14:09:15  INFO      [14:09:06.614] -- /predict done --
+2026-07-27 14:09:15  INFO      [14:09:15.181] -- /predict request received --
+2026-07-27 14:09:15  INFO      [14:09:15.181] File: 'P01523.jpg'
+2026-07-27 14:09:15  INFO      [14:09:15.181] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmp8qkkb5x7.jpg  (44574 bytes)
+2026-07-27 14:09:15  INFO      [14:09:15.181] Trying 4 model(s): ['english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-07-27 14:09:15  INFO      [14:09:15.181] Trying model: english_train33 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train33\weights\best.pt)
+2026-07-27 14:09:15  INFO      [14:09:15.181]   english_train33: box conf=0.385 xyxy=[476,396,557,422]
+2026-07-27 14:09:22  INFO      [14:09:15.181]   english_train33: OCR result = 'ELIE 2008'
+2026-07-27 14:09:22  INFO      [14:09:15.181] SUCCESS via english_train33: plate='ELIE 2008'  conf=0.385
+2026-07-27 14:09:23  INFO      [14:09:15.181] -- /predict done --
+2026-07-27 14:09:23  INFO      [14:09:23.576] -- /predict request received --
+2026-07-27 14:09:23  INFO      [14:09:23.576] File: 'taiwan.jpg'
+2026-07-27 14:09:23  INFO      [14:09:23.576] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmpwyqh2s82.jpg  (16012 bytes)
+2026-07-27 14:09:23  INFO      [14:09:23.576] Trying 4 model(s): ['english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-07-27 14:09:23  INFO      [14:09:23.576] Trying model: english_train33 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train33\weights\best.pt)
+2026-07-27 14:09:24  INFO      [14:09:23.576]   english_train33: no boxes — skipping
+2026-07-27 14:09:24  INFO      [14:09:23.576] Trying model: english_train32 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train32\weights\best.pt)
+2026-07-27 14:09:25  INFO      [14:09:23.576]   english_train32: box conf=0.964 xyxy=[0,0,291,135]
+2026-07-27 14:09:33  INFO      [14:09:23.576]   english_train32: OCR result = 'BQ 3233'
+2026-07-27 14:09:33  INFO      [14:09:23.576] SUCCESS via english_train32: plate='BQ 3233'  conf=0.964
+2026-07-27 14:09:34  INFO      [14:09:23.576] -- /predict done --

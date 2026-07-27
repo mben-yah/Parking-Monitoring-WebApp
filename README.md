@@ -1,6 +1,22 @@
-﻿# PlateVision — Automatic License Plate Recognition System
+# PlateVision — Automatic License Plate Recognition System
 
 > **Intelligent parking surveillance platform** combining YOLOv8 plate detection, multi-engine OCR (PaddleOCR · EasyOCR), real-time livestream analysis, MongoDB persistence, and an analytics dashboard.
+
+---
+
+## Screenshots
+
+### Homepage — Image Recognition
+![Homepage — License Plate Recognition](screenshots/homepage.png)
+
+### Live Stream — IP Webcam
+![Livestream — IP Webcam mode with real-time detection feed](screenshots/livestream.png)
+
+### Analytics & Sensor Health Dashboard
+![Dashboard — Peak hours, sensor health, detection metrics](screenshots/dashboard.png)
+
+### Supervisor — Client & Vehicle Authorization Manager
+![Supervisor — Whitelist/Blacklist management and alert panel](screenshots/supervisor.png)
 
 ---
 
