@@ -69,25 +69,67 @@ RECOG_SRC  = SUBSET_DIR / "groundtruth_recognition"   # plate text labels
 
 DATASET_DIR  = BASE_DIR / "Dataset"
 YAML_PATH    = BASE_DIR / "dataset.yaml"
-def _resolve_best_weights() -> Path:
-    """Auto-detect the highest-numbered english_trainN weights available."""
+def _resolve_best_weights(dataset_type: str = "auto") -> Path:
+    """Auto-detect available model weights based on dataset_type ('commercial', 'non_commercial', or 'auto')."""
     search_root = BASE_DIR / "runs" / "detect" / "runs" / "detect"
     import re
-    best_run   = None
-    best_num   = -1
     if search_root.exists():
-        for d in search_root.iterdir():
-            m = re.fullmatch(r"english_train(\d*)", d.name)
-            if m:
-                num = int(m.group(1)) if m.group(1) else 1
-                pt  = d / "weights" / "best.pt"
-                if pt.exists() and num > best_num:
-                    best_num = num
-                    best_run = pt
-    # Fallback to hard-coded path
-    if best_run is None:
-        best_run = BASE_DIR / "runs" / "detect" / "runs" / "detect" / "english_train2" / "weights" / "best.pt"
-    return best_run
+        # Commercial / ELPD model selection
+        if dataset_type in ("commercial", "elpd"):
+            best_run, best_num = None, -1
+            for d in search_root.iterdir():
+                m = re.fullmatch(r"elpd_commercial_train(\d*)", d.name)
+                if m:
+                    num = int(m.group(1)) if m.group(1) else 1
+                    pt  = d / "weights" / "best.pt"
+                    if pt.exists() and num > best_num:
+                        best_num = num
+                        best_run = pt
+            if best_run:
+                return best_run
+
+        # Non-commercial / Standard English model selection
+        if dataset_type in ("non_commercial", "standard", "english"):
+            best_run, best_num = None, -1
+            for d in search_root.iterdir():
+                m = re.fullmatch(r"english_train(\d*)", d.name)
+                if m:
+                    num = int(m.group(1)) if m.group(1) else 1
+                    pt  = d / "weights" / "best.pt"
+                    if pt.exists() and num > best_num:
+                        best_num = num
+                        best_run = pt
+            if best_run:
+                return best_run
+
+        # Auto mode: preference to commercial ELPD if available, fallback to english_train
+        if dataset_type == "auto":
+            best_run, best_num = None, -1
+            for d in search_root.iterdir():
+                m = re.fullmatch(r"elpd_commercial_train(\d*)", d.name)
+                if m:
+                    num = int(m.group(1)) if m.group(1) else 1
+                    pt  = d / "weights" / "best.pt"
+                    if pt.exists() and num > best_num:
+                        best_num = num
+                        best_run = pt
+            if best_run:
+                return best_run
+
+            best_run, best_num = None, -1
+            for d in search_root.iterdir():
+                m = re.fullmatch(r"english_train(\d*)", d.name)
+                if m:
+                    num = int(m.group(1)) if m.group(1) else 1
+                    pt  = d / "weights" / "best.pt"
+                    if pt.exists() and num > best_num:
+                        best_num = num
+                        best_run = pt
+            if best_run:
+                return best_run
+
+    # Fallback
+    return BASE_DIR / "runs" / "detect" / "runs" / "detect" / "english_train2" / "weights" / "best.pt"
 
 BEST_WEIGHTS   = _resolve_best_weights()
 ARABIC_WEIGHTS = BASE_DIR / "runs" / "detect" / "train9" / "weights" / "best.pt"

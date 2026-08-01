@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PlateVision · Parking Tickets & Cashier Portal</title>
+  <meta name="description" content="Parking ticket generation, fee calculator, payment processing, and PDF receipts." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #080b12;
+      --surface:   #0f1420;
+      --surface2:  #161d2e;
+      --glass:     rgba(255,255,255,0.035);
+      --border:    rgba(255,255,255,0.07);
+      --border-hi: rgba(99,179,237,0.45);
+      --accent:    #3b82f6;
+      --accent2:   #8b5cf6;
+      --success:   #10b981;
+      --warning:   #f59e0b;
+      --error:     #ef4444;
+      --text:      #e8edf8;
+      --muted:     #6b7a99;
+      --radius:    14px;
+      --shadow:    0 32px 80px rgba(0,0,0,0.7);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Ambient background blur */
+    .bg-orbs { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .orb { position: absolute; border-radius: 50%; filter: blur(130px); opacity: 0.12; }
+    .orb-1 { width: 600px; height: 600px; background: var(--accent); top: -200px; left: -150px; }
+    .orb-2 { width: 500px; height: 500px; background: var(--accent2); bottom: -150px; right: -100px; }
+
+    /* Top Nav */
+    header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(8, 11, 18, 0.88); backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 1.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .logo-group { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: inherit; }
+    .logo-icon { width: 36px; height: 36px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border-radius: 10px; display: grid; place-items: center; font-weight: 800; font-size: 1.1rem; color: white; }
+    .logo-text { font-weight: 800; font-size: 1.15rem; letter-spacing: -0.02em; color: var(--text); }
+    .nav-links { display: flex; align-items: center; gap: 0.4rem; }
+    .nav-btn {
+      padding: 0.5rem 0.85rem; border-radius: 8px; font-size: 0.85rem; font-weight: 500;
+      color: var(--muted); text-decoration: none; transition: all 0.2s; border: 1px solid transparent;
+    }
+    .nav-btn:hover { color: var(--text); background: var(--glass); border-color: var(--border); }
+    .nav-btn.active { color: #60a5fa; background: rgba(59,130,246,0.12); border-color: rgba(59,130,246,0.3); font-weight: 600; }
+
+    /* User Profile Pill */
+    .user-badge {
+      display: flex; align-items: center; gap: 0.5rem;
+      background: var(--surface2); border: 1px solid var(--border);
+      padding: 0.35rem 0.75rem; border-radius: 99px; font-size: 0.8rem; font-weight: 600;
+    }
+    .role-tag { font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; background: var(--accent); color: white; text-transform: uppercase; }
+
+    /* Main Content */
+    main { position: relative; z-index: 1; flex: 1; max-width: 1280px; width: 100%; margin: 0 auto; padding: 2rem 1.5rem; }
+
+    .page-header { margin-bottom: 2rem; }
+    .page-title { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.6rem; }
+    .page-subtitle { color: var(--muted); font-size: 0.95rem; }
+
+    /* Layout Grid */
+    .tickets-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2.5rem; }
+    @media (max-width: 900px) { .tickets-grid { grid-template-columns: 1fr; } }
+
+    /* Card Panels */
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.5rem;
+      box-shadow: var(--shadow); backdrop-filter: blur(12px);
+    }
+    .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
+    .card-title { font-size: 1.1rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; }
+
+    /* Form Inputs */
+    .form-group { margin-bottom: 1rem; }
+    .form-label { display: block; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin-bottom: 0.4rem; }
+    .form-input {
+      width: 100%; padding: 0.75rem 1rem; background: var(--surface2);
+      border: 1px solid var(--border); border-radius: 8px; color: var(--text);
+      font-size: 0.95rem; font-family: inherit; transition: border-color 0.2s;
+    }
+    .form-input:focus { outline: none; border-color: var(--accent); }
+
+    /* Action Buttons */
+    .btn {
+      width: 100%; padding: 0.8rem 1.2rem; border-radius: 8px; font-weight: 600; font-size: 0.95rem;
+      border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+      transition: all 0.2s;
+    }
+    .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: white; }
+    .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-success { background: linear-gradient(135deg, #10b981, #059669); color: white; }
+    .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+    .btn-outline:hover { background: var(--glass); border-color: var(--accent); }
+    .btn-sm { padding: 0.4rem 0.75rem; font-size: 0.8rem; width: auto; }
+
+    /* Fee Display Box */
+    .fee-box {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1rem; margin: 1rem 0;
+    }
+    .fee-row { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 0.4rem; }
+    .fee-total { border-top: 1px dashed var(--border); padding-top: 0.6rem; margin-top: 0.4rem; font-size: 1.1rem; font-weight: 800; color: #60a5fa; }
+
+    /* Tickets Table */
+    .table-container { overflow-x: auto; border-radius: var(--radius); border: 1px solid var(--border); background: var(--surface); }
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; }
+    th, td { padding: 0.9rem 1.2rem; border-bottom: 1px solid var(--border); }
+    th { background: var(--surface2); color: var(--muted); font-size: 0.75rem; text-transform: uppercase; font-weight: 700; }
+    tr:hover { background: var(--glass); }
+
+    .status-badge {
+      display: inline-block; padding: 3px 8px; border-radius: 99px; font-size: 0.75rem; font-weight: 700;
+    }
+    .status-active { background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.3); }
+    .status-paid { background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.3); }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed; bottom: 20px; right: 20px; padding: 12px 20px;
+      background: var(--surface2); border: 1px solid var(--border-hi);
+      border-radius: 10px; font-size: 0.9rem; color: var(--text);
+      box-shadow: var(--shadow); z-index: 1000; display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+  </div>
+
+  <!-- Header / Navigation -->
+  <header>
+    <a href="/" class="logo-group">
+      <div class="logo-icon">PV</div>
+      <div class="logo-text">PlateVision</div>
+    </a>
+
+    <nav class="nav-links">
+      <a href="/" class="nav-btn">📷 Image</a>
+      <a href="/video" class="nav-btn">🎬 Video</a>
+      <a href="/livestream" class="nav-btn">🔴 Live Stream</a>
+      <a href="/tickets" class="nav-btn active">🎟️ Tickets & Pay</a>
+      <a href="/supervisor" class="nav-btn">🛡️ Supervisor</a>
+      <a href="/dashboard" class="nav-btn">📊 Dashboard</a>
+      <a href="/db" class="nav-btn">🗄️ Database</a>
+      <a href="/logs" class="nav-btn">📋 Logs</a>
+    </nav>
+
+    <div id="userBadgeContainer"></div>
+  </header>
+
+  <!-- Main Container -->
+  <main>
+    <div class="page-header">
+      <h1 class="page-title">🎟️ Parking Lot Ticket & Cashier Portal</h1>
+      <p class="page-subtitle">Issue entry tickets, calculate duration & hourly fees, process payments, and generate PDF receipts.</p>
+    </div>
+
+    <!-- Layout Grid -->
+    <div class="tickets-grid">
+      <!-- 1. Entry Ticket Generator -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">🚗 Issue Entry Ticket</div>
+          <span class="status-badge status-active">ENTRY GATE</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">License Plate Number</label>
+          <input type="text" id="entryPlate" class="form-input" placeholder="e.g. 12345|A|06 or DG368HP" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Hourly Rate (MAD/hr)</label>
+          <input type="number" id="entryRate" class="form-input" value="10.0" step="0.5" />
+        </div>
+
+        <button class="btn btn-primary" onclick="issueTicket()" style="margin-top: 1rem;">
+          🎟️ Generate Entry Ticket
+        </button>
+
+        <div id="issueResult" style="margin-top: 1rem; display: none;"></div>
+      </div>
+
+      <!-- 2. Cashier Fee Calculator & Payment -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">💳 Cashier Payment & Receipt</div>
+          <span class="status-badge status-paid">EXIT GATE</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Search Ticket ID or Plate</label>
+          <div style="display: flex; gap: 0.5rem;">
+            <input type="text" id="lookupId" class="form-input" placeholder="e.g. TKT-20260731-8234" />
+            <button class="btn btn-outline btn-sm" onclick="lookupTicket()">🔍 Search</button>
+          </div>
+        </div>
+
+        <!-- Calculated Fee Box -->
+        <div id="feeBox" class="fee-box" style="display: none;">
+          <div class="fee-row"><span>Ticket ID:</span><strong id="feeTicketId">-</strong></div>
+          <div class="fee-row"><span>Plate:</span><strong id="feePlate">-</strong></div>
+          <div class="fee-row"><span>Duration:</span><span id="feeDuration">0 mins</span></div>
+          <div class="fee-row fee-total"><span>Total Amount Due:</span><span id="feeTotal">0.00 MAD</span></div>
+
+          <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+            <button class="btn btn-success" onclick="processPayment('CARD')">💳 Pay with Card</button>
+            <button class="btn btn-outline" onclick="processPayment('CASH')">💵 Cash Payment</button>
+          </div>
+
+          <div style="display: flex; gap: 0.5rem; margin-top: 0.75rem;">
+            <a id="btnNativePdf" href="#" target="_blank" class="btn btn-outline btn-sm" style="flex:1; text-decoration:none;">🖨️ Download PDF</a>
+            <a id="btnHtmlTicket" href="#" target="_blank" class="btn btn-outline btn-sm" style="flex:1; text-decoration:none;">🌐 Print HTML Receipt</a>
+          </div>
+
+          <!-- APITemplate.io Integration -->
+          <div style="margin-top: 1rem; border-top: 1px solid var(--border); padding-top: 0.75rem;">
+            <label class="form-label" style="font-size:0.7rem;">APITemplate.io REST API Generator</label>
+            <div style="display: flex; gap: 0.5rem;">
+              <input type="text" id="apiKeyInput" class="form-input" style="font-size:0.8rem;" placeholder="APITemplate.io API Key (Optional)" />
+              <button class="btn btn-outline btn-sm" onclick="generateApiTemplatePdf()">📄 APITemplate.io PDF</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Active & Paid Tickets Table -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">📋 Ticket History & Logs</div>
+        <button class="btn btn-outline btn-sm" onclick="loadTickets()">🔄 Refresh List</button>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Ticket ID</th>
+              <th>Plate Number</th>
+              <th>Entry Time</th>
+              <th>Status</th>
+              <th>Amount</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="ticketsTableBody">
+            <tr><td colspan="6" style="text-align: center; color: var(--muted); padding: 2rem;">Loading tickets...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    let activeTicketData = null;
+
+    async function checkAuth() {
+      try {
+        const res = await fetch('/api/auth/me');
+        const data = await res.json();
+        const container = document.getElementById('userBadgeContainer');
+        if (data.user) {
+          container.innerHTML = `
+            <div class="user-badge">
+              <span>👤 ${data.user.username}</span>
+              <span class="role-tag">${data.user.role}</span>
+              <button onclick="handleLogout()" style="background:none; border:none; color:var(--error); cursor:pointer; font-size:0.8rem; margin-left:4px;">Logout</button>
+            </div>`;
+        } else {
+          window.location.href = '/login';
+        }
+      } catch (err) {
+        console.error("Auth check failed:", err);
+      }
+    }
+
+    async function handleLogout() {
+      await fetch('/api/auth/logout', { method: 'POST' });
+      window.location.href = '/login';
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.innerText = msg;
+      toast.style.display = 'block';
+      setTimeout(() => { toast.style.display = 'none'; }, 3500);
+    }
+
+    async function issueTicket() {
+      const plate = document.getElementById('entryPlate').value.trim();
+      const rate = parseFloat(document.getElementById('entryRate').value) || 10.0;
+
+      if (!plate) {
+        showToast("⚠️ Please enter a plate number.");
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/parking/ticket/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ plate_text: plate, rate_per_hour: rate })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          showToast(`✅ Ticket Issued: ${data.ticket.ticket_id}`);
+          document.getElementById('lookupId').value = data.ticket.ticket_id;
+          lookupTicket();
+          loadTickets();
+          document.getElementById('entryPlate').value = '';
+        } else {
+          showToast("❌ Error: " + (data.error || "Failed to create ticket"));
+        }
+      } catch (err) {
+        showToast("❌ Request failed: " + err.message);
+      }
+    }
+
+    async function lookupTicket() {
+      const query = document.getElementById('lookupId').value.trim();
+      if (!query) return;
+
+      try {
+        const res = await fetch('/api/parking/tickets');
+        const data = await res.json();
+        const tickets = data.tickets || [];
+        const found = tickets.find(t => t.ticket_id.toUpperCase() === query.toUpperCase() || t.plate_text.toUpperCase() === query.toUpperCase());
+
+        if (found) {
+          activeTicketData = found;
+          document.getElementById('feeTicketId').innerText = found.ticket_id;
+          document.getElementById('feePlate').innerText = found.plate_text;
+          document.getElementById('feeTotal').innerText = `${found.amount_paid || 0.00} MAD`;
+          document.getElementById('feeBox').style.display = 'block';
+
+          document.getElementById('btnNativePdf').href = `/api/parking/ticket/${found.ticket_id}/pdf`;
+          document.getElementById('btnHtmlTicket').href = `/ticket/${found.ticket_id}`;
+        } else {
+          showToast("⚠️ Ticket or Plate not found.");
+        }
+      } catch (err) {
+        showToast("❌ Lookup failed: " + err.message);
+      }
+    }
+
+    async function processPayment(method) {
+      if (!activeTicketData) return;
+      try {
+        const res = await fetch(`/api/parking/ticket/${activeTicketData.ticket_id}/pay`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ payment_method: method })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          showToast(`✅ Payment Successful (${data.ticket.amount_paid} MAD via ${method})`);
+          lookupTicket();
+          loadTickets();
+        } else {
+          showToast("❌ Payment failed: " + data.error);
+        }
+      } catch (err) {
+        showToast("❌ Error: " + err.message);
+      }
+    }
+
+    async function generateApiTemplatePdf() {
+      if (!activeTicketData) return;
+      const apiKey = document.getElementById('apiKeyInput').value.trim();
+
+      try {
+        const res = await fetch('/api/parking/ticket/apitemplate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ticket_id: activeTicketData.ticket_id, api_key: apiKey })
+        });
+        
+        if (res.ok) {
+          const blob = await res.blob();
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `apitemplate_ticket_${activeTicketData.ticket_id}.pdf`;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          showToast("✅ Downloaded APITemplate.io PDF!");
+        } else {
+          const data = await res.json();
+          showToast("❌ APITemplate.io Error: " + (data.error || "Failed to generate"));
+        }
+      } catch (err) {
+        showToast("❌ API Error: " + err.message);
+      }
+    }
+
+    async function loadTickets() {
+      try {
+        const res = await fetch('/api/parking/tickets?limit=50');
+        const data = await res.json();
+        const tbody = document.getElementById('ticketsTableBody');
+        tbody.innerHTML = '';
+
+        if (!data.tickets || data.tickets.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--muted); padding:2rem;">No tickets issued yet.</td></tr>';
+          return;
+        }
+
+        data.tickets.forEach(t => {
+          const entryStr = String(t.entry_time || '').replace('T', ' ').substring(0, 19);
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td style="font-weight:700; font-family:'JetBrains Mono',monospace;">${t.ticket_id}</td>
+            <td style="font-weight:700; color:#60a5fa;">🚘 ${t.plate_text}</td>
+            <td>${entryStr}</td>
+            <td><span class="status-badge ${t.status==='PAID'?'status-paid':'status-active'}">${t.status}</span></td>
+            <td style="font-weight:700;">${(t.amount_paid || 0.0).toFixed(2)} MAD</td>
+            <td style="display:flex; gap:0.4rem;">
+              <a href="/api/parking/ticket/${t.ticket_id}/pdf" target="_blank" class="btn btn-outline btn-sm" style="text-decoration:none;">🖨️ PDF</a>
+              <a href="/ticket/${t.ticket_id}" target="_blank" class="btn btn-outline btn-sm" style="text-decoration:none;">🌐 View</a>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (err) {
+        console.error("Failed to load tickets:", err);
+      }
+    }
+
+    checkAuth();
+    loadTickets();
+  </script>
+</body>
+</html>

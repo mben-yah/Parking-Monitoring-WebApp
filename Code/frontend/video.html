@@ -189,6 +189,24 @@
   #toast { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(60px); background: var(--surface2); border: 1px solid var(--border); padding: 12px 24px; border-radius: 10px; font-size: 14px; box-shadow: 0 8px 32px rgba(0,0,0,0.5); transition: transform 0.3s, opacity 0.3s; opacity: 0; z-index: 9999; pointer-events: none; }
   #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
+  /* ── Nav ── */
+  .nav {
+    position: sticky; top: 0; z-index: 100;
+    display: flex; align-items: center; gap: 14px;
+    padding: 0 28px; height: 58px;
+    background: rgba(10,13,18,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 17px; text-decoration: none; color: var(--text); }
+  .nav-links { display: flex; gap: 6px; margin-left: 8px; }
+  .nav-link {
+    font-size: 13px; padding: 5px 13px; border-radius: 8px;
+    color: var(--muted); text-decoration: none; transition: all 0.2s; border: 1px solid transparent;
+  }
+  .nav-link:hover { color: var(--text); border-color: var(--border); }
+  .nav-link.active { color: #60a5fa; background: rgba(59,130,246,0.12); border-color: rgba(59,130,246,0.3); font-weight: 600; }
+
   /* ── Footer ── */
   footer { text-align: center; margin-top: 72px; color: var(--muted); font-size: 13px; line-height: 2; }
   footer a { color: var(--accent); text-decoration: none; }
@@ -200,6 +218,25 @@
   </style>
 </head>
 <body>
+
+<nav class="nav">
+  <a class="nav-logo" href="/">
+    <div style="width:32px; height:32px; background:linear-gradient(135deg, #3b82f6, #8b5cf6); border-radius:8px; display:grid; place-items:center; font-weight:800; font-size:1rem; color:white;">PV</div>
+    PlateVision
+  </a>
+  <div class="nav-links">
+    <a class="nav-link" href="/">📷 Image</a>
+    <a class="nav-link active" href="/video">🎬 Video</a>
+    <a class="nav-link" href="/livestream">🔴 Stream</a>
+    <a class="nav-link" href="/tickets">🎟️ Tickets & Pay</a>
+    <a class="nav-link" href="/supervisor">🛡️ Supervisor</a>
+    <a class="nav-link" href="/dashboard">📊 Dashboard</a>
+    <a class="nav-link" href="/db">🗄️ Database</a>
+    <a class="nav-link" href="/logs">📋 Logs</a>
+  </div>
+  <span style="flex:1;"></span>
+  <div id="userBadgeContainer"></div>
+</nav>
 
 <div class="bg-orbs">
   <div class="orb orb-1"></div>
@@ -220,7 +257,6 @@
 
   <!-- Header -->
   <header>
-    <a class="nav-back" href="/">← Back to Image Mode</a>
     <div class="logo">
       <div class="logo-icon">🎥</div>
       <span class="logo-text">PlateVision</span>
@@ -262,6 +298,15 @@
           <button class="mode-btn" id="mode-ar" data-mode="arabic" type="button">
             &#127474;&#127462; Moroccan Plates
           </button>
+        </div>
+        <!-- Dataset Selector (for English mode) -->
+        <div class="option-group" id="video-dataset-group">
+          <span class="option-label">Dataset:</span>
+          <select id="video-dataset-select" style="background:rgba(255,255,255,0.06);color:#e8ecf4;border:1px solid rgba(255,255,255,0.15);padding:4px 10px;border-radius:8px;font-size:12px;cursor:pointer;outline:none;">
+            <option value="commercial" style="background:#1a1d24;color:#fff;">🏢 Commercial Dataset (ELPD — mAP 0.987)</option>
+            <option value="non_commercial" style="background:#1a1d24;color:#fff;">🚙 Non-Commercial Dataset (Standard)</option>
+            <option value="auto" selected style="background:#1a1d24;color:#fff;">🎯 Auto (Best Available)</option>
+          </select>
         </div>
         <span id="model-badge" style="font-size:11px;color:var(--success);background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);padding:4px 10px;border-radius:6px;margin-left:4px;">
           &#127919; English YOLO &mdash; Auto best model
@@ -462,6 +507,7 @@ async function startAnalysis() {
   const form = new FormData();
   form.append('video', selectedVideo);
   form.append('mode', currentMode);
+  form.append('dataset_type', document.getElementById('video-dataset-select').value);
   form.append('frame_skip', skipSlider.value);
   form.append('engine', document.getElementById('engine-select').value);
   form.append('save_db', document.getElementById('save-db-check').checked ? 'true' : 'false');

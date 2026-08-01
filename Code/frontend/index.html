@@ -400,6 +400,24 @@
   }
   #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
+  /* ── Nav ── */
+  .nav {
+    position: sticky; top: 0; z-index: 100;
+    display: flex; align-items: center; gap: 14px;
+    padding: 0 28px; height: 58px;
+    background: rgba(10,13,18,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 17px; text-decoration: none; color: var(--text); }
+  .nav-links { display: flex; gap: 6px; margin-left: 8px; }
+  .nav-link {
+    font-size: 13px; padding: 5px 13px; border-radius: 8px;
+    color: var(--muted); text-decoration: none; transition: all 0.2s; border: 1px solid transparent;
+  }
+  .nav-link:hover { color: var(--text); border-color: var(--border); }
+  .nav-link.active { color: #60a5fa; background: rgba(59,130,246,0.12); border-color: rgba(59,130,246,0.3); font-weight: 600; }
+
   /* ═══════════════════════════════════════════════
      FOOTER
   ═══════════════════════════════════════════════ */
@@ -409,6 +427,25 @@
   </style>
 </head>
 <body>
+
+<nav class="nav">
+  <a class="nav-logo" href="/">
+    <div style="width:32px; height:32px; background:linear-gradient(135deg, #3b82f6, #8b5cf6); border-radius:8px; display:grid; place-items:center; font-weight:800; font-size:1rem; color:white;">PV</div>
+    PlateVision
+  </a>
+  <div class="nav-links">
+    <a class="nav-link active" href="/">📷 Image</a>
+    <a class="nav-link" href="/video">🎬 Video</a>
+    <a class="nav-link" href="/livestream">🔴 Stream</a>
+    <a class="nav-link" href="/tickets">🎟️ Tickets & Pay</a>
+    <a class="nav-link" href="/supervisor">🛡️ Supervisor</a>
+    <a class="nav-link" href="/dashboard">📊 Dashboard</a>
+    <a class="nav-link" href="/db">🗄️ Database</a>
+    <a class="nav-link" href="/logs">📋 Logs</a>
+  </div>
+  <span style="flex:1;"></span>
+  <div id="userBadgeContainer"></div>
+</nav>
 
 <!-- Background orbs -->
 <div class="bg-orbs">
@@ -436,9 +473,6 @@
     </div>
     <h1>License Plate Recognition</h1>
     <p class="subtitle">Drop one or more car photos — our AI detects and reads every plate number instantly.</p>
-    <a href="/video" style="display:inline-flex;align-items:center;gap:8px;margin-top:18px;padding:9px 22px;border-radius:10px;font-size:14px;font-weight:600;background:rgba(139,92,246,0.12);border:1px solid rgba(139,92,246,0.3);color:#a78bfa;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.background='rgba(139,92,246,0.22)'" onmouseout="this.style.background='rgba(139,92,246,0.12)'">🎥 &nbsp;Try Video Mode</a>
-    <a href="/livestream" style="display:inline-flex;align-items:center;gap:8px;margin-top:18px;margin-left:10px;padding:9px 22px;border-radius:10px;font-size:14px;font-weight:600;background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.3);color:#60a5fa;text-decoration:none;" onmouseover="this.style.background='rgba(59,130,246,0.22)'" onmouseout="this.style.background='rgba(59,130,246,0.12)'">&#128225; &nbsp;Live Stream</a>
-    <a href="/supervisor" style="display:inline-flex;align-items:center;gap:8px;margin-top:18px;margin-left:10px;padding:9px 22px;border-radius:10px;font-size:14px;font-weight:600;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.3);color:#34d399;text-decoration:none;" onmouseover="this.style.background='rgba(16,185,129,0.22)'" onmouseout="this.style.background='rgba(16,185,129,0.12)'">🛡️ &nbsp;Manage Clients &amp; Vehicles</a>
   </header>
 
   <!-- ── Stats bar (shown after first run) ── -->
@@ -474,11 +508,26 @@
           &#127474;&#127462; Moroccan Plates
         </button>
       </div>
+
+      <!-- Dataset / Model Selector (for English mode) -->
+      <div id="dataset-group" style="display:inline-flex;align-items:center;gap:6px;margin-left:4px;">
+        <span class="option-label" style="font-size:12px;">Dataset:</span>
+        <select id="dataset-select" style="background:rgba(255,255,255,0.06);color:#e8ecf4;border:1px solid rgba(255,255,255,0.15);padding:4px 10px;border-radius:8px;font-size:12px;cursor:pointer;outline:none;">
+          <option value="commercial" style="background:#1a1d24;color:#fff;">🏢 Commercial Dataset (ELPD — mAP 0.987)</option>
+          <option value="non_commercial" style="background:#1a1d24;color:#fff;">🚙 Non-Commercial Dataset (Standard)</option>
+          <option value="auto" selected style="background:#1a1d24;color:#fff;">🎯 Auto (Best Available)</option>
+        </select>
+      </div>
+
       <span id="model-badge" style="font-size:11px;color:var(--success);background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);padding:3px 10px;border-radius:6px;">
         &#127919; Auto &mdash; best available model
       </span>
       <a href="/supervisor" style="color:var(--muted,#6b7280);text-decoration:none;font-size:13px;padding:5px 12px;border-radius:8px;transition:color 0.2s;" onmouseover="this.style.color='#e8ecf4'" onmouseout="this.style.color='#6b7280'">🛡️ Supervisor</a>
-      <a href="/db" style="color:var(--muted,#6b7280);text-decoration:none;font-size:13px;padding:5px 12px;border-radius:8px;transition:color 0.2s;" onmouseover="this.style.color='#e8ecf4'" onmouseout="this.style.color='#6b7280'">🗄 DB Admin</a><a href="/logs" target="_blank" style="margin-left:auto;font-size:11px;color:var(--text-muted);text-decoration:none;padding:3px 10px;">&#128279; Live Logs</a>
+      <a href="/db" style="color:var(--muted,#6b7280);text-decoration:none;font-size:13px;padding:5px 12px;border-radius:8px;transition:color 0.2s;" onmouseover="this.style.color='#e8ecf4'" onmouseout="this.style.color='#6b7280'">🗄 DB Admin</a>
+      <a href="/login" id="auth-link" style="color:var(--accent,#6366f1);text-decoration:none;font-size:12px;font-weight:600;padding:4px 12px;background:rgba(99,102,241,0.12);border:1px solid rgba(99,102,241,0.25);border-radius:8px;transition:all 0.2s;display:inline-flex;align-items:center;gap:6px;">
+        🔑 Sign In
+      </a>
+      <a href="/logs" target="_blank" style="margin-left:auto;font-size:11px;color:var(--text-muted);text-decoration:none;padding:3px 10px;">&#128279; Live Logs</a>
     </div>
 
     <!-- Arabic info banner (shown only in Arabic mode) -->
@@ -549,6 +598,8 @@ document.getElementById('mode-group').addEventListener('click', e => {
   activeMode = btn.dataset.mode;
   const isAr = activeMode === 'arabic';
   document.getElementById('arabic-info').style.display = isAr ? 'block' : 'none';
+  const dsGrp = document.getElementById('dataset-group');
+  if (dsGrp) dsGrp.style.display = isAr ? 'none' : 'inline-flex';
   document.getElementById('btn-label').textContent = isAr
     ? '⚡\u00a0Analyse Moroccan Plates' : '⚡\u00a0Recognise Plates';
 });
@@ -693,6 +744,8 @@ async function runRecognition() {
       const form     = new FormData();
       const endpoint = activeMode === 'arabic' ? '/predict_arabic' : '/predict';
       form.append('image', file);
+      const dsEl = document.getElementById('dataset-select');
+      if (dsEl) form.append('dataset_type', dsEl.value);
 
       const resp = await fetch(endpoint, { method: 'POST', body: form });
       const data = await resp.json();
@@ -961,6 +1014,38 @@ function escHtml(str) {
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 function truncate(str, n) { return str.length > n ? str.slice(0,n-1)+'…' : str; }
+
+/* ══════════════════════════════════════════════════════
+   AUTHENTICATION CHECK
+══════════════════════════════════════════════════════ */
+async function checkAuth() {
+  const authLink = document.getElementById('auth-link');
+  try {
+    const resp = await fetch('/api/auth/me');
+    const data = await resp.json();
+    if (data.authenticated && data.user) {
+      if (authLink) {
+        const u = data.user;
+        const roleBadge = u.role === 'ADMIN' ? '🛡️ Admin' : '👁️ Operator';
+        authLink.style.background = 'rgba(16,185,129,0.12)';
+        authLink.style.borderColor = 'rgba(16,185,129,0.25)';
+        authLink.style.color = '#10b981';
+        authLink.innerHTML = `👤 ${escHtml(u.username)} (${roleBadge}) &nbsp;<span onclick="handleLogout(event)" style="opacity:0.75;font-size:10px;text-decoration:underline;cursor:pointer;">Logout</span>`;
+        authLink.href = 'javascript:void(0)';
+      }
+    } else {
+      window.location.href = '/login';
+    }
+  } catch(e) {}
+}
+
+async function handleLogout(e) {
+  if (e) e.stopPropagation();
+  await fetch('/api/auth/logout', { method: 'POST' });
+  localStorage.removeItem('platevision_user');
+  window.location.reload();
+}
+checkAuth();
 </script>
 </body>
 </html>

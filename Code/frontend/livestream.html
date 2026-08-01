@@ -318,26 +318,25 @@ tbody td { padding: 10px 16px; }
 <!-- Nav -->
 <nav class="nav">
   <a class="nav-logo" href="/">
-    <span class="dot"></span> PlateVision
+    <div style="width:32px; height:32px; background:linear-gradient(135deg, #3b82f6, #8b5cf6); border-radius:8px; display:grid; place-items:center; font-weight:800; font-size:1rem; color:white;">PV</div>
+    PlateVision
   </a>
   <div class="nav-links">
-    <a class="nav-link" href="/">📷 Images</a>
-    <a class="nav-link active" href="/livestream">📡 Live Stream</a>
-    <a class="nav-link" href="/video">🎞 Video</a>
+    <a class="nav-link" href="/">📷 Image</a>
+    <a class="nav-link" href="/video">🎬 Video</a>
+    <a class="nav-link active" href="/livestream">🔴 Stream</a>
+    <a class="nav-link" href="/tickets">🎟️ Tickets & Pay</a>
+    <a class="nav-link" href="/supervisor">🛡️ Supervisor</a>
     <a class="nav-link" href="/dashboard">📊 Dashboard</a>
-    <a class="nav-link" href="/db">🗄 DB</a>
-    <a class="nav-link" href="/supervisor">👮 Supervisor</a>
+    <a class="nav-link" href="/db">🗄️ Database</a>
     <a class="nav-link" href="/logs">📋 Logs</a>
   </div>
-  <span class="nav-spacer"></span>
-  <a href="/supervisor" class="supervisor-btn" id="supervisor-nav-btn">
-    <span class="supervisor-dot"></span>
-    🛡 Supervisor
-  </a>
-  <div class="status-pill" id="status-pill">
+  <span style="flex:1;"></span>
+  <div class="status-pill" id="status-pill" style="margin-right:10px;">
     <div class="dot-live"></div>
     <span id="status-text">Disconnected</span>
   </div>
+  <div id="userBadgeContainer"></div>
 </nav>
 
 <!-- Page -->

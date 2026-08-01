@@ -400,6 +400,186 @@ def get_sensor_health_stats() -> list[dict]:
     return sensors
 
 
+# ── User Authentication ──────────────────────────────────────────────────────────
+
+def create_user(username: str, password: str, role: str = "OPERATOR") -> tuple[bool, str]:
+    """Create a new user document in the 'users' collection."""
+    from werkzeug.security import generate_password_hash
+    username = username.strip().lower()
+    if not username or not password:
+        return False, "Username and password are required"
+    
+    col = _col("users")
+    if col.find_one({"username": username}) is not None:
+        return False, "Username already exists"
+    
+    role_upper = role.strip().upper()
+    if role_upper not in ("ADMIN", "OPERATOR"):
+        role_upper = "OPERATOR"
+        
+    doc = {
+        "username": username,
+        "password_hash": generate_password_hash(password),
+        "role": role_upper,
+        "created_at": datetime.now(timezone.utc),
+        "last_login": None
+    }
+    res = col.insert_one(doc)
+    return True, str(res.inserted_id)
+
+
+def get_user_by_username(username: str) -> dict | None:
+    """Retrieve user document by username."""
+    u = _col("users").find_one({"username": username.strip().lower()})
+    return _serialise(u) if u else None
+
+
+def verify_user(username: str, password: str) -> tuple[bool, dict | str]:
+    """Verify user credentials and update last_login on success."""
+    from werkzeug.security import check_password_hash
+    username = username.strip().lower()
+    col = _col("users")
+    user = col.find_one({"username": username})
+    
+    if not user:
+        return False, "User not found"
+        
+    if not check_password_hash(user["password_hash"], password):
+        return False, "Invalid password"
+        
+    now = datetime.now(timezone.utc)
+    col.update_one({"_id": user["_id"]}, {"$set": {"last_login": now}})
+    
+    user_data = {
+        "id": str(user["_id"]),
+        "username": user["username"],
+        "role": user.get("role", "OPERATOR"),
+        "last_login": now.isoformat()
+    }
+    return True, user_data
+
+
+def seed_default_users():
+    """Ensure default admin and operator users exist for demo."""
+    col = _col("users")
+    if col.count_documents({}) == 0:
+        create_user("admin", "admin123", "ADMIN")
+        create_user("operator", "operator123", "OPERATOR")
+        print("[platevision-db] Seeded default users: admin / operator")
+
+
+# ── Parking Ticket & Payment Helpers ─────────────────────────────────────────
+
+def create_parking_ticket(
+    plate_text: str,
+    rate_per_hour: float = 10.0,
+    free_hours: float = 1.0,
+    supermarket_stamp: bool = False,
+    entry_time: datetime | None = None
+) -> dict:
+    plate_text = plate_text.strip().upper()
+    now = entry_time or datetime.now(timezone.utc)
+    import random
+    ticket_id = f"TKT-{now.strftime('%Y%m%d')}-{random.randint(1000, 9999)}"
+    
+    doc = {
+        "ticket_id": ticket_id,
+        "plate_text": plate_text,
+        "entry_time": now,
+        "exit_time": None,
+        "rate_per_hour": float(rate_per_hour),
+        "free_hours": float(free_hours) if supermarket_stamp else 0.0,
+        "supermarket_stamp": bool(supermarket_stamp),
+        "status": "ACTIVE",  # ACTIVE, PAID, EXITED
+        "payment_method": None,
+        "amount_paid": 0.0,
+        "created_at": now
+    }
+    _col("tickets").insert_one(doc)
+    return _serialise(doc)
+
+
+def get_parking_ticket(ticket_id: str) -> dict | None:
+    doc = _col("tickets").find_one({"ticket_id": ticket_id.strip().upper()})
+    if not doc:
+        # Fallback search by plate_text if ticket_id is plate
+        doc = _col("tickets").find_one({"plate_text": ticket_id.strip().upper(), "status": "ACTIVE"})
+    return _serialise(doc) if doc else None
+
+
+def calculate_ticket_fee(ticket: dict, exit_time: datetime | None = None) -> dict:
+    now = exit_time or datetime.now(timezone.utc)
+    entry_str = ticket.get("entry_time")
+    if isinstance(entry_str, str):
+        try:
+            entry_time = datetime.fromisoformat(entry_str.replace("Z", "+00:00"))
+        except Exception:
+            entry_time = datetime.now(timezone.utc)
+    elif isinstance(entry_str, datetime):
+        entry_time = entry_str
+    else:
+        entry_time = datetime.now(timezone.utc)
+
+    if entry_time.tzinfo is not None:
+        entry_time = entry_time.astimezone(timezone.utc).replace(tzinfo=None)
+    if now.tzinfo is not None:
+        now = now.astimezone(timezone.utc).replace(tzinfo=None)
+
+    duration_seconds = max((now - entry_time).total_seconds(), 0)
+    duration_hours = duration_seconds / 3600.0
+    
+    free_hours = float(ticket.get("free_hours", 0.0))
+    rate = float(ticket.get("rate_per_hour", 10.0))
+    
+    billable_hours = max(duration_hours - free_hours, 0.0)
+    import math
+    billable_units = math.ceil(billable_hours)
+    total_amount = round(billable_units * rate, 2)
+    
+    return {
+        "duration_minutes": round(duration_seconds / 60.0, 1),
+        "duration_hours": round(duration_hours, 2),
+        "billable_hours": billable_hours,
+        "free_hours": free_hours,
+        "rate_per_hour": rate,
+        "total_amount": total_amount,
+        "currency": "MAD"
+    }
+
+
+def pay_parking_ticket(ticket_id: str, payment_method: str = "CARD", exit_now: bool = True) -> dict | None:
+    ticket = get_parking_ticket(ticket_id)
+    if not ticket:
+        return None
+    
+    now = datetime.now(timezone.utc)
+    fee_data = calculate_ticket_fee(ticket, exit_time=now if exit_now else None)
+    
+    update_fields = {
+        "status": "PAID" if exit_now else "PAID_PENDING_EXIT",
+        "payment_method": payment_method.upper(),
+        "amount_paid": fee_data["total_amount"],
+        "exit_time": now if exit_now else None,
+        "paid_at": now
+    }
+    
+    _col("tickets").update_one({"ticket_id": ticket["ticket_id"]}, {"$set": update_fields})
+    updated = get_parking_ticket(ticket["ticket_id"])
+    if updated:
+        updated.update(fee_data)
+    return updated
+
+
+def list_parking_tickets(limit: int = 50, status: str | None = None) -> list[dict]:
+    query = {"status": status} if status else {}
+    try:
+        from pymongo import DESCENDING as D
+    except ImportError:
+        from montydb import DESCENDING as D
+    return [_serialise(d) for d in _col("tickets").find(query).sort("created_at", D).limit(limit)]
+
+
+
 # ── Quick test ──────────────────────────────────────────────────────────────────
 if __name__ == "__main__":
     db = get_db()

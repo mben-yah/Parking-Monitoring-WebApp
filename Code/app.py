@@ -12,6 +12,7 @@ POST /predict_video -> streams SSE plate detections from a video
 """
 
 import base64
+import csv
 import io
 import os
 import sys
@@ -30,9 +31,16 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != 'utf-8':
 if sys.stderr.encoding and sys.stderr.encoding.lower() != 'utf-8':
     sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
 
-from flask import Flask, jsonify, request, send_from_directory, Response, stream_with_context
+from flask import Flask, jsonify, request, send_from_directory, Response, stream_with_context, session, redirect, url_for
 from flask_cors import CORS
 import alert_engine
+import mongodb_client
+
+# Seed default users on startup
+try:
+    mongodb_client.seed_default_users()
+except Exception as _seede:
+    pass
 
 # ---------------------------------------------------------------------------
 # Logging setup — writes to console AND logs/predict.log
@@ -93,29 +101,37 @@ except Exception as _e:
 
 # ---------------------------------------------------------------------------
 app = Flask(__name__, static_folder="frontend", template_folder="frontend")
+app.secret_key = "platevision_secret_2026"
 CORS(app)
 
 ALLOWED_EXTENSIONS = {".jpg", ".jpeg", ".png", ".bmp", ".tif", ".tiff", ".webp"}
 
 import re as _re
 
-def _get_all_models() -> list[tuple[int, str, Path]]:
+def _get_all_models(dataset_type: str = "auto") -> list[tuple[int, str, Path, str]]:
     """
-    Scan runs/detect/runs/detect/ for all english_trainN folders that have best.pt.
-    Returns list of (number, name, path) sorted newest-first.
+    Scan runs/detect/runs/detect/ for english_trainN and elpd_commercial_trainN folders that have best.pt.
+    Filters models based on dataset_type ('commercial', 'non_commercial', or 'auto').
     """
     search = BASE_DIR / "runs" / "detect" / "runs" / "detect"
     found  = []
+    dt     = (dataset_type or "auto").lower()
     if search.exists():
         for d in search.iterdir():
-            m = _re.fullmatch(r"english_train(\d*)", d.name)
-            if m:
-                num = int(m.group(1)) if m.group(1) else 1
+            m_elpd = _re.fullmatch(r"elpd_commercial_train(\d*)", d.name)
+            m_eng  = _re.fullmatch(r"english_train(\d*)", d.name)
+            if m_elpd and dt in ("auto", "commercial", "elpd"):
+                num = int(m_elpd.group(1)) if m_elpd.group(1) else 1
+                pt  = d / "weights" / "best.pt"
+                if pt.exists():
+                    found.append((200 + num, d.name, pt, f"ELPD Commercial (train{num}) — mAP 0.987"))
+            elif m_eng and dt in ("auto", "non_commercial", "standard", "english"):
+                num = int(m_eng.group(1)) if m_eng.group(1) else 1
                 pt  = d / "weights" / "best.pt"
                 if pt.exists():
                     label = f"english_train{'2' if num == 2 else str(num)} (overnight)" if num == 2 else f"english_train{num} (augmented)"
-                    found.append((num, d.name, pt, label))
-    found.sort(key=lambda x: x[0], reverse=True)  # newest first
+                    found.append((100 + num, d.name, pt, label))
+    found.sort(key=lambda x: x[0], reverse=True)  # newest/highest priority first
     return found
 
 log.info(f"Available models: {[m[1] for m in _get_all_models()]}")
@@ -126,8 +142,96 @@ def allowed(filename: str) -> bool:
 
 
 # ---------------------------------------------------------------------------
-# Routes — static
+# Authentication Guard Hook & Routes
 # ---------------------------------------------------------------------------
+PUBLIC_ENDPOINTS = {
+    "login_page", "api_auth_login", "api_auth_register", 
+    "api_auth_logout", "api_auth_me", "static_files", "static",
+    "view_html_ticket", "download_pdf_ticket", "apitemplate_pdf_ticket", "api_create_parking_ticket", "tickets_page"
+}
+
+@app.before_request
+def require_login():
+    if request.endpoint in PUBLIC_ENDPOINTS or request.path in ("/login", "/tickets"):
+        return None
+    if request.path.startswith("/api/auth/") or request.path.startswith("/ticket/") or request.path.startswith("/api/parking/ticket"):
+        return None
+    ext = Path(request.path).suffix.lower()
+    if ext in {".css", ".js", ".png", ".jpg", ".jpeg", ".svg", ".ico", ".woff", ".woff2", ".ttf", ".webp"}:
+        return None
+    if not session.get("user"):
+        if request.path.startswith("/api/"):
+            return jsonify({"error": "Authentication required", "redirect": "/login"}), 401
+        return redirect("/login")
+
+
+@app.route("/login")
+def login_page():
+    if session.get("user"):
+        return redirect("/")
+    return send_from_directory("frontend", "login.html")
+
+
+@app.route("/api/auth/login", methods=["POST"])
+def api_auth_login():
+    data = request.get_json(silent=True) or {}
+    username = data.get("username", "")
+    password = data.get("password", "")
+    
+    if not username or not password:
+        return jsonify({"error": "Username and password required"}), 400
+        
+    try:
+        from mongodb_client import verify_user
+        success, res = verify_user(username, password)
+        if not success:
+            return jsonify({"error": res}), 401
+            
+        session["user"] = res
+        log.info(f"User logged in: {username} ({res.get('role')})")
+        return jsonify({"success": True, "user": res})
+    except Exception as e:
+        log.error(f"Login error: {e}")
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/auth/register", methods=["POST"])
+def api_auth_register():
+    data = request.get_json(silent=True) or {}
+    username = data.get("username", "")
+    password = data.get("password", "")
+    role     = data.get("role", "OPERATOR")
+    
+    if not username or not password:
+        return jsonify({"error": "Username and password required"}), 400
+        
+    try:
+        from mongodb_client import create_user
+        success, res = create_user(username, password, role)
+        if not success:
+            return jsonify({"error": res}), 400
+            
+        log.info(f"User registered: {username} ({role})")
+        return jsonify({"success": True, "user_id": res})
+    except Exception as e:
+        log.error(f"Registration error: {e}")
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/auth/logout", methods=["POST", "GET"])
+def api_auth_logout():
+    session.pop("user", None)
+    return jsonify({"success": True})
+
+
+@app.route("/api/auth/me", methods=["GET"])
+def api_auth_me():
+    user = session.get("user")
+    if user:
+        return jsonify({"authenticated": True, "user": user})
+    return jsonify({"authenticated": False, "user": None})
+
+
 @app.route("/")
 def index():
     return send_from_directory("frontend", "index.html")
@@ -138,6 +242,11 @@ def video_page():
     return send_from_directory("frontend", "video.html")
 
 
+@app.route("/tickets")
+def tickets_page():
+    return send_from_directory("frontend", "tickets.html")
+
+
 @app.route("/<path:filename>")
 def static_files(filename):
     if filename == "logs":          # don't let this route eat /logs
@@ -146,31 +255,99 @@ def static_files(filename):
 
 
 # ---------------------------------------------------------------------------
-# Log viewer
+# Log viewer & Export
 # ---------------------------------------------------------------------------
+def _parse_log_lines(lines):
+    import re
+    parsed = []
+    pattern = re.compile(r"^(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2})\s+([A-Z]+)\s+(.*)$")
+    for raw in lines:
+        raw_clean = raw.rstrip("\r\n")
+        m = pattern.match(raw_clean)
+        if m:
+            parsed.append({
+                "timestamp": m.group(1),
+                "level": m.group(2).strip(),
+                "message": m.group(3)
+            })
+        else:
+            parsed.append({
+                "timestamp": "",
+                "level": "INFO",
+                "message": raw_clean
+            })
+    return parsed
+
+
+@app.route("/logs/export")
 @app.route("/logs")
 def log_viewer():
-    """Return the last N lines of the log file as a styled HTML page."""
-    n = int(request.args.get("n", 300))
+    """Return live log viewer HTML page or export log content based on query parameters."""
+    export_fmt = (request.args.get("format") or request.args.get("export") or request.args.get("download") or "").strip().lower()
+    
+    # If route ends with /export and no format specified, default format to txt
+    if request.path.endswith("/export") and not export_fmt:
+        export_fmt = "txt"
+    elif export_fmt in ("1", "true", "yes", "download"):
+        export_fmt = "txt"
+
+    scope = (request.args.get("scope") or "").strip().lower()
+    n_param = request.args.get("n", "")
+
     try:
         with open(LOG_FILE, encoding="utf-8", errors="replace") as f:
             lines = f.readlines()
-        tail = lines[-n:]
     except FileNotFoundError:
-        tail = ["(log file not found yet)\n"]
+        lines = ["(log file not found yet)\n"]
 
+    if scope == "full" or n_param in ("all", "0"):
+        selected_lines = lines
+    else:
+        n = int(n_param) if (n_param and n_param.isdigit()) else 300
+        selected_lines = lines[-n:] if n > 0 else lines
+
+    # Export logic
+    if export_fmt:
+        timestamp_str = datetime.now().strftime("%Y%m%d_%H%M%S")
+        if export_fmt in ("txt", "log", "raw"):
+            content = "".join(selected_lines)
+            filename = f"platevision_log_{timestamp_str}.log"
+            res = Response(content, mimetype="text/plain; charset=utf-8")
+            res.headers["Content-Disposition"] = f'attachment; filename="{filename}"'
+            return res
+        elif export_fmt == "json":
+            parsed = _parse_log_lines(selected_lines)
+            filename = f"platevision_log_{timestamp_str}.json"
+            res = jsonify(parsed)
+            res.headers["Content-Disposition"] = f'attachment; filename="{filename}"'
+            return res
+        elif export_fmt == "csv":
+            parsed = _parse_log_lines(selected_lines)
+            output = io.StringIO()
+            writer = csv.DictWriter(output, fieldnames=["timestamp", "level", "message"])
+            writer.writeheader()
+            writer.writerows(parsed)
+            filename = f"platevision_log_{timestamp_str}.csv"
+            res = Response(output.getvalue(), mimetype="text/csv; charset=utf-8")
+            res.headers["Content-Disposition"] = f'attachment; filename="{filename}"'
+            return res
+        else:
+            return jsonify({"error": f"Unsupported export format '{export_fmt}'. Supported formats: txt, json, csv"}), 400
+
+    # HTML log viewer
     def colour(line):
         if "ERROR" in line or "❌" in line:
-            return f'<span style="color:#ef4444">{line}</span>'
+            return f'<span class="log-row level-error" style="color:#ef4444">{line}</span>'
         if "WARNING" in line or "WARN" in line or "⚠" in line:
-            return f'<span style="color:#f59e0b">{line}</span>'
+            return f'<span class="log-row level-warn" style="color:#f59e0b">{line}</span>'
         if "✅" in line or "INFO" in line:
-            return f'<span style="color:#a3e635">{line}</span>'
+            return f'<span class="log-row level-info" style="color:#a3e635">{line}</span>'
         if "DEBUG" in line:
-            return f'<span style="color:#6b7a99">{line}</span>'
-        return f'<span>{line}</span>'
+            return f'<span class="log-row level-debug" style="color:#6b7a99">{line}</span>'
+        return f'<span class="log-row">{line}</span>'
 
-    coloured = "".join(colour(l.rstrip()) + "\n" for l in tail)
+    coloured = "".join(colour(l.rstrip()) + "\n" for l in selected_lines)
+    n_display = len(selected_lines)
 
     html = f"""<!DOCTYPE html>
 <html lang="en">
@@ -182,30 +359,82 @@ def log_viewer():
   <style>
     *{{box-sizing:border-box;margin:0;padding:0}}
     body{{background:#080b12;color:#e8edf8;font-family:'JetBrains Mono',monospace;font-size:13px;padding:24px}}
-    h1{{font-size:18px;font-weight:700;margin-bottom:16px;color:#3b82f6}}
-    .meta{{font-size:11px;color:#6b7a99;margin-bottom:12px}}
+    .header{{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:12px}}
+    h1{{font-size:18px;font-weight:700;color:#3b82f6;display:flex;align-items:center;gap:8px}}
+    .meta{{font-size:11px;color:#6b7a99;margin-bottom:16px}}
     pre{{background:#0f1420;border:1px solid rgba(255,255,255,0.07);border-radius:10px;
-         padding:20px;overflow-x:auto;line-height:1.7;white-space:pre-wrap;word-break:break-all}}
-    .controls{{margin-bottom:16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}}
-    a.btn{{padding:7px 18px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;
-           background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.3);color:#60a5fa;transition:all .2s}}
-    a.btn:hover{{background:rgba(59,130,246,0.25)}}
-    .back{{color:#6b7a99;font-size:12px}}
+         padding:20px;overflow-x:auto;line-height:1.7;white-space:pre-wrap;word-break:break-all;max-height:75vh}}
+    .controls{{margin-bottom:16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}}
+    .group-label{{font-size:11px;font-weight:600;color:#6b7a99;text-transform:uppercase;letter-spacing:0.5px;margin-right:2px}}
+    a.btn, button.btn{{padding:7px 14px;border-radius:8px;font-size:12px;font-weight:600;text-decoration:none;
+           background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.25);color:#60a5fa;cursor:pointer;
+           transition:all .2s;display:inline-flex;align-items:center;gap:6px;font-family:inherit}}
+    a.btn:hover, button.btn:hover{{background:rgba(59,130,246,0.25);color:#93c5fd;border-color:rgba(59,130,246,0.4)}}
+    a.btn-export, button.btn-export{{background:rgba(16,185,129,0.12);border-color:rgba(16,185,129,0.3);color:#34d399}}
+    a.btn-export:hover, button.btn-export:hover{{background:rgba(16,185,129,0.25);color:#6ee7b7;border-color:rgba(16,185,129,0.5)}}
+    .search-box{{padding:7px 12px;border-radius:8px;font-size:12px;background:#0f1420;border:1px solid rgba(255,255,255,0.1);
+                 color:#e8edf8;outline:none;font-family:inherit;min-width:220px;transition:border-color .2s}}
+    .search-box:focus{{border-color:#3b82f6}}
+    .divider{{width:1px;height:24px;background:rgba(255,255,255,0.08);margin:0 4px}}
+    .toast{{position:fixed;bottom:24px;right:24px;background:#10b981;color:#fff;padding:10px 18px;border-radius:8px;
+            font-weight:600;box-shadow:0 4px 12px rgba(0,0,0,0.3);display:none;z-index:9999}}
   </style>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet"/>
 </head>
 <body>
-  <h1>🪵 PlateVision — Live Logs</h1>
-  <div class="meta">Last {len(tail)} of {len(lines)} lines · auto-refreshes every 5s · {datetime.now().strftime('%H:%M:%S')}</div>
+  <div class="header">
+    <h1>🪵 PlateVision — Live Server Logs</h1>
+  </div>
+  <div class="meta">Showing {n_display} of {len(lines)} lines · Auto-refreshes every 5s · Server Time: {datetime.now().strftime('%H:%M:%S')}</div>
+  
   <div class="controls">
+    <span class="group-label">View:</span>
     <a class="btn" href="/logs?n=100">Last 100</a>
     <a class="btn" href="/logs?n=300">Last 300</a>
     <a class="btn" href="/logs?n=1000">Last 1000</a>
+    <a class="btn" href="/logs?scope=full">Full Log</a>
+    
+    <div class="divider"></div>
+    
+    <span class="group-label">Export:</span>
+    <a class="btn btn-export" href="/logs?format=txt&n={n_param or '300'}" title="Download raw log text file">📥 Export TXT</a>
+    <a class="btn btn-export" href="/logs?format=json&n={n_param or '300'}" title="Download log as structured JSON">📊 Export JSON</a>
+    <a class="btn btn-export" href="/logs?format=csv&n={n_param or '300'}" title="Download log as CSV spreadsheet">📄 Export CSV</a>
+    <button class="btn" onclick="copyLogs()" title="Copy current logs to clipboard">📋 Copy</button>
+
+    <div class="divider"></div>
+
+    <input type="text" id="logFilter" class="search-box" placeholder="🔍 Filter logs..." onkeyup="filterLogs()"/>
+
+    <div class="divider"></div>
     <a class="btn" href="/">← Image Mode</a>
     <a class="btn" href="/video">🎥 Video Mode</a>
   </div>
-  <pre>{coloured}</pre>
+
+  <pre id="logContent">{coloured}</pre>
+
+  <div id="toast" class="toast">Copied to clipboard!</div>
+
+  <script>
+    function copyLogs() {{
+      const text = document.getElementById('logContent').innerText;
+      navigator.clipboard.writeText(text).then(() => {{
+        const toast = document.getElementById('toast');
+        toast.style.display = 'block';
+        setTimeout(() => {{ toast.style.display = 'none'; }}, 2500);
+      }});
+    }}
+
+    function filterLogs() {{
+      const query = document.getElementById('logFilter').value.toLowerCase();
+      const rows = document.querySelectorAll('#logContent .log-row');
+      rows.forEach(row => {{
+        const text = row.innerText.toLowerCase();
+        row.style.display = text.includes(query) ? '' : 'none';
+      }});
+    }}
+  </script>
 </body>
 </html>"""
     return html
@@ -243,11 +472,12 @@ def predict():
         from ultralytics import YOLO
         import easyocr
 
-        models = _get_all_models()   # sorted newest-first
+        dataset_type = request.form.get("dataset_type", request.form.get("dataset", "auto")).lower()
+        models = _get_all_models(dataset_type=dataset_type)   # sorted newest-first
         if not models:
-            return jsonify({"error": "No trained models found"}), 500
+            return jsonify({"error": f"No trained models found for dataset type: {dataset_type}"}), 500
 
-        log.info(f"[{req_id}] Trying {len(models)} model(s): {[m[1] for m in models]}")
+        log.info(f"[{req_id}] Trying {len(models)} model(s) [dataset_type={dataset_type}]: {[m[1] for m in models]}")
 
         plate_text    = ""
         confidence    = None
@@ -534,8 +764,9 @@ def predict_video():
             else:  # english mode
                 import recognition_pipeline as en_pipe
                 importlib.reload(en_pipe)
-                weights = en_pipe._resolve_best_weights() or en_pipe.BEST_WEIGHTS
-                log.info(f"[{req_id}] Video mode=ENGLISH, weights={weights}")
+                dataset_type = request.form.get("dataset_type", request.form.get("dataset", "auto")).lower()
+                weights = en_pipe._resolve_best_weights(dataset_type=dataset_type) or en_pipe.BEST_WEIGHTS
+                log.info(f"[{req_id}] Video mode=ENGLISH, dataset_type={dataset_type}, weights={weights}")
                 model = YOLO(str(weights))
 
                 def _ocr_crop(crop):
@@ -874,6 +1105,102 @@ def api_dashboard_stats():
         return jsonify({"error": str(exc)}), 500
 
 
+@app.route("/api/dashboard/export")
+def api_dashboard_export():
+    try:
+        from mongodb_client import get_stats, get_peak_hours_stats, get_sensor_health_stats, parking_stats
+        data = {
+            "basic": get_stats(),
+            "peak_hours": get_peak_hours_stats(),
+            "sensors": get_sensor_health_stats(),
+            "parking": parking_stats()
+        }
+        
+        export_fmt = (request.args.get("format") or request.args.get("export") or "json").strip().lower()
+        export_type = (request.args.get("type") or "all").strip().lower()
+        timestamp_str = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+        if export_fmt == "json":
+            if export_type == "sensors":
+                payload = data.get("sensors", [])
+            elif export_type == "peak_hours":
+                payload = data.get("peak_hours", {})
+            elif export_type == "basic":
+                payload = data.get("basic", {})
+            else:
+                payload = data
+            
+            filename = f"platevision_dashboard_{export_type}_{timestamp_str}.json"
+            res = jsonify(payload)
+            res.headers["Content-Disposition"] = f'attachment; filename="{filename}"'
+            return res
+
+        elif export_fmt == "csv":
+            output = io.StringIO()
+            
+            if export_type == "sensors":
+                writer = csv.DictWriter(output, fieldnames=["name", "type", "lot", "status", "uptime_pct", "downtime_mins", "last_active"])
+                writer.writeheader()
+                for s in data.get("sensors", []):
+                    writer.writerow({
+                        "name": s.get("name", ""),
+                        "type": s.get("type", ""),
+                        "lot": s.get("lot", ""),
+                        "status": s.get("status", ""),
+                        "uptime_pct": s.get("uptime_pct", 0),
+                        "downtime_mins": s.get("downtime_mins", 0),
+                        "last_active": s.get("last_active", "")
+                    })
+            elif export_type == "peak_hours":
+                writer = csv.DictWriter(output, fieldnames=["hour", "time_window", "detections_count"])
+                writer.writeheader()
+                hourly = data.get("peak_hours", {}).get("hourly", {})
+                for h in range(24):
+                    writer.writerow({
+                        "hour": f"{h:02d}",
+                        "time_window": f"{h:02d}:00 - {(h+1)%24:02d}:00",
+                        "detections_count": hourly.get(h, 0)
+                    })
+            else:
+                # Full report CSV
+                writer = csv.writer(output)
+                writer.writerow(["=== PLATEVISION DASHBOARD & SENSOR HEALTH REPORT ==="])
+                writer.writerow(["Generated At", datetime.now().strftime("%Y-%m-%d %H:%M:%S")])
+                writer.writerow([])
+                
+                writer.writerow(["--- KPI & DETECTION SUMMARY ---"])
+                basic = data.get("basic", {})
+                writer.writerow(["Total Detections", basic.get("total", 0)])
+                by_src = basic.get("by_source", {})
+                writer.writerow(["Image Detections", by_src.get("image", 0)])
+                writer.writerow(["Video Detections", by_src.get("video", 0)])
+                writer.writerow(["Livestream Detections", by_src.get("livestream", 0)])
+                writer.writerow([])
+                
+                writer.writerow(["--- SENSOR HEALTH & DOWNTIME TRACKER ---"])
+                writer.writerow(["Sensor Label", "Type", "Assigned Lot", "Status", "Uptime %", "Downtime (Mins)", "Last Active"])
+                for s in data.get("sensors", []):
+                    writer.writerow([s.get("name"), s.get("type"), s.get("lot"), s.get("status"), s.get("uptime_pct"), s.get("downtime_mins"), s.get("last_active")])
+                writer.writerow([])
+
+                writer.writerow(["--- PEAK TRAFFIC HOURS ---"])
+                writer.writerow(["Hour Window", "Detection Count"])
+                hourly = data.get("peak_hours", {}).get("hourly", {})
+                for h in range(24):
+                    writer.writerow([f"{h:02d}:00 - {(h+1)%24:02d}:00", hourly.get(h, 0)])
+
+            filename = f"platevision_dashboard_{export_type}_{timestamp_str}.csv"
+            res = Response(output.getvalue(), mimetype="text/csv; charset=utf-8")
+            res.headers["Content-Disposition"] = f'attachment; filename="{filename}"'
+            return res
+
+        else:
+            return jsonify({"error": f"Unsupported format '{export_fmt}'. Use 'json' or 'csv'."}), 400
+
+    except Exception as exc:
+        return jsonify({"error": str(exc)}), 500
+
+
 # ---------------------------------------------------------------------------
 # Supervisor / Parking endpoints
 # ---------------------------------------------------------------------------
@@ -989,6 +1316,141 @@ def parking_alert_stream():
         mimetype="text/event-stream",
         headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
     )
+
+
+# ── Parking Ticket & PDF Generation API ──────────────────────────────────────
+
+@app.route("/api/parking/ticket/create", methods=["POST"])
+def api_create_parking_ticket():
+    from mongodb_client import create_parking_ticket
+    data = request.get_json(silent=True) or request.form.to_dict() or {}
+    plate_text = data.get("plate_text", "UNKNOWN")
+    rate_per_hour = float(data.get("rate_per_hour", 10.0))
+    free_hours = float(data.get("free_hours", 1.0))
+    supermarket = str(data.get("supermarket_stamp", "true")).lower() in ("true", "1", "yes")
+
+    ticket = create_parking_ticket(
+        plate_text=plate_text,
+        rate_per_hour=rate_per_hour,
+        free_hours=free_hours,
+        supermarket_stamp=supermarket
+    )
+    log.info(f"[ticket] Created ticket {ticket['ticket_id']} for plate {plate_text!r}")
+    return jsonify({"ok": True, "ticket": ticket})
+
+
+@app.route("/ticket/<ticket_id>")
+def view_html_ticket(ticket_id):
+    """Render interactive printable HTML ticket view."""
+    from mongodb_client import get_parking_ticket, calculate_ticket_fee
+    from ticket_pdf_generator import generate_html_ticket
+
+    ticket = get_parking_ticket(ticket_id)
+    if not ticket:
+        ticket = {
+            "ticket_id": f"TKT-{datetime.now().strftime('%Y%m%d')}-DEMO",
+            "plate_text": ticket_id.upper(),
+            "entry_time": datetime.now(timezone.utc).isoformat(),
+            "rate_per_hour": 10.0,
+            "free_hours": 1.0,
+            "supermarket_stamp": True,
+            "status": "ACTIVE",
+            "total_amount": 0.0
+        }
+    else:
+        fee = calculate_ticket_fee(ticket)
+        ticket.update(fee)
+
+    html_content = generate_html_ticket(ticket, printable=True)
+    return Response(html_content, mimetype="text/html")
+
+
+@app.route("/api/parking/ticket/<ticket_id>/pdf")
+def download_pdf_ticket(ticket_id):
+    """Download ReportLab native PDF ticket."""
+    from mongodb_client import get_parking_ticket, calculate_ticket_fee
+    from ticket_pdf_generator import generate_native_pdf_ticket
+
+    ticket = get_parking_ticket(ticket_id)
+    if not ticket:
+        return jsonify({"error": f"Ticket {ticket_id} not found"}), 404
+
+    fee = calculate_ticket_fee(ticket)
+    ticket.update(fee)
+
+    try:
+        pdf_bytes = generate_native_pdf_ticket(ticket)
+        return Response(
+            pdf_bytes,
+            mimetype="application/pdf",
+            headers={
+                "Content-Disposition": f"inline; filename=parking_ticket_{ticket['ticket_id']}.pdf"
+            }
+        )
+    except Exception as exc:
+        log.error(f"[ticket] Error generating PDF: {exc}")
+        return jsonify({"error": str(exc)}), 500
+
+
+@app.route("/api/parking/ticket/apitemplate", methods=["POST"])
+def apitemplate_pdf_ticket():
+    """
+    APITemplate.io Integration Endpoint.
+    Sends HTML/CSS + JSON data to APITemplate.io REST API and returns PDF.
+    """
+    from mongodb_client import get_parking_ticket, calculate_ticket_fee
+    from ticket_pdf_generator import generate_apitemplate_pdf
+
+    data = request.get_json(silent=True) or request.form.to_dict() or {}
+    ticket_id = data.get("ticket_id")
+    api_key = data.get("api_key") or os.environ.get("APITEMPLATE_API_KEY")
+
+    if not ticket_id:
+        return jsonify({"error": "Missing ticket_id parameter"}), 400
+
+    ticket = get_parking_ticket(ticket_id)
+    if not ticket:
+        return jsonify({"error": f"Ticket {ticket_id} not found"}), 404
+
+    fee = calculate_ticket_fee(ticket)
+    ticket.update(fee)
+
+    try:
+        pdf_bytes = generate_apitemplate_pdf(ticket, api_key=api_key)
+        if isinstance(pdf_bytes, str):
+            return jsonify({"ok": True, "download_url": pdf_bytes})
+        return Response(
+            pdf_bytes,
+            mimetype="application/pdf",
+            headers={
+                "Content-Disposition": f"attachment; filename=apitemplate_ticket_{ticket['ticket_id']}.pdf"
+            }
+        )
+    except Exception as exc:
+        log.error(f"[apitemplate] API error: {exc}")
+        return jsonify({"error": f"APITemplate.io error: {exc}"}), 500
+
+
+@app.route("/api/parking/ticket/<ticket_id>/pay", methods=["POST"])
+def api_pay_parking_ticket(ticket_id):
+    from mongodb_client import pay_parking_ticket
+    data = request.get_json(silent=True) or request.form.to_dict() or {}
+    method = data.get("payment_method", "CARD")
+    
+    ticket = pay_parking_ticket(ticket_id, payment_method=method)
+    if not ticket:
+        return jsonify({"error": "Ticket not found or already paid"}), 404
+        
+    log.info(f"[ticket] Ticket {ticket_id} paid ({ticket['amount_paid']} MAD) via {method}")
+    return jsonify({"ok": True, "ticket": ticket})
+
+
+@app.route("/api/parking/tickets")
+def api_list_parking_tickets():
+    from mongodb_client import list_parking_tickets
+    limit = int(request.args.get("limit", 50))
+    status = request.args.get("status")
+    return jsonify({"tickets": list_parking_tickets(limit=limit, status=status)})
 
 
 # ---------------------------------------------------------------------------

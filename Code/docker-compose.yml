@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  platevision-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: platevision_app
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./runs:/app/runs
+      - ./logs:/app/logs
+      - ./platevision_db:/app/platevision_db
+    restart: unless-stopped
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:latest
+    container_name: platevision_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    restart: unless-stopped
+
+volumes:
+  mongo_data:

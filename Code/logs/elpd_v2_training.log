@@ -1,0 +1,33 @@
+[2026-07-27 15:06:04]  ======================================================================
+[2026-07-27 15:06:04]  STEP 1 — COCO → YOLO conversion
+[2026-07-27 15:06:04]  Total in JSON: 2329  |  On disk: 2329  |  Valid annotated: 2287
+[2026-07-27 15:06:04]  STEP 2 — Train / Val split
+[2026-07-27 15:06:04]  Train: 1944  |  Val: 343
+[2026-07-27 15:07:17]  Written train: 1944 images
+[2026-07-27 15:07:17]  Written val  : 343 images
+[2026-07-27 15:07:17]  STEP 3 — Augmentation (crop · scale · translation)
+[2026-07-27 15:29:56]  Augmentation done — added 5791 images (skipped 41)
+[2026-07-27 15:29:56]  Final train: 7735  |  val: 343
+[2026-07-27 15:29:56]  STEP 4 — Writing dataset YAML
+[2026-07-27 15:29:56]  YAML: C:\Users\Mohamed Walid\Desktop\Internship\Code\elpd_commercial_v2.yaml
+[2026-07-27 15:29:56]  STEP 5 — YOLOv8 training
+[2026-07-27 15:29:56]  Weights  : C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train33\weights\best.pt
+[2026-07-27 15:29:56]  Epochs   : 40  |  Batch: 16  |  Imgsz: 640
+[2026-07-27 15:29:56]  ======================================================================
+[2026-07-27 15:30:10]  Starting from: C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train33\weights\best.pt
+[2026-07-27 16:56:36]  Epoch  1/40  |  mAP50=0  mAP50-95=0  P=0  R=0  |  Elapsed=1:26:25  ETA=01:07:19  (~2 days, 8:10:42 left)
+[2026-07-27 19:18:32]  Epoch  2/40  |  mAP50=0.9830  mAP50-95=0.8294  P=0.9609  R=0.9268  |  Elapsed=3:48:21  ETA=19:37:26  (~3 days, 0:18:54 left)
+[2026-07-28 00:43:47]  Epoch  3/40  |  mAP50=0.9844  mAP50-95=0.8375  P=0.9376  R=0.9633  |  Elapsed=9:13:37  ETA=18:31:45  (~4 days, 17:47:57 left)
+[2026-07-28 02:06:51]  Epoch  4/40  |  mAP50=0.9822  mAP50-95=0.8188  P=0.9432  R=0.9490  |  Elapsed=10:36:40  ETA=01:37:00  (~3 days, 23:30:08 left)
+[2026-07-28 15:41:06]  Epoch  5/40  |  mAP50=0.9853  mAP50-95=0.8549  P=0.9469  R=0.9725  |  Elapsed=1 day, 0:10:55  ETA=16:57:35  (~7 days, 1:16:29 left)
+[2026-07-28 17:44:58]  Epoch  6/40  |  mAP50=0.9837  mAP50-95=0.8313  P=0.9294  R=0.9748  |  Elapsed=1 day, 2:14:47  ETA=22:28:49  (~6 days, 4:43:50 left)
+[2026-07-28 20:35:00]  Epoch  7/40  |  mAP50=0.9858  mAP50-95=0.8525  P=0.9709  R=0.9405  |  Elapsed=1 day, 5:04:49  ETA=13:40:35  (~5 days, 17:05:35 left)
+[2026-07-28 22:02:26]  Epoch  8/40  |  mAP50=0.9870  mAP50-95=0.8537  P=0.9399  R=0.9669  |  Elapsed=1 day, 6:32:15  ETA=00:11:29  (~5 days, 2:09:03 left)
+[2026-07-28 23:14:15]  ======================================================================
+[2026-07-28 23:14:15]  Existing dataset found (ELPD_Commercial_v2). Skipping conversion & augmentation.
+[2026-07-28 23:14:15]  STEP 4 — Writing dataset YAML
+[2026-07-28 23:14:15]  YAML: C:\Users\Mohamed Walid\Desktop\Internship\Code\elpd_commercial_v2.yaml
+[2026-07-28 23:14:15]  STEP 5 — YOLOv8 training
+[2026-07-28 23:14:15]  Epochs   : 40  |  Batch: 16  |  Imgsz: 640
+[2026-07-28 23:14:15]  ======================================================================
+[2026-07-28 23:14:36]  Resuming training from checkpoint: C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\last.pt

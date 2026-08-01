@@ -157,18 +157,23 @@ tbody td { padding: 10px 16px; vertical-align: middle; }
 <body>
 
 <nav class="nav">
-  <a class="nav-logo" href="/"><span class="dot"></span> PlateVision</a>
+  <a class="nav-logo" href="/">
+    <div style="width:32px; height:32px; background:linear-gradient(135deg, #3b82f6, #8b5cf6); border-radius:8px; display:grid; place-items:center; font-weight:800; font-size:1rem; color:white;">PV</div>
+    PlateVision
+  </a>
   <div class="nav-links">
-    <a class="nav-link" href="/">📷 Images</a>
-    <a class="nav-link" href="/livestream">📡 Live Stream</a>
-    <a class="nav-link" href="/video">🎞 Video</a>
+    <a class="nav-link" href="/">📷 Image</a>
+    <a class="nav-link" href="/video">🎬 Video</a>
+    <a class="nav-link" href="/livestream">🔴 Stream</a>
+    <a class="nav-link" href="/tickets">🎟️ Tickets & Pay</a>
+    <a class="nav-link" href="/supervisor">🛡️ Supervisor</a>
     <a class="nav-link" href="/dashboard">📊 Dashboard</a>
-    <a class="nav-link active" href="/db">🗄 DB Admin</a>
-    <a class="nav-link" href="/supervisor">👮 Supervisor</a>
+    <a class="nav-link active" href="/db">🗄️ Database</a>
     <a class="nav-link" href="/logs">📋 Logs</a>
   </div>
-  <span class="nav-spacer"></span>
-  <span class="db-badge" id="nav-db-badge">Connecting…</span>
+  <span style="flex:1;"></span>
+  <span class="db-badge" id="nav-db-badge" style="margin-right:10px;">Connecting…</span>
+  <div id="userBadgeContainer"></div>
 </nav>
 
 <div class="page">

@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PlateVision — Authentication & Login</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --panel-bg: rgba(17, 24, 39, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --accent: #6366f1;
+      --accent-hover: #4f46e5;
+      --text: #f3f4f6;
+      --text-muted: #9ca3af;
+      --danger: #ef4444;
+      --success: #10b981;
+      --warning: #f59e0b;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-image: 
+        radial-gradient(circle at 15% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(16, 185, 129, 0.1) 0%, transparent 40%);
+      padding: 20px;
+    }
+
+    .auth-container {
+      width: 100%;
+      max-width: 440px;
+      background: var(--panel-bg);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 40px 32px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      animation: fadeIn 0.4s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .brand-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .brand-icon {
+      font-size: 38px;
+      display: inline-block;
+      margin-bottom: 8px;
+      filter: drop-shadow(0 0 12px rgba(99, 102, 241, 0.5));
+    }
+
+    .brand-title {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #fff 0%, #9ca3af 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Tab switcher */
+    .tabs-wrap {
+      display: flex;
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 12px;
+      padding: 4px;
+      margin-bottom: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 10px 0;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: transparent;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn.active {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    }
+
+    /* Form controls */
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+
+    .form-input, .form-select {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      color: var(--text);
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-input:focus, .form-select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.2s;
+      margin-top: 8px;
+    }
+
+    .btn-submit:hover {
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+    }
+
+    .btn-submit:active {
+      transform: scale(0.98);
+    }
+
+    /* Quick demo login cards */
+    .demo-section {
+      margin-top: 28px;
+      padding-top: 20px;
+      border-top: 1px solid var(--card-border);
+    }
+
+    .demo-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .demo-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .demo-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .demo-card:hover {
+      background: rgba(255, 255, 255, 0.07);
+      border-color: rgba(99, 102, 241, 0.4);
+    }
+
+    .demo-role {
+      font-size: 12px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .demo-cred {
+      font-size: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .alert-banner {
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      margin-bottom: 18px;
+      display: none;
+    }
+
+    .alert-banner.error {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #fca5a5;
+    }
+
+    .alert-banner.success {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #6ee7b7;
+    }
+
+    .footer-link {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .footer-link a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="auth-container">
+    <div class="brand-header">
+      <div class="brand-icon">🚘</div>
+      <div class="brand-title">PlateVision Access</div>
+      <div class="brand-subtitle">Surveillance & Parking Management System</div>
+    </div>
+
+    <div class="tabs-wrap">
+      <button class="tab-btn active" id="tab-login" onclick="switchTab('login')">Sign In</button>
+      <button class="tab-btn" id="tab-register" onclick="switchTab('register')">Create Account</button>
+    </div>
+
+    <div id="alert-msg" class="alert-banner"></div>
+
+    <form id="auth-form" onsubmit="handleSubmit(event)">
+      <div class="form-group">
+        <label class="form-label" for="username">Username</label>
+        <input type="text" id="username" class="form-input" placeholder="e.g. admin or operator" required autocomplete="username" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">Password</label>
+        <input type="password" id="password" class="form-input" placeholder="••••••••" required autocomplete="current-password" />
+      </div>
+
+      <div class="form-group" id="role-group" style="display: none;">
+        <label class="form-label" for="role">Account Role</label>
+        <select id="role" class="form-select">
+          <option value="OPERATOR">Operator (Monitoring & Livestreams)</option>
+          <option value="ADMIN">Administrator (Full Access & Supervisor)</option>
+        </select>
+      </div>
+
+      <button type="submit" id="btn-text" class="btn-submit">Sign In to Dashboard</button>
+    </form>
+
+    <div class="demo-section">
+      <div class="demo-title">⚡ Quick 1-Click Demo Accounts</div>
+      <div class="demo-grid">
+        <div class="demo-card" onclick="quickFill('admin', 'admin123')">
+          <div class="demo-role">🛡️ Administrator</div>
+          <div class="demo-cred">admin / admin123</div>
+        </div>
+        <div class="demo-card" onclick="quickFill('operator', 'operator123')">
+          <div class="demo-role">👁️ Operator</div>
+          <div class="demo-cred">operator / operator123</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-link">
+      <a href="/" style="text-decoration:none;">← Return to Main Application</a>
+    </div>
+  </div>
+
+  <script>
+    let currentMode = 'login';
+
+    function switchTab(mode) {
+      currentMode = mode;
+      document.getElementById('tab-login').classList.toggle('active', mode === 'login');
+      document.getElementById('tab-register').classList.toggle('active', mode === 'register');
+      document.getElementById('role-group').style.display = mode === 'register' ? 'block' : 'none';
+      document.getElementById('btn-text').textContent = mode === 'login' ? 'Sign In to Dashboard' : 'Register Account';
+      hideAlert();
+    }
+
+    function showAlert(msg, type = 'error') {
+      const banner = document.getElementById('alert-msg');
+      banner.textContent = msg;
+      banner.className = `alert-banner ${type}`;
+      banner.style.display = 'block';
+    }
+
+    function hideAlert() {
+      document.getElementById('alert-msg').style.display = 'none';
+    }
+
+    function quickFill(user, pass) {
+      document.getElementById('username').value = user;
+      document.getElementById('password').value = pass;
+      switchTab('login');
+      handleSubmit(new Event('submit'));
+    }
+
+    async function handleSubmit(e) {
+      e.preventDefault();
+      hideAlert();
+
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      const role = document.getElementById('role').value;
+
+      const endpoint = currentMode === 'login' ? '/api/auth/login' : '/api/auth/register';
+      const body = currentMode === 'login' ? { username, password } : { username, password, role };
+
+      try {
+        const resp = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+
+        const data = await resp.json();
+
+        if (!resp.ok || data.error) {
+          showAlert(data.error || 'Authentication failed');
+          return;
+        }
+
+        if (currentMode === 'register') {
+          showAlert('Account created successfully! Signing in...', 'success');
+          setTimeout(() => quickFill(username, password), 800);
+        } else {
+          showAlert('Login successful! Redirecting...', 'success');
+          // Save session locally
+          localStorage.setItem('platevision_user', JSON.stringify(data.user));
+          setTimeout(() => {
+            window.location.href = '/';
+          }, 600);
+        }
+      } catch (err) {
+        showAlert('Network connection error');
+      }
+    }
+  </script>
+</body>
+</html>

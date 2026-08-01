@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.git
+.gitignore
+.env
+*.log
+logs/*.log
+Subset_LE/
+archive/
+.vscode/
+.idea/
