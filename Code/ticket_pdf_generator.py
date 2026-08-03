@@ -138,7 +138,7 @@ def generate_native_pdf_ticket(ticket: dict) -> bytes:
     story.append(d)
 
     story.append(Spacer(1, 2 * mm))
-    story.append(Paragraph("Thank you for using Ben Yahia Parking System", sub_style))
+    story.append(Paragraph("Thank you for using Magnetite Vision Parking System by Ben Yahia", sub_style))
 
     doc.build(story)
     buffer.seek(0)
