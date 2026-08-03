@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PlateVision · License Plate Recognition</title>
+  <title>Magnetite Vision · License Plate Recognition</title>
   <meta name="description" content="AI-powered license plate recognition. Upload car photos and get plate numbers instantly." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -16,19 +16,19 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --bg:        #080b12;
-    --surface:   #0f1420;
-    --surface2:  #161d2e;
-    --glass:     rgba(255,255,255,0.035);
-    --border:    rgba(255,255,255,0.07);
-    --border-hi: rgba(99,179,237,0.45);
-    --accent:    #3b82f6;
-    --accent2:   #8b5cf6;
-    --success:   #10b981;
+    --bg:        #0b0f17;
+    --surface:   #111827;
+    --surface2:  #1f2937;
+    --glass:     rgba(255,255,255,0.04);
+    --border:    rgba(255,255,255,0.08);
+    --border-hi: rgba(6,214,160,0.45);
+    --accent:    #06d6a0;
+    --accent2:   #059669;
+    --success:   #06d6a0;
     --warning:   #f59e0b;
     --error:     #ef4444;
-    --text:      #e8edf8;
-    --muted:     #6b7a99;
+    --text:      #f1f5f9;
+    --muted:     #94a3b8;
     --radius:    14px;
     --shadow:    0 32px 80px rgba(0,0,0,0.7);
   }
@@ -416,7 +416,7 @@
     color: var(--muted); text-decoration: none; transition: all 0.2s; border: 1px solid transparent;
   }
   .nav-link:hover { color: var(--text); border-color: var(--border); }
-  .nav-link.active { color: #60a5fa; background: rgba(59,130,246,0.12); border-color: rgba(59,130,246,0.3); font-weight: 600; }
+  .nav-link.active { color: #06d6a0; background: rgba(6,214,160,0.12); border-color: rgba(6,214,160,0.3); font-weight: 600; }
 
   /* ═══════════════════════════════════════════════
      FOOTER
@@ -430,8 +430,8 @@
 
 <nav class="nav">
   <a class="nav-logo" href="/">
-    <div style="width:32px; height:32px; background:linear-gradient(135deg, #3b82f6, #8b5cf6); border-radius:8px; display:grid; place-items:center; font-weight:800; font-size:1rem; color:white;">PV</div>
-    PlateVision
+    <img src="/magnetite_vision_logo.png" alt="Magnetite Vision Logo" style="width:34px; height:34px; border-radius:8px; object-fit:cover; border:1px solid rgba(6,214,160,0.5); box-shadow:0 0 10px rgba(6,214,160,0.3);" />
+    Magnetite Vision
   </a>
   <div class="nav-links">
     <a class="nav-link active" href="/">📷 Image</a>
@@ -468,8 +468,8 @@
   <!-- ── Header ── -->
   <header>
     <div class="logo">
-      <div class="logo-icon">🚗</div>
-      <span class="logo-text">PlateVision</span>
+      <img src="/magnetite_vision_logo.png" alt="Magnetite Vision Logo" style="width:48px; height:48px; border-radius:12px; object-fit:cover; border:2px solid rgba(6,214,160,0.6); box-shadow:0 0 20px rgba(6,214,160,0.4);" />
+      <span class="logo-text">Magnetite Vision</span>
     </div>
     <h1>License Plate Recognition</h1>
     <p class="subtitle">Drop one or more car photos — our AI detects and reads every plate number instantly.</p>
@@ -1046,6 +1046,156 @@ async function handleLogout(e) {
   window.location.reload();
 }
 checkAuth();
+</script>
+
+<!-- ── Lower Section: About Us & Contact Us ── -->
+<section class="about-contact-section" style="background:#0b0f17; border-top:1px solid rgba(6,214,160,0.15); padding: 50px 24px 30px; margin-top:60px; color:#94a3b8;">
+  <div style="max-width:1200px; margin:0 auto;">
+    
+    <!-- About Section based on User Report -->
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:30px; margin-bottom:50px;">
+      
+      <!-- Company Info & Mission -->
+      <div>
+        <h2 style="color:#f8fafc; font-size:1.4rem; font-weight:700; margin-bottom:12px; display:flex; align-items:center; gap:10px;">
+          <span data-i18n="about_title">🪨 About Magnetite Vision</span>
+        </h2>
+        <p style="font-size:0.92rem; line-height:1.6; color:#cbd5e1; margin-bottom:20px;" data-i18n="about_subtitle">
+          Smart License Plate Recognition & Commercial Parking Management System
+        </p>
+
+        <div style="background:#111827; padding:16px; border-radius:12px; border:1px solid rgba(6,214,160,0.25); margin-bottom:16px;">
+          <h4 style="color:#06d6a0; font-size:0.95rem; margin-bottom:6px;" data-i18n="mission_title">🎯 Mission Statement</h4>
+          <p style="font-size:0.85rem; color:#94a3b8; line-height:1.5;" data-i18n="mission_desc">Delivering lightweight, 98.7% accurate automatic license plate recognition running under 35ms on CPU, making smart parking and surveillance accessible worldwide.</p>
+        </div>
+
+        <div style="background:#111827; padding:16px; border-radius:12px; border:1px solid rgba(255,255,255,0.06);">
+          <h4 style="color:#38bdf8; font-size:0.95rem; margin-bottom:6px;" data-i18n="origin_title">📖 Origin Story</h4>
+          <p style="font-size:0.85rem; color:#94a3b8; line-height:1.5;" data-i18n="origin_desc">Founded in 2026 by Mohamed Walid Ben Yahia to replace expensive proprietary ANPR cameras with custom YOLOv8 edge AI pipelines.</p>
+        </div>
+      </div>
+
+      <!-- Core Values & Tech SaaS -->
+      <div>
+        <div style="background:#111827; padding:16px; border-radius:12px; border:1px solid rgba(255,255,255,0.06); margin-bottom:16px; margin-top:40px;">
+          <h4 style="color:#f59e0b; font-size:0.95rem; margin-bottom:6px;" data-i18n="values_title">💡 Core Values</h4>
+          <p style="font-size:0.85rem; color:#94a3b8; line-height:1.5;" data-i18n="values_desc">Real-time edge speed, offline-first reliability, end-to-end data privacy, and transparent open-source code.</p>
+        </div>
+
+        <div style="background:#111827; padding:16px; border-radius:12px; border:1px solid rgba(255,255,255,0.06); margin-bottom:16px;">
+          <h4 style="color:#a855f7; font-size:0.95rem; margin-bottom:6px;" data-i18n="tech_title">🚀 Product Evolution (Tech & SaaS)</h4>
+          <p style="font-size:0.85rem; color:#94a3b8; line-height:1.5;" data-i18n="tech_desc">Powered by ELPD Commercial v2 (3.2M params, mAP50 0.987) with MontyDB file-backed NoSQL storage.</p>
+        </div>
+
+        <div style="background:#111827; padding:16px; border-radius:12px; border:1px solid rgba(255,255,255,0.06);">
+          <h4 style="color:#ec4899; font-size:0.95rem; margin-bottom:6px;" data-i18n="team_title">👥 Leadership & Team</h4>
+          <p style="font-size:0.85rem; color:#94a3b8; line-height:1.5;" data-i18n="team_desc">Engineered by AI specialists dedicated to state-of-the-art computer vision, deep learning OCR, and NoSQL architecture.</p>
+        </div>
+      </div>
+
+      <!-- Contact Us Box -->
+      <div>
+        <h2 style="color:#f8fafc; font-size:1.4rem; font-weight:700; margin-bottom:12px; display:flex; align-items:center; gap:10px;">
+          <span data-i18n="contact_title">📩 Contact Us</span>
+        </h2>
+        <p style="font-size:0.88rem; color:#94a3b8; margin-bottom:12px;" data-i18n="contact_subtitle">Have questions or partnership inquiries? Send a message directly to our team.</p>
+        
+        <p style="font-size:0.85rem; color:#06d6a0; margin-bottom:16px; font-family:'JetBrains Mono', monospace;">
+          <span data-i18n="contact_email_label">Official Company Email:</span> 
+          <a href="mailto:benyahiamedwalid.com" style="color:#06d6a0; text-decoration:underline;">benyahiamedwalid.com</a>
+        </p>
+
+        <form id="contactUsForm" onsubmit="submitContactForm(event)" style="display:flex; flex-direction:column; gap:10px;">
+          <input type="text" id="c_name" required placeholder="Your Name" data-i18n="form_name" style="background:#111827; border:1px solid rgba(255,255,255,0.12); padding:10px 14px; border-radius:8px; color:#f8fafc; font-size:0.88rem;" />
+          <input type="email" id="c_email" required placeholder="Your Email" data-i18n="form_email" style="background:#111827; border:1px solid rgba(255,255,255,0.12); padding:10px 14px; border-radius:8px; color:#f8fafc; font-size:0.88rem;" />
+          <input type="text" id="c_subject" placeholder="Subject" data-i18n="form_subject" style="background:#111827; border:1px solid rgba(255,255,255,0.12); padding:10px 14px; border-radius:8px; color:#f8fafc; font-size:0.88rem;" />
+          <textarea id="c_message" required rows="3" placeholder="Type your message here..." data-i18n="form_message" style="background:#111827; border:1px solid rgba(255,255,255,0.12); padding:10px 14px; border-radius:8px; color:#f8fafc; font-size:0.88rem; resize:vertical;"></textarea>
+          
+          <button type="submit" style="background:linear-gradient(135deg, #06d6a0, #059669); color:#0b0f17; font-weight:700; border:none; padding:12px; border-radius:8px; cursor:pointer; font-size:0.92rem; transition:transform 0.2s;" data-i18n="form_send">
+            ✈️ Send Message
+          </button>
+          <div id="contactStatus" style="font-size:0.85rem; margin-top:4px;"></div>
+        </form>
+      </div>
+
+    </div>
+
+    <!-- Footer Bottom Row: Copyright, Social Links, Language Selector -->
+    <div style="border-top:1px solid rgba(255,255,255,0.08); padding-top:20px; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px;">
+      
+      <!-- Copyright Notice -->
+      <div style="font-size:0.85rem; color:#64748b;" data-i18n="copyright_notice">
+        © 2026 Magnetite Vision. All rights reserved. Developed by Mohamed Walid Ben Yahia.
+      </div>
+
+      <!-- Social Links -->
+      <div style="display:flex; align-items:center; gap:16px; font-size:0.88rem;">
+        <a href="https://github.com/mben-yah/Parking-Monitoring-WebApp" target="_blank" style="color:#38bdf8; text-decoration:none; display:flex; align-items:center; gap:6px;">
+          <svg style="width:18px; height:18px; fill:currentColor;" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          <span data-i18n="github_link">GitHub Repository</span>
+        </a>
+        <a href="https://linkedin.com/in/mohamed-walid-ben-yahia" target="_blank" style="color:#0ea5e9; text-decoration:none; display:flex; align-items:center; gap:6px;">
+          <svg style="width:18px; height:18px; fill:currentColor;" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+          <span data-i18n="linkedin_link">LinkedIn Profile</span>
+        </a>
+      </div>
+
+      <!-- Language Selector -->
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span style="font-size:0.85rem; color:#94a3b8;">🌐 Language:</span>
+        <select id="langSelect" onchange="changeLanguage(this.value)" style="background:#111827; color:#06d6a0; border:1px solid rgba(6,214,160,0.4); padding:6px 10px; border-radius:6px; font-size:0.85rem; font-weight:600; cursor:pointer;">
+          <option value="en">English (EN)</option>
+          <option value="fr">Français (FR)</option>
+          <option value="ar">العربية (AR)</option>
+          <option value="hi">हिन्दी (HI)</option>
+          <option value="ja">日本語 (JA)</option>
+          <option value="ko">한국어 (KO)</option>
+          <option value="zh">中文 (ZH)</option>
+          <option value="ru">Русский (RU)</option>
+          <option value="tr">Türkçe (TR)</option>
+        </select>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<script src="/i18n.js"></script>
+<script>
+async function submitContactForm(e) {
+  e.preventDefault();
+  const statusEl = document.getElementById('contactStatus');
+  statusEl.style.color = '#38bdf8';
+  statusEl.innerText = 'Sending message...';
+
+  const body = {
+    name: document.getElementById('c_name').value,
+    email: document.getElementById('c_email').value,
+    subject: document.getElementById('c_subject').value,
+    message: document.getElementById('c_message').value
+  };
+
+  try {
+    const res = await fetch('/api/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    const data = await res.json();
+    if (data.ok) {
+      statusEl.style.color = '#06d6a0';
+      statusEl.innerText = '✅ ' + (data.message || 'Message sent successfully!');
+      document.getElementById('contactUsForm').reset();
+    } else {
+      statusEl.style.color = '#f43f5e';
+      statusEl.innerText = '❌ ' + (data.error || 'Failed to send message.');
+    }
+  } catch (err) {
+    statusEl.style.color = '#f43f5e';
+    statusEl.innerText = '❌ Network error sending message.';
+  }
+}
 </script>
 </body>
 </html>

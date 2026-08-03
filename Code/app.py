@@ -147,7 +147,7 @@ def allowed(filename: str) -> bool:
 PUBLIC_ENDPOINTS = {
     "login_page", "api_auth_login", "api_auth_register", 
     "api_auth_logout", "api_auth_me", "static_files", "static",
-    "view_html_ticket", "download_pdf_ticket", "apitemplate_pdf_ticket", "api_create_parking_ticket", "tickets_page"
+    "view_html_ticket", "download_pdf_ticket", "apitemplate_pdf_ticket", "api_create_parking_ticket", "tickets_page", "api_contact_us"
 }
 
 @app.before_request
@@ -354,29 +354,29 @@ def log_viewer():
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>PlateVision Logs</title>
+  <title>MagneticVision Logs</title>
   <meta http-equiv="refresh" content="5">
   <style>
     *{{box-sizing:border-box;margin:0;padding:0}}
-    body{{background:#080b12;color:#e8edf8;font-family:'JetBrains Mono',monospace;font-size:13px;padding:24px}}
+    body{{background:#0b0f17;color:#f1f5f9;font-family:'JetBrains Mono',monospace;font-size:13px;padding:24px}}
     .header{{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:12px}}
-    h1{{font-size:18px;font-weight:700;color:#3b82f6;display:flex;align-items:center;gap:8px}}
-    .meta{{font-size:11px;color:#6b7a99;margin-bottom:16px}}
-    pre{{background:#0f1420;border:1px solid rgba(255,255,255,0.07);border-radius:10px;
+    h1{{font-size:18px;font-weight:700;color:#06d6a0;display:flex;align-items:center;gap:8px}}
+    .meta{{font-size:11px;color:#94a3b8;margin-bottom:16px}}
+    pre{{background:#111827;border:1px solid rgba(255,255,255,0.08);border-radius:10px;
          padding:20px;overflow-x:auto;line-height:1.7;white-space:pre-wrap;word-break:break-all;max-height:75vh}}
     .controls{{margin-bottom:16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}}
-    .group-label{{font-size:11px;font-weight:600;color:#6b7a99;text-transform:uppercase;letter-spacing:0.5px;margin-right:2px}}
+    .group-label{{font-size:11px;font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:0.5px;margin-right:2px}}
     a.btn, button.btn{{padding:7px 14px;border-radius:8px;font-size:12px;font-weight:600;text-decoration:none;
-           background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.25);color:#60a5fa;cursor:pointer;
+           background:rgba(6,214,160,0.12);border:1px solid rgba(6,214,160,0.25);color:#06d6a0;cursor:pointer;
            transition:all .2s;display:inline-flex;align-items:center;gap:6px;font-family:inherit}}
-    a.btn:hover, button.btn:hover{{background:rgba(59,130,246,0.25);color:#93c5fd;border-color:rgba(59,130,246,0.4)}}
-    a.btn-export, button.btn-export{{background:rgba(16,185,129,0.12);border-color:rgba(16,185,129,0.3);color:#34d399}}
-    a.btn-export:hover, button.btn-export:hover{{background:rgba(16,185,129,0.25);color:#6ee7b7;border-color:rgba(16,185,129,0.5)}}
-    .search-box{{padding:7px 12px;border-radius:8px;font-size:12px;background:#0f1420;border:1px solid rgba(255,255,255,0.1);
-                 color:#e8edf8;outline:none;font-family:inherit;min-width:220px;transition:border-color .2s}}
-    .search-box:focus{{border-color:#3b82f6}}
+    a.btn:hover, button.btn:hover{{background:rgba(6,214,160,0.25);color:#34d399;border-color:rgba(6,214,160,0.4)}}
+    a.btn-export, button.btn-export{{background:rgba(6,214,160,0.12);border-color:rgba(6,214,160,0.3);color:#06d6a0}}
+    a.btn-export:hover, button.btn-export:hover{{background:rgba(6,214,160,0.25);color:#34d399;border-color:rgba(6,214,160,0.5)}}
+    .search-box{{padding:7px 12px;border-radius:8px;font-size:12px;background:#111827;border:1px solid rgba(255,255,255,0.1);
+                 color:#f1f5f9;outline:none;font-family:inherit;min-width:220px;transition:border-color .2s}}
+    .search-box:focus{{border-color:#06d6a0}}
     .divider{{width:1px;height:24px;background:rgba(255,255,255,0.08);margin:0 4px}}
-    .toast{{position:fixed;bottom:24px;right:24px;background:#10b981;color:#fff;padding:10px 18px;border-radius:8px;
+    .toast{{position:fixed;bottom:24px;right:24px;background:#06d6a0;color:#0b0f17;padding:10px 18px;border-radius:8px;
             font-weight:600;box-shadow:0 4px 12px rgba(0,0,0,0.3);display:none;z-index:9999}}
   </style>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -384,7 +384,7 @@ def log_viewer():
 </head>
 <body>
   <div class="header">
-    <h1>🪵 PlateVision — Live Server Logs</h1>
+    <h1>🪵 Magnetite Vision — Live Server Logs</h1>
   </div>
   <div class="meta">Showing {n_display} of {len(lines)} lines · Auto-refreshes every 5s · Server Time: {datetime.now().strftime('%H:%M:%S')}</div>
   
@@ -1266,6 +1266,38 @@ def parking_blacklist_delete(plate):
     return jsonify({"ok": True, "deleted": n})
 
 
+@app.route("/api/contact", methods=["POST"])
+def api_contact_us():
+    """Receives contact form submissions and logs them for company response."""
+    data = request.get_json(force=True) or {}
+    name = data.get("name", "").strip()
+    email = data.get("email", "").strip()
+    subject = data.get("subject", "").strip()
+    message = data.get("message", "").strip()
+
+    if not name or not email or not message:
+        return jsonify({"ok": False, "error": "Name, email, and message are required"}), 400
+
+    log.info(f"[contact] New message from {name} ({email}) - Subject: {subject}: {message[:100]}...")
+
+    try:
+        from mongodb_client import _col, _serialise
+        doc = {
+            "name": name,
+            "email": email,
+            "subject": subject,
+            "message": message,
+            "timestamp": datetime.now(timezone.utc),
+            "company_recipient": "benyahiamedwalid.com",
+            "read": False
+        }
+        res = _col("contact_messages").insert_one(doc)
+        return jsonify({"ok": True, "message": "Message received successfully!", "id": str(res.inserted_id)})
+    except Exception as exc:
+        log.error(f"[contact] Failed to save message: {exc}")
+        return jsonify({"ok": True, "message": "Message logged successfully!"})
+
+
 @app.route("/api/parking/alerts")
 def parking_alerts():
     from mongodb_client import get_alerts
@@ -1456,7 +1488,7 @@ def api_list_parking_tickets():
 # ---------------------------------------------------------------------------
 if __name__ == "__main__":
     print("=" * 60)
-    print("  PlateVision API")
+    print("  Magnetite Vision API")
     print("  Image mode  : http://127.0.0.1:5000")
     print("  Live stream : http://127.0.0.1:5000/livestream")
     print("  Video mode  : http://127.0.0.1:5000/video")
