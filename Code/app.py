@@ -384,7 +384,7 @@ def log_viewer():
 </head>
 <body>
   <div class="header">
-    <h1>🪵 Magnetite Vision — Live Server Logs</h1>
+    <h1>🪵 Ben Yahia — Live Server Logs</h1>
   </div>
   <div class="meta">Showing {n_display} of {len(lines)} lines · Auto-refreshes every 5s · Server Time: {datetime.now().strftime('%H:%M:%S')}</div>
   
@@ -1488,7 +1488,7 @@ def api_list_parking_tickets():
 # ---------------------------------------------------------------------------
 if __name__ == "__main__":
     print("=" * 60)
-    print("  Magnetite Vision API")
+    print("  Ben Yahia API")
     print("  Image mode  : http://127.0.0.1:5000")
     print("  Live stream : http://127.0.0.1:5000/livestream")
     print("  Video mode  : http://127.0.0.1:5000/video")
