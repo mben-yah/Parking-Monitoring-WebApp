@@ -152,7 +152,7 @@ PUBLIC_ENDPOINTS = {
 
 @app.before_request
 def require_login():
-    if request.endpoint in PUBLIC_ENDPOINTS or request.path in ("/login", "/tickets", "/landing"):
+    if request.endpoint in PUBLIC_ENDPOINTS or request.path in ("/", "/login", "/tickets", "/landing"):
         return None
     if request.path.startswith("/api/auth/") or request.path.startswith("/ticket/") or request.path.startswith("/api/parking/ticket"):
         return None
@@ -233,13 +233,15 @@ def api_auth_me():
 
 
 @app.route("/")
-def index():
-    return send_from_directory("frontend", "index.html")
-
-
 @app.route("/landing")
 def landing_page():
     return send_from_directory("frontend", "landing.html")
+
+
+@app.route("/app")
+@app.route("/image")
+def app_index():
+    return send_from_directory("frontend", "index.html")
 
 
 @app.route("/video")

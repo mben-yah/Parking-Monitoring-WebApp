@@ -4975,3 +4975,464 @@ pytesseract.pytesseract.TesseractNotFoundError: tesseract is not installed or it
 2026-08-04 06:45:40  INFO      English pipeline weights path: C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt
 2026-08-04 06:45:40  INFO        [OK] Weights file exists (18024 KB)
 2026-08-04 06:45:40  INFO      Available models: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-04 06:56:48  INFO      ============================================================
+2026-08-04 06:56:48  INFO      PlateVision server starting
+2026-08-04 06:56:48  INFO      Log file: C:\Users\Mohamed Walid\Desktop\Internship\Code\logs\predict.log
+2026-08-04 06:56:48  INFO      ============================================================
+2026-08-04 06:56:49  INFO      English pipeline weights path: C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt
+2026-08-04 06:56:49  INFO        [OK] Weights file exists (18024 KB)
+2026-08-04 06:56:49  INFO      Available models: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-04 12:18:57  INFO      ============================================================
+2026-08-04 12:18:57  INFO      PlateVision server starting
+2026-08-04 12:18:57  INFO      Log file: C:\Users\Mohamed Walid\Desktop\Internship\Code\logs\predict.log
+2026-08-04 12:18:57  INFO      ============================================================
+2026-08-04 12:19:00  INFO      English pipeline weights path: C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt
+2026-08-04 12:19:00  INFO        [OK] Weights file exists (18024 KB)
+2026-08-04 12:19:00  INFO      Available models: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-04 12:19:34  INFO      User logged in: admin (ADMIN)
+2026-08-04 12:27:02  INFO      [12:27:02.853] -- /predict request received --
+2026-08-04 12:27:02  INFO      [12:27:02.853] File: 'Car_license_plate_of_Morocco_in_Spain.jpg'
+2026-08-04 12:27:02  INFO      [12:27:02.853] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmphnaeh3mn.jpg  (312204 bytes)
+2026-08-04 12:27:24  INFO      [12:27:02.853] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-04 12:27:24  INFO      [12:27:02.853] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-04 12:27:25  INFO      [12:27:02.853]   elpd_commercial_train2: no boxes — skipping
+2026-08-04 12:27:25  INFO      [12:27:02.853] Trying model: elpd_commercial_train1 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train1\weights\best.pt)
+2026-08-04 12:27:25  INFO      [12:27:02.853]   elpd_commercial_train1: box conf=0.169 xyxy=[24,230,1714,646]
+2026-08-04 12:27:29  INFO      [12:27:29.300] -- /predict request received --
+2026-08-04 12:27:29  INFO      [12:27:29.300] File: 'Car_license_plate_of_Morocco_in_Spain.jpg'
+2026-08-04 12:27:29  INFO      [12:27:29.300] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmpnulccqp7.jpg  (312204 bytes)
+2026-08-04 12:27:29  INFO      [12:27:29.300] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-04 12:27:29  INFO      [12:27:29.300] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-04 12:27:30  INFO      [12:27:29.300]   elpd_commercial_train2: no boxes — skipping
+2026-08-04 12:27:30  INFO      [12:27:29.300] Trying model: elpd_commercial_train1 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train1\weights\best.pt)
+2026-08-04 12:27:30  INFO      [12:27:29.300]   elpd_commercial_train1: box conf=0.169 xyxy=[24,230,1714,646]
+2026-08-04 12:27:46  INFO      [12:27:02.853]   elpd_commercial_train1: OCR result = '60567'
+2026-08-04 12:27:46  INFO      [12:27:02.853] SUCCESS via elpd_commercial_train1: plate='60567'  conf=0.169
+2026-08-04 12:27:47  INFO      [12:27:29.300]   elpd_commercial_train1: OCR result = '60567'
+2026-08-04 12:27:47  INFO      [12:27:29.300] SUCCESS via elpd_commercial_train1: plate='60567'  conf=0.169
+2026-08-04 12:27:54  INFO      [12:27:02.853] -- /predict done --
+2026-08-04 12:27:54  INFO      [12:27:29.300] -- /predict done --
+2026-08-04 12:27:54  INFO      [12:27:54.951] -- /predict request received --
+2026-08-04 12:27:54  INFO      [12:27:54.951] File: 'images (1).jpg'
+2026-08-04 12:27:54  INFO      [12:27:54.951] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmp_d_edpac.jpg  (15124 bytes)
+2026-08-04 12:27:54  INFO      [12:27:54.951] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-04 12:27:54  INFO      [12:27:54.951] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-04 12:27:55  INFO      [12:27:54.951]   elpd_commercial_train2: no boxes — skipping
+2026-08-04 12:27:55  INFO      [12:27:54.951] Trying model: elpd_commercial_train1 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train1\weights\best.pt)
+2026-08-04 12:27:56  INFO      [12:27:54.951]   elpd_commercial_train1: no boxes — skipping
+2026-08-04 12:27:56  INFO      [12:27:54.951] Trying model: english_train33 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train33\weights\best.pt)
+2026-08-04 12:27:57  INFO      [12:27:54.951]   english_train33: box conf=0.593 xyxy=[182,197,442,288]
+2026-08-04 12:28:03  INFO      [12:27:54.951]   english_train33: OCR result = '7 > 6'
+2026-08-04 12:28:03  INFO      [12:27:54.951] SUCCESS via english_train33: plate='7 > 6'  conf=0.593
+2026-08-04 12:28:04  INFO      [12:27:54.951] -- /predict done --
+2026-08-04 12:28:04  INFO      [12:28:04.938] -- /predict request received --
+2026-08-04 12:28:04  INFO      [12:28:04.938] File: 'images (2).jpg'
+2026-08-04 12:28:04  INFO      [12:28:04.938] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmp9e_rl73e.jpg  (15612 bytes)
+2026-08-04 12:28:04  INFO      [12:28:04.938] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-04 12:28:04  INFO      [12:28:04.938] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-04 12:28:05  INFO      [12:28:04.938]   elpd_commercial_train2: no boxes — skipping
+2026-08-04 12:28:05  INFO      [12:28:04.938] Trying model: elpd_commercial_train1 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train1\weights\best.pt)
+2026-08-04 12:28:06  INFO      [12:28:04.938]   elpd_commercial_train1: no boxes — skipping
+2026-08-04 12:28:06  INFO      [12:28:04.938] Trying model: english_train33 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train33\weights\best.pt)
+2026-08-04 12:28:06  INFO      [12:28:04.938]   english_train33: no boxes — skipping
+2026-08-04 12:28:06  INFO      [12:28:04.938] Trying model: english_train32 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train32\weights\best.pt)
+2026-08-04 12:28:07  INFO      [12:28:04.938]   english_train32: no boxes — skipping
+2026-08-04 12:28:07  INFO      [12:28:04.938] Trying model: english_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train2\weights\best.pt)
+2026-08-04 12:28:08  INFO      [12:28:04.938]   english_train2: no boxes — skipping
+2026-08-04 12:28:08  INFO      [12:28:04.938] Trying model: english_train (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train\weights\best.pt)
+2026-08-04 12:28:08  INFO      [12:28:04.938]   english_train: no boxes — skipping
+2026-08-04 12:28:08  WARNING   [12:28:04.938] FAIL: no model detected a plate
+2026-08-04 12:28:08  INFO      [12:28:04.938] -- /predict done --
+2026-08-04 12:28:08  INFO      [12:28:08.984] -- /predict request received --
+2026-08-04 12:28:08  INFO      [12:28:08.984] File: 'images (3).jpg'
+2026-08-04 12:28:08  INFO      [12:28:08.984] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmpncapyv76.jpg  (15829 bytes)
+2026-08-04 12:28:08  INFO      [12:28:08.984] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-04 12:28:08  INFO      [12:28:08.984] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-04 12:28:09  INFO      [12:28:08.984]   elpd_commercial_train2: box conf=0.218 xyxy=[186,0,325,13]
+2026-08-04 12:28:15  INFO      [12:28:08.984]   elpd_commercial_train2: OCR result = ''
+2026-08-04 12:28:15  INFO      [12:28:08.984] SUCCESS via elpd_commercial_train2: plate=''  conf=0.218
+2026-08-04 12:28:15  WARNING   [12:28:08.984] FAIL: no model detected a plate
+2026-08-04 12:28:15  INFO      [12:28:08.984] -- /predict done --
+2026-08-04 12:28:15  INFO      [12:28:15.133] -- /predict request received --
+2026-08-04 12:28:15  INFO      [12:28:15.133] File: 'images (4).jpg'
+2026-08-04 12:28:15  INFO      [12:28:15.133] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmpcjib6o2i.jpg  (12464 bytes)
+2026-08-04 12:28:15  INFO      [12:28:15.133] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-04 12:28:15  INFO      [12:28:15.133] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-04 12:28:15  INFO      [12:28:15.133]   elpd_commercial_train2: no boxes — skipping
+2026-08-04 12:28:15  INFO      [12:28:15.133] Trying model: elpd_commercial_train1 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train1\weights\best.pt)
+2026-08-04 12:28:16  INFO      [12:28:15.133]   elpd_commercial_train1: box conf=0.184 xyxy=[0,108,365,214]
+2026-08-04 12:28:22  INFO      [12:28:15.133]   elpd_commercial_train1: OCR result = '2 4A9F'
+2026-08-04 12:28:22  INFO      [12:28:15.133] SUCCESS via elpd_commercial_train1: plate='2 4A9F'  conf=0.184
+2026-08-04 12:28:24  INFO      [12:28:15.133] -- /predict done --
+2026-08-04 12:28:33  INFO      [12:28:33.033] -- /predict_arabic request received --
+2026-08-04 12:28:33  INFO      [12:28:33.033] Arabic inference: images (3).jpg (15829 bytes)
+2026-08-04 12:28:45  INFO      [12:28:33.033] Detected: True  Plate: 44444 | أ
+2026-08-04 12:28:45  INFO      [12:28:33.033]   left_seq=44444  letter=أ  region=  city=Unknown
+2026-08-04 12:28:45  INFO      [12:28:33.033]   raw_fast="PlatePrediction(plate='44444III', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='/أ | 44444'
+2026-08-04 12:28:46  INFO      [12:28:33.033] -- /predict_arabic done --
+2026-08-04 12:29:03  INFO      [12:29:03.604] -- /predict_arabic request received --
+2026-08-04 12:29:03  INFO      [12:29:03.604] Arabic inference: images (3).jpg (15829 bytes)
+2026-08-04 12:29:06  INFO      [12:29:03.604] Detected: True  Plate: 44444 | أ
+2026-08-04 12:29:06  INFO      [12:29:03.604]   left_seq=44444  letter=أ  region=  city=Unknown
+2026-08-04 12:29:06  INFO      [12:29:03.604]   raw_fast="PlatePrediction(plate='44444III', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='/أ | 44444'
+2026-08-04 12:29:08  INFO      [12:29:03.604] -- /predict_arabic done --
+2026-08-04 12:29:08  INFO      [12:29:08.128] -- /predict_arabic request received --
+2026-08-04 12:29:08  INFO      [12:29:08.128] Arabic inference: Car_license_plate_of_Morocco_in_Spain.jpg (312204 bytes)
+2026-08-04 12:29:22  INFO      [12:29:08.128] Detected: True  Plate: 60567 | ا
+2026-08-04 12:29:22  INFO      [12:29:08.128]   left_seq=60567  letter=ا  region=  city=Unknown
+2026-08-04 12:29:22  INFO      [12:29:08.128]   raw_fast="PlatePrediction(plate='60567IAI', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='5٥5٥7 ان آ'
+2026-08-04 12:29:23  INFO      [12:29:08.128] -- /predict_arabic done --
+2026-08-04 12:29:24  INFO      [12:29:24.150] -- /predict_arabic request received --
+2026-08-04 12:29:24  INFO      [12:29:24.150] Arabic inference: images (1).jpg (15124 bytes)
+2026-08-04 12:29:26  INFO      [12:29:24.150] Detected: True  Plate: 77777 | ط
+2026-08-04 12:29:26  INFO      [12:29:24.150]   left_seq=77777  letter=ط  region=  city=Unknown
+2026-08-04 12:29:26  INFO      [12:29:24.150]   raw_fast="PlatePrediction(plate='77777I', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='٥ ط  77777'
+2026-08-04 12:29:28  INFO      [12:29:24.150] -- /predict_arabic done --
+2026-08-04 12:29:28  INFO      [12:29:28.193] -- /predict_arabic request received --
+2026-08-04 12:29:28  INFO      [12:29:28.193] Arabic inference: images (2).jpg (15612 bytes)
+2026-08-04 12:29:30  INFO      [12:29:28.193] Detected: True  Plate: 11
+2026-08-04 12:29:30  INFO      [12:29:28.193]   left_seq=11  letter=  region=  city=Unknown
+2026-08-04 12:29:30  INFO      [12:29:28.193]   raw_fast="PlatePrediction(plate='11II', char_probs=None, region='Estonia', region_prob=None)"  raw_ar='٩ ٩'
+2026-08-04 12:29:31  INFO      [12:29:28.193] -- /predict_arabic done --
+2026-08-04 12:29:31  INFO      [12:29:31.925] -- /predict_arabic request received --
+2026-08-04 12:29:31  INFO      [12:29:31.925] Arabic inference: images (4).jpg (12464 bytes)
+2026-08-04 12:29:34  INFO      [12:29:31.925] Detected: True  Plate: 24896
+2026-08-04 12:29:34  INFO      [12:29:31.925]   left_seq=24896  letter=  region=  city=Unknown
+2026-08-04 12:29:34  INFO      [12:29:31.925]   raw_fast="PlatePrediction(plate='24896A', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='24095'
+2026-08-04 12:29:35  INFO      [12:29:31.925] -- /predict_arabic done --
+2026-08-04 12:29:35  INFO      [12:29:35.598] -- /predict_arabic request received --
+2026-08-04 12:29:35  INFO      [12:29:35.598] Arabic inference: images (5).jpg (24234 bytes)
+2026-08-04 12:29:45  INFO      [12:29:35.598] Detected: True  Plate: 274835 | و
+2026-08-04 12:29:45  INFO      [12:29:35.598]   left_seq=274835  letter=و  region=  city=Unknown
+2026-08-04 12:29:45  INFO      [12:29:35.598]   raw_fast="PlatePrediction(plate='274835', char_probs=None, region='Italy', region_prob=None)"  raw_ar='27483 ) 49  ٤٤5 3٤2  7ق٨$ وماك ك٧طس{ بط٨:  ٥١'
+2026-08-04 12:29:47  INFO      [12:29:35.598] -- /predict_arabic done --
+2026-08-04 12:29:47  INFO      [12:29:47.457] -- /predict_arabic request received --
+2026-08-04 12:29:47  INFO      [12:29:47.457] Arabic inference: images (6).jpg (35131 bytes)
+2026-08-04 12:29:49  INFO      [12:29:47.457] Detected: True  Plate: 41621
+2026-08-04 12:29:49  INFO      [12:29:47.457]   left_seq=41621  letter=  region=  city=Unknown
+2026-08-04 12:29:49  INFO      [12:29:47.457]   raw_fast="PlatePrediction(plate='41621I', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='41521 26'
+2026-08-04 12:29:50  INFO      [12:29:47.457] -- /predict_arabic done --
+2026-08-04 12:29:50  INFO      [12:29:50.914] -- /predict_arabic request received --
+2026-08-04 12:29:50  INFO      [12:29:50.914] Arabic inference: images (7).jpg (12121 bytes)
+2026-08-04 12:29:53  INFO      [12:29:50.914] Detected: True  Plate: 60567 | ه
+2026-08-04 12:29:53  INFO      [12:29:50.914]   left_seq=60567  letter=ه  region=  city=Unknown
+2026-08-04 12:29:53  INFO      [12:29:50.914]   raw_fast="PlatePrediction(plate='60567I', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='50557  ه'
+2026-08-04 12:29:54  INFO      [12:29:50.914] -- /predict_arabic done --
+2026-08-04 12:29:55  INFO      [12:29:55.207] -- /predict_arabic request received --
+2026-08-04 12:29:55  INFO      [12:29:55.207] Arabic inference: images (8).jpg (26292 bytes)
+2026-08-04 12:29:57  INFO      [12:29:55.207] Detected: True  Plate: 77095 | أ | 1
+2026-08-04 12:29:57  INFO      [12:29:55.207]   left_seq=77095  letter=أ  region=1  city=Rabat
+2026-08-04 12:29:57  INFO      [12:29:55.207]   raw_fast="PlatePrediction(plate='77095I1I0', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='[4| أ/95[77'
+2026-08-04 12:29:59  INFO      [12:29:55.207] -- /predict_arabic done --
+2026-08-04 12:29:59  INFO      [12:29:59.127] -- /predict_arabic request received --
+2026-08-04 12:29:59  INFO      [12:29:59.127] Arabic inference: images (9).jpg (26414 bytes)
+2026-08-04 12:30:08  INFO      [12:29:59.127] Detected: True  Plate: 7631 | ب | 8
+2026-08-04 12:30:08  INFO      [12:29:59.127]   left_seq=7631  letter=ب  region=8  city=Settat
+2026-08-04 12:30:08  INFO      [12:29:59.127]   raw_fast="PlatePrediction(plate='7631IH8', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='٥ ١ب١ 7531 0٤7٧05[03,$060?33!8/03330/3003 0 70225182  83000579   ٠:؟'
+2026-08-04 12:30:10  INFO      [12:29:59.127] -- /predict_arabic done --
+2026-08-04 12:30:10  INFO      [12:30:10.441] -- /predict_arabic request received --
+2026-08-04 12:30:10  INFO      [12:30:10.441] Arabic inference: images (10).jpg (26292 bytes)
+2026-08-04 12:30:13  INFO      [12:30:10.441] Detected: True  Plate: 77095 | أ | 1
+2026-08-04 12:30:13  INFO      [12:30:10.441]   left_seq=77095  letter=أ  region=1  city=Rabat
+2026-08-04 12:30:13  INFO      [12:30:10.441]   raw_fast="PlatePrediction(plate='77095I1I0', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='[4| أ/95[77'
+2026-08-04 12:30:14  INFO      [12:30:10.441] -- /predict_arabic done --
+2026-08-04 12:30:14  INFO      [12:30:14.582] -- /predict_arabic request received --
+2026-08-04 12:30:14  INFO      [12:30:14.582] Arabic inference: images (11).jpg (23371 bytes)
+2026-08-04 12:30:17  INFO      [12:30:14.582] Detected: True  Plate: 32930 | د
+2026-08-04 12:30:17  INFO      [12:30:14.582]   left_seq=32930  letter=د  region=  city=Unknown
+2026-08-04 12:30:17  INFO      [12:30:14.582]   raw_fast="PlatePrediction(plate='32930', char_probs=None, region='Israel', region_prob=None)"  raw_ar='١٩ /دا 32930,'
+2026-08-04 12:30:19  INFO      [12:30:14.582] -- /predict_arabic done --
+2026-08-04 12:30:19  INFO      [12:30:19.520] -- /predict_arabic request received --
+2026-08-04 12:30:19  INFO      [12:30:19.520] Arabic inference: images (12).jpg (20238 bytes)
+2026-08-04 12:30:21  INFO      [12:30:19.520] Detected: True  Plate: 4946 | 4
+2026-08-04 12:30:21  INFO      [12:30:19.520]   left_seq=4946  letter=  region=4  city=Témara
+2026-08-04 12:30:21  INFO      [12:30:19.520]   raw_fast="PlatePrediction(plate='4946III4', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='4945 ١ ١ ١ 4'
+2026-08-04 12:30:23  INFO      [12:30:19.520] -- /predict_arabic done --
+2026-08-04 12:30:23  INFO      [12:30:23.497] -- /predict_arabic request received --
+2026-08-04 12:30:23  INFO      [12:30:23.497] Arabic inference: images (13).jpg (24224 bytes)
+2026-08-04 12:30:26  INFO      [12:30:23.497] Detected: True  Plate: 38310 | 40
+2026-08-04 12:30:26  INFO      [12:30:23.497]   left_seq=38310  letter=  region=40  city=Tanger
+2026-08-04 12:30:26  INFO      [12:30:23.497]   raw_fast="PlatePrediction(plate='38310I40', char_probs=None, region='Armenia', region_prob=None)"  raw_ar='3831٥ 4٥'
+2026-08-04 12:30:27  INFO      [12:30:23.497] -- /predict_arabic done --
+2026-08-04 12:30:27  INFO      [12:30:27.923] -- /predict_arabic request received --
+2026-08-04 12:30:27  INFO      [12:30:27.923] Arabic inference: images (14).jpg (16185 bytes)
+2026-08-04 12:30:30  INFO      [12:30:27.923] Detected: True  Plate: 77143 | د
+2026-08-04 12:30:30  INFO      [12:30:27.923]   left_seq=77143  letter=د  region=  city=Unknown
+2026-08-04 12:30:30  INFO      [12:30:27.923]   raw_fast="PlatePrediction(plate='77143IOI', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='/ د / 77143'
+2026-08-04 12:30:31  INFO      [12:30:27.923] -- /predict_arabic done --
+2026-08-04 12:30:31  INFO      [12:30:31.817] -- /predict_arabic request received --
+2026-08-04 12:30:31  INFO      [12:30:31.817] Arabic inference: images (15).jpg (24234 bytes)
+2026-08-04 12:30:42  INFO      [12:30:31.817] Detected: True  Plate: 274835 | و
+2026-08-04 12:30:42  INFO      [12:30:31.817]   left_seq=274835  letter=و  region=  city=Unknown
+2026-08-04 12:30:42  INFO      [12:30:31.817]   raw_fast="PlatePrediction(plate='274835', char_probs=None, region='Italy', region_prob=None)"  raw_ar='27483 ) 49  ٤٤5 3٤2  7ق٨$ وماك ك٧طس{ بط٨:  ٥١'
+2026-08-04 12:30:44  INFO      [12:30:31.817] -- /predict_arabic done --
+2026-08-04 12:30:44  INFO      [12:30:44.484] -- /predict_arabic request received --
+2026-08-04 12:30:44  INFO      [12:30:44.484] Arabic inference: images (16).jpg (16185 bytes)
+2026-08-04 12:30:46  INFO      [12:30:44.484] Detected: True  Plate: 77143 | د
+2026-08-04 12:30:46  INFO      [12:30:44.484]   left_seq=77143  letter=د  region=  city=Unknown
+2026-08-04 12:30:46  INFO      [12:30:44.484]   raw_fast="PlatePrediction(plate='77143IOI', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='/ د / 77143'
+2026-08-04 12:30:48  INFO      [12:30:44.484] -- /predict_arabic done --
+2026-08-04 12:30:48  INFO      [12:30:48.373] -- /predict_arabic request received --
+2026-08-04 12:30:48  INFO      [12:30:48.373] Arabic inference: images (17).jpg (24234 bytes)
+2026-08-04 12:30:58  INFO      [12:30:48.373] Detected: True  Plate: 274835 | و
+2026-08-04 12:30:58  INFO      [12:30:48.373]   left_seq=274835  letter=و  region=  city=Unknown
+2026-08-04 12:30:58  INFO      [12:30:48.373]   raw_fast="PlatePrediction(plate='274835', char_probs=None, region='Italy', region_prob=None)"  raw_ar='27483 ) 49  ٤٤5 3٤2  7ق٨$ وماك ك٧طس{ بط٨:  ٥١'
+2026-08-04 12:30:59  INFO      [12:30:48.373] -- /predict_arabic done --
+2026-08-04 12:31:00  INFO      [12:31:00.312] -- /predict_arabic request received --
+2026-08-04 12:31:00  INFO      [12:31:00.312] Arabic inference: images (18).jpg (26307 bytes)
+2026-08-04 12:31:03  INFO      [12:31:00.312] Detected: True  Plate: 97695 | د | 1
+2026-08-04 12:31:03  INFO      [12:31:00.312]   left_seq=97695  letter=د  region=1  city=Rabat
+2026-08-04 12:31:03  INFO      [12:31:00.312]   raw_fast="PlatePrediction(plate='97695I1_6', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='97695 5 /د'
+2026-08-04 12:31:04  INFO      [12:31:00.312] -- /predict_arabic done --
+2026-08-04 12:31:04  INFO      [12:31:04.500] -- /predict_arabic request received --
+2026-08-04 12:31:04  INFO      [12:31:04.500] Arabic inference: images (19).jpg (12437 bytes)
+2026-08-04 12:31:06  INFO      [12:31:04.500] Detected: True  Plate: 24896 | 1
+2026-08-04 12:31:06  INFO      [12:31:04.500]   left_seq=24896  letter=  region=1  city=Rabat
+2026-08-04 12:31:06  INFO      [12:31:04.500]   raw_fast="PlatePrediction(plate='24896A1', char_probs=None, region='Belarus', region_prob=None)"  raw_ar=']4095'
+2026-08-04 12:31:08  INFO      [12:31:04.500] -- /predict_arabic done --
+2026-08-04 12:31:08  INFO      [12:31:08.592] -- /predict_arabic request received --
+2026-08-04 12:31:08  INFO      [12:31:08.592] Arabic inference: images (20).jpg (19644 bytes)
+2026-08-04 12:31:16  INFO      [12:31:08.592] Detected: True  Plate: 36335 | ا
+2026-08-04 12:31:16  INFO      [12:31:08.592]   left_seq=36335  letter=ا  region=  city=Unknown
+2026-08-04 12:31:16  INFO      [12:31:08.592]   raw_fast="PlatePrediction(plate='36335', char_probs=None, region='Qatar', region_prob=None)"  raw_ar='36335/ ظ6 لشناء ٤00:ك8ح0- 8~٤$؟ق8'
+2026-08-04 12:31:18  INFO      [12:31:08.592] -- /predict_arabic done --
+2026-08-04 12:31:18  INFO      [12:31:18.449] -- /predict_arabic request received --
+2026-08-04 12:31:18  INFO      [12:31:18.449] Arabic inference: images (21).jpg (23371 bytes)
+2026-08-04 12:31:21  INFO      [12:31:18.449] Detected: True  Plate: 32930 | د
+2026-08-04 12:31:21  INFO      [12:31:18.449]   left_seq=32930  letter=د  region=  city=Unknown
+2026-08-04 12:31:21  INFO      [12:31:18.449]   raw_fast="PlatePrediction(plate='32930', char_probs=None, region='Israel', region_prob=None)"  raw_ar='١٩ /دا 32930,'
+2026-08-04 12:31:23  INFO      [12:31:18.449] -- /predict_arabic done --
+2026-08-04 12:31:23  INFO      [12:31:23.416] -- /predict_arabic request received --
+2026-08-04 12:31:23  INFO      [12:31:23.416] Arabic inference: images (22).jpg (17488 bytes)
+2026-08-04 12:31:26  INFO      [12:31:23.416] Detected: True  Plate: 1083 | أ
+2026-08-04 12:31:26  INFO      [12:31:23.416]   left_seq=1083  letter=أ  region=  city=Unknown
+2026-08-04 12:31:26  INFO      [12:31:23.416]   raw_fast="PlatePrediction(plate='1083II121', char_probs=None, region='France', region_prob=None)"  raw_ar='1003 21 / أ /'
+2026-08-04 12:31:27  INFO      [12:31:23.416] -- /predict_arabic done --
+2026-08-04 12:31:27  INFO      [12:31:27.587] -- /predict_arabic request received --
+2026-08-04 12:31:27  INFO      [12:31:27.587] Arabic inference: images (23).jpg (26292 bytes)
+2026-08-04 12:31:30  INFO      [12:31:27.587] Detected: True  Plate: 77095 | أ | 1
+2026-08-04 12:31:30  INFO      [12:31:27.587]   left_seq=77095  letter=أ  region=1  city=Rabat
+2026-08-04 12:31:30  INFO      [12:31:27.587]   raw_fast="PlatePrediction(plate='77095I1I0', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='[4| أ/95[77'
+2026-08-04 12:31:31  INFO      [12:31:27.587] -- /predict_arabic done --
+2026-08-04 12:31:31  INFO      [12:31:31.887] -- /predict_arabic request received --
+2026-08-04 12:31:31  INFO      [12:31:31.887] Arabic inference: images (24).jpg (17488 bytes)
+2026-08-04 12:31:34  INFO      [12:31:31.887] Detected: True  Plate: 1083 | أ
+2026-08-04 12:31:34  INFO      [12:31:31.887]   left_seq=1083  letter=أ  region=  city=Unknown
+2026-08-04 12:31:34  INFO      [12:31:31.887]   raw_fast="PlatePrediction(plate='1083II121', char_probs=None, region='France', region_prob=None)"  raw_ar='1003 21 / أ /'
+2026-08-04 12:31:35  INFO      [12:31:31.887] -- /predict_arabic done --
+2026-08-04 12:31:35  INFO      [12:31:35.775] -- /predict_arabic request received --
+2026-08-04 12:31:35  INFO      [12:31:35.775] Arabic inference: images (25).jpg (20238 bytes)
+2026-08-04 12:31:38  INFO      [12:31:35.775] Detected: True  Plate: 4946 | 4
+2026-08-04 12:31:38  INFO      [12:31:35.775]   left_seq=4946  letter=  region=4  city=Témara
+2026-08-04 12:31:38  INFO      [12:31:35.775]   raw_fast="PlatePrediction(plate='4946III4', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='4945 ١ ١ ١ 4'
+2026-08-04 12:31:39  INFO      [12:31:35.775] -- /predict_arabic done --
+2026-08-04 12:31:40  INFO      [12:31:40.033] -- /predict_arabic request received --
+2026-08-04 12:31:40  INFO      [12:31:40.033] Arabic inference: images (26).jpg (28147 bytes)
+2026-08-04 12:31:43  INFO      [12:31:40.033] Detected: True  Plate: 88888
+2026-08-04 12:31:43  INFO      [12:31:40.033]   left_seq=88888  letter=  region=  city=Unknown
+2026-08-04 12:31:43  INFO      [12:31:40.033]   raw_fast="PlatePrediction(plate='88888IJI', char_probs=None, region='Unknown', region_prob=None)"  raw_ar='٥0888 ل'
+2026-08-04 12:31:44  INFO      [12:31:40.033] -- /predict_arabic done --
+2026-08-04 12:31:44  INFO      [12:31:44.635] -- /predict_arabic request received --
+2026-08-04 12:31:44  INFO      [12:31:44.635] Arabic inference: images (27).jpg (20238 bytes)
+2026-08-04 12:31:47  INFO      [12:31:44.635] Detected: True  Plate: 4946 | 4
+2026-08-04 12:31:47  INFO      [12:31:44.635]   left_seq=4946  letter=  region=4  city=Témara
+2026-08-04 12:31:47  INFO      [12:31:44.635]   raw_fast="PlatePrediction(plate='4946III4', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='4945 ١ ١ ١ 4'
+2026-08-04 12:31:48  INFO      [12:31:44.635] -- /predict_arabic done --
+2026-08-04 12:31:48  INFO      [12:31:48.966] -- /predict_arabic request received --
+2026-08-04 12:31:48  INFO      [12:31:48.966] Arabic inference: images (28).jpg (16394 bytes)
+2026-08-04 12:31:51  INFO      [12:31:48.966] Detected: True  Plate: 9503 | ب
+2026-08-04 12:31:51  INFO      [12:31:48.966]   left_seq=9503  letter=ب  region=  city=Unknown
+2026-08-04 12:31:51  INFO      [12:31:48.966]   raw_fast="PlatePrediction(plate='9503II', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='9503 ب !'
+2026-08-04 12:31:52  INFO      [12:31:48.966] -- /predict_arabic done --
+2026-08-04 12:31:52  INFO      [12:31:52.957] -- /predict_arabic request received --
+2026-08-04 12:31:52  INFO      [12:31:52.957] Arabic inference: images (29).jpg (16952 bytes)
+2026-08-04 12:31:55  INFO      [12:31:52.957] Detected: True  Plate: 4281 | 2
+2026-08-04 12:31:55  INFO      [12:31:52.957]   left_seq=4281  letter=  region=2  city=Salé
+2026-08-04 12:31:55  INFO      [12:31:52.957]   raw_fast="PlatePrediction(plate='4281II2', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='4201'
+2026-08-04 12:31:56  INFO      [12:31:52.957] -- /predict_arabic done --
+2026-08-04 12:31:56  INFO      [12:31:56.829] -- /predict_arabic request received --
+2026-08-04 12:31:56  INFO      [12:31:56.829] Arabic inference: images (30).jpg (22545 bytes)
+2026-08-04 12:31:59  INFO      [12:31:56.829] Detected: True  Plate: 46495 | 1
+2026-08-04 12:31:59  INFO      [12:31:56.829]   left_seq=46495  letter=  region=1  city=Rabat
+2026-08-04 12:31:59  INFO      [12:31:56.829]   raw_fast="PlatePrediction(plate='46495I1', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='46495 ١ / 1'
+2026-08-04 12:32:01  INFO      [12:31:56.829] -- /predict_arabic done --
+2026-08-04 12:32:01  INFO      [12:32:01.299] -- /predict_arabic request received --
+2026-08-04 12:32:01  INFO      [12:32:01.299] Arabic inference: images (31).jpg (17488 bytes)
+2026-08-04 12:32:04  INFO      [12:32:01.299] Detected: True  Plate: 1083 | أ
+2026-08-04 12:32:04  INFO      [12:32:01.299]   left_seq=1083  letter=أ  region=  city=Unknown
+2026-08-04 12:32:04  INFO      [12:32:01.299]   raw_fast="PlatePrediction(plate='1083II121', char_probs=None, region='France', region_prob=None)"  raw_ar='1003 21 / أ /'
+2026-08-04 12:32:05  INFO      [12:32:01.299] -- /predict_arabic done --
+2026-08-04 12:32:06  INFO      [12:32:06.011] -- /predict_arabic request received --
+2026-08-04 12:32:06  INFO      [12:32:06.011] Arabic inference: images (32).jpg (26292 bytes)
+2026-08-04 12:32:08  INFO      [12:32:06.011] Detected: True  Plate: 77095 | أ | 1
+2026-08-04 12:32:08  INFO      [12:32:06.011]   left_seq=77095  letter=أ  region=1  city=Rabat
+2026-08-04 12:32:08  INFO      [12:32:06.011]   raw_fast="PlatePrediction(plate='77095I1I0', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='[4| أ/95[77'
+2026-08-04 12:32:10  INFO      [12:32:06.011] -- /predict_arabic done --
+2026-08-04 12:32:10  INFO      [12:32:10.450] -- /predict_arabic request received --
+2026-08-04 12:32:10  INFO      [12:32:10.450] Arabic inference: images (33).jpg (17488 bytes)
+2026-08-04 12:32:13  INFO      [12:32:10.450] Detected: True  Plate: 1083 | أ
+2026-08-04 12:32:13  INFO      [12:32:10.450]   left_seq=1083  letter=أ  region=  city=Unknown
+2026-08-04 12:32:13  INFO      [12:32:10.450]   raw_fast="PlatePrediction(plate='1083II121', char_probs=None, region='France', region_prob=None)"  raw_ar='1003 21 / أ /'
+2026-08-04 12:32:14  INFO      [12:32:10.450] -- /predict_arabic done --
+2026-08-04 12:32:15  INFO      [12:32:15.040] -- /predict_arabic request received --
+2026-08-04 12:32:15  INFO      [12:32:15.040] Arabic inference: images (34).jpg (23842 bytes)
+2026-08-04 12:32:17  INFO      [12:32:15.040] Detected: True  Plate: 21300 | 5
+2026-08-04 12:32:17  INFO      [12:32:15.040]   left_seq=21300  letter=  region=5  city=Khémisset
+2026-08-04 12:32:17  INFO      [12:32:15.040]   raw_fast="PlatePrediction(plate='21300III5', char_probs=None, region='Unknown', region_prob=None)"  raw_ar='21300| 50'
+2026-08-04 12:32:19  INFO      [12:32:15.040] -- /predict_arabic done --
+2026-08-04 12:32:19  INFO      [12:32:19.028] -- /predict_arabic request received --
+2026-08-04 12:32:19  INFO      [12:32:19.028] Arabic inference: images (35).jpg (20832 bytes)
+2026-08-04 12:32:21  INFO      [12:32:19.028] Detected: True  Plate: 25391 | ا
+2026-08-04 12:32:21  INFO      [12:32:19.028]   left_seq=25391  letter=ا  region=  city=Unknown
+2026-08-04 12:32:21  INFO      [12:32:19.028]   raw_fast="PlatePrediction(plate='25391', char_probs=None, region='Belgium', region_prob=None)"  raw_ar='253-91 المغرب'
+2026-08-04 12:32:22  INFO      [12:32:19.028] -- /predict_arabic done --
+2026-08-04 12:32:23  INFO      [12:32:23.319] -- /predict_arabic request received --
+2026-08-04 12:32:23  INFO      [12:32:23.319] Arabic inference: images (36).jpg (24664 bytes)
+2026-08-04 12:32:25  INFO      [12:32:23.319] Detected: True  Plate: 27221
+2026-08-04 12:32:25  INFO      [12:32:23.319]   left_seq=27221  letter=  region=  city=Unknown
+2026-08-04 12:32:25  INFO      [12:32:23.319]   raw_fast="PlatePrediction(plate='27221I154', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='54/.ئ /2722'
+2026-08-04 12:32:27  INFO      [12:32:23.319] -- /predict_arabic done --
+2026-08-04 12:32:27  INFO      [12:32:27.033] -- /predict_arabic request received --
+2026-08-04 12:32:27  INFO      [12:32:27.033] Arabic inference: images (37).jpg (15476 bytes)
+2026-08-04 12:32:29  INFO      [12:32:27.033] Detected: True  Plate: 66 | ي
+2026-08-04 12:32:29  INFO      [12:32:27.033]   left_seq=66  letter=ي  region=  city=Unknown
+2026-08-04 12:32:29  INFO      [12:32:27.033]   raw_fast="PlatePrediction(plate='66IG', char_probs=None, region='United Kingdom', region_prob=None)"  raw_ar='5٥ ي'
+2026-08-04 12:32:30  INFO      [12:32:27.033] -- /predict_arabic done --
+2026-08-04 12:32:31  INFO      [12:32:31.263] -- /predict_arabic request received --
+2026-08-04 12:32:31  INFO      [12:32:31.263] Arabic inference: images (38).jpg (21008 bytes)
+2026-08-04 12:32:39  INFO      [12:32:31.263] Detected: True  Plate: 4578 | ب
+2026-08-04 12:32:39  INFO      [12:32:31.263]   left_seq=4578  letter=ب  region=  city=Unknown
+2026-08-04 12:32:39  INFO      [12:32:31.263]   raw_fast="PlatePrediction(plate='4578HA', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='26  با 4578 ^ءا0ق٢٥٤ ؟٧?آ & ٥ 48.1ن071`0'
+2026-08-04 12:32:41  INFO      [12:32:31.263] -- /predict_arabic done --
+2026-08-04 12:32:41  INFO      [12:32:41.526] -- /predict_arabic request received --
+2026-08-04 12:32:41  INFO      [12:32:41.526] Arabic inference: images (39).jpg (16617 bytes)
+2026-08-04 12:32:44  INFO      [12:32:41.526] Detected: True  Plate: 54814
+2026-08-04 12:32:44  INFO      [12:32:41.526]   left_seq=54814  letter=  region=  city=Unknown
+2026-08-04 12:32:44  INFO      [12:32:41.526]   raw_fast="PlatePrediction(plate='54814IJ', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='54014 9 / 1'
+2026-08-04 12:32:45  INFO      [12:32:41.526] -- /predict_arabic done --
+2026-08-04 12:32:45  INFO      [12:32:45.750] -- /predict_arabic request received --
+2026-08-04 12:32:45  INFO      [12:32:45.750] Arabic inference: images (40).jpg (12437 bytes)
+2026-08-04 12:32:48  INFO      [12:32:45.750] Detected: True  Plate: 24896 | 1
+2026-08-04 12:32:48  INFO      [12:32:45.750]   left_seq=24896  letter=  region=1  city=Rabat
+2026-08-04 12:32:48  INFO      [12:32:45.750]   raw_fast="PlatePrediction(plate='24896A1', char_probs=None, region='Belarus', region_prob=None)"  raw_ar=']4095'
+2026-08-04 12:32:49  INFO      [12:32:45.750] -- /predict_arabic done --
+2026-08-04 12:32:49  INFO      [12:32:49.987] -- /predict_arabic request received --
+2026-08-04 12:32:49  INFO      [12:32:49.987] Arabic inference: images (41).jpg (24234 bytes)
+2026-08-04 12:33:00  INFO      [12:32:49.987] Detected: True  Plate: 274835 | و
+2026-08-04 12:33:00  INFO      [12:32:49.987]   left_seq=274835  letter=و  region=  city=Unknown
+2026-08-04 12:33:00  INFO      [12:32:49.987]   raw_fast="PlatePrediction(plate='274835', char_probs=None, region='Italy', region_prob=None)"  raw_ar='27483 ) 49  ٤٤5 3٤2  7ق٨$ وماك ك٧طس{ بط٨:  ٥١'
+2026-08-04 12:33:02  INFO      [12:32:49.987] -- /predict_arabic done --
+2026-08-04 12:33:02  INFO      [12:33:02.515] -- /predict_arabic request received --
+2026-08-04 12:33:02  INFO      [12:33:02.515] Arabic inference: images (42).jpg (16185 bytes)
+2026-08-04 12:33:05  INFO      [12:33:02.515] Detected: True  Plate: 77143 | د
+2026-08-04 12:33:05  INFO      [12:33:02.515]   left_seq=77143  letter=د  region=  city=Unknown
+2026-08-04 12:33:05  INFO      [12:33:02.515]   raw_fast="PlatePrediction(plate='77143IOI', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='/ د / 77143'
+2026-08-04 12:33:06  INFO      [12:33:02.515] -- /predict_arabic done --
+2026-08-04 12:33:06  INFO      [12:33:06.954] -- /predict_arabic request received --
+2026-08-04 12:33:06  INFO      [12:33:06.954] Arabic inference: marokko_1 (1).jpg (147308 bytes)
+2026-08-04 12:33:09  INFO      [12:33:06.954] Detected: True  Plate: 24896
+2026-08-04 12:33:09  INFO      [12:33:06.954]   left_seq=24896  letter=  region=  city=Unknown
+2026-08-04 12:33:09  INFO      [12:33:06.954]   raw_fast="PlatePrediction(plate='24896AI', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='24٥95'
+2026-08-04 12:33:10  INFO      [12:33:06.954] -- /predict_arabic done --
+2026-08-04 12:33:10  INFO      [12:33:10.802] -- /predict_arabic request received --
+2026-08-04 12:33:10  INFO      [12:33:10.802] Arabic inference: marokko_1.jpg (147308 bytes)
+2026-08-04 12:33:13  INFO      [12:33:10.802] Detected: True  Plate: 24896
+2026-08-04 12:33:13  INFO      [12:33:10.802]   left_seq=24896  letter=  region=  city=Unknown
+2026-08-04 12:33:13  INFO      [12:33:10.802]   raw_fast="PlatePrediction(plate='24896AI', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='24٥95'
+2026-08-04 12:33:15  INFO      [12:33:10.802] -- /predict_arabic done --
+2026-08-04 12:33:15  INFO      [12:33:15.382] -- /predict_arabic request received --
+2026-08-04 12:33:15  INFO      [12:33:15.382] Arabic inference: marokko_4.jpg (25991 bytes)
+2026-08-04 12:33:18  INFO      [12:33:15.382] Detected: True  Plate: 4946 | 4
+2026-08-04 12:33:18  INFO      [12:33:15.382]   left_seq=4946  letter=  region=4  city=Témara
+2026-08-04 12:33:18  INFO      [12:33:15.382]   raw_fast="PlatePrediction(plate='4946III4', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='4945 ١ ١ ١ 4'
+2026-08-04 12:33:19  INFO      [12:33:15.382] -- /predict_arabic done --
+2026-08-04 12:33:19  INFO      [12:33:19.676] -- /predict_arabic request received --
+2026-08-04 12:33:19  INFO      [12:33:19.676] Arabic inference: marokko_6.jpg (27255 bytes)
+2026-08-04 12:33:22  INFO      [12:33:19.676] Detected: True  Plate: 77143 | د
+2026-08-04 12:33:22  INFO      [12:33:19.676]   left_seq=77143  letter=د  region=  city=Unknown
+2026-08-04 12:33:22  INFO      [12:33:19.676]   raw_fast="PlatePrediction(plate='77143I', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='/ د / 77143'
+2026-08-04 12:33:23  INFO      [12:33:19.676] -- /predict_arabic done --
+2026-08-04 12:33:24  INFO      [12:33:24.108] -- /predict_arabic request received --
+2026-08-04 12:33:24  INFO      [12:33:24.108] Arabic inference: marokko_8.jpg (32613 bytes)
+2026-08-04 12:33:34  INFO      [12:33:24.108] Detected: True  Plate: 7631 | ب | 8
+2026-08-04 12:33:34  INFO      [12:33:24.108]   left_seq=7631  letter=ب  region=8  city=Settat
+2026-08-04 12:33:34  INFO      [12:33:24.108]   raw_fast="PlatePrediction(plate='7631II8', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='٥ ١ب١ 7531 ٨٤٨3٧١{ |8٢0 ةطع   55٤و ش82 54 022 4  9^عى/83  :ع3؟'
+2026-08-04 12:33:36  INFO      [12:33:24.108] -- /predict_arabic done --
+2026-08-04 12:33:36  INFO      [12:33:36.110] -- /predict_arabic request received --
+2026-08-04 12:33:36  INFO      [12:33:36.110] Arabic inference: marokko8.jpg (30185 bytes)
+2026-08-04 12:33:38  INFO      [12:33:36.110] Detected: True  Plate: 21300 | أ | 5
+2026-08-04 12:33:38  INFO      [12:33:36.110]   left_seq=21300  letter=أ  region=5  city=Khémisset
+2026-08-04 12:33:38  INFO      [12:33:36.110]   raw_fast="PlatePrediction(plate='21300III5', char_probs=None, region='Unknown', region_prob=None)"  raw_ar='أ |21300 50'
+2026-08-04 12:33:40  INFO      [12:33:36.110] -- /predict_arabic done --
+2026-08-04 12:33:40  INFO      [12:33:40.414] -- /predict_arabic request received --
+2026-08-04 12:33:40  INFO      [12:33:40.414] Arabic inference: marokko26.jpg (35517 bytes)
+2026-08-04 12:33:42  INFO      [12:33:40.414] Detected: True  Plate: 77095 | أ | 44
+2026-08-04 12:33:42  INFO      [12:33:40.414]   left_seq=77095  letter=أ  region=44  city=Errachidia
+2026-08-04 12:33:42  INFO      [12:33:40.414]   raw_fast="PlatePrediction(plate='77095II44', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='[4| أ/95[77'
+2026-08-04 12:33:44  INFO      [12:33:40.414] -- /predict_arabic done --
+2026-08-04 12:33:44  INFO      [12:33:44.499] -- /predict_arabic request received --
+2026-08-04 12:33:44  INFO      [12:33:44.499] Arabic inference: marokko36.jpg (34089 bytes)
+2026-08-04 12:33:53  INFO      [12:33:44.499] Detected: True  Plate: 4578 | ب
+2026-08-04 12:33:53  INFO      [12:33:44.499]   left_seq=4578  letter=ب  region=  city=Unknown
+2026-08-04 12:33:53  INFO      [12:33:44.499]   raw_fast="PlatePrediction(plate='4578OA', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='2٢ ربا 4578 و ^8شقطفت «3& ?٥ 07128.'
+2026-08-04 12:33:55  INFO      [12:33:44.499] -- /predict_arabic done --
+2026-08-04 12:33:55  INFO      [12:33:55.690] -- /predict_arabic request received --
+2026-08-04 12:33:55  INFO      [12:33:55.690] Arabic inference: marokko46.jpg (133467 bytes)
+2026-08-04 12:34:07  INFO      [12:33:55.690] Detected: True  Plate: 2748354 | ط
+2026-08-04 12:34:07  INFO      [12:33:55.690]   left_seq=2748354  letter=ط  region=  city=Unknown
+2026-08-04 12:34:07  INFO      [12:33:55.690]   raw_fast="PlatePrediction(plate='2748354', char_probs=None, region='Israel', region_prob=None)"  raw_ar='27483 ) 49 3٨2  ع  {/{ئ$ 4٧ط%٧^ ٨9أ$ عع| ٨ع_٨ع6'
+2026-08-04 12:34:08  INFO      [12:33:55.690] -- /predict_arabic done --
+2026-08-04 12:34:08  INFO      [12:34:08.620] -- /predict_arabic request received --
+2026-08-04 12:34:08  INFO      [12:34:08.620] Arabic inference: new-licence-plate-idea-for-morocco-thoughts-v0-e0ogbawsa65f1.webp (22784 bytes)
+2026-08-04 12:34:17  INFO      [12:34:08.620] Detected: True  Plate: 13456 | ب | 27
+2026-08-04 12:34:17  INFO      [12:34:08.620]   left_seq=13456  letter=ب  region=27  city=Taounate
+2026-08-04 12:34:17  INFO      [12:34:08.620]   raw_fast="PlatePrediction(plate='13456IJ27', char_probs=None, region='Unknown', region_prob=None)"  raw_ar='13450 ب 27'
+2026-08-04 12:34:19  INFO      [12:34:08.620] -- /predict_arabic done --
+2026-08-04 12:34:19  INFO      [12:34:19.392] -- /predict_arabic request received --
+2026-08-04 12:34:19  INFO      [12:34:19.392] Arabic inference: Screenshot 2026-07-15 133740.png (864956 bytes)
+2026-08-04 12:34:22  INFO      [12:34:19.392] Detected: True  Plate: 65997 | أ
+2026-08-04 12:34:22  INFO      [12:34:19.392]   left_seq=65997  letter=أ  region=  city=Unknown
+2026-08-04 12:34:22  INFO      [12:34:19.392]   raw_fast="PlatePrediction(plate='65997III', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='55997 أ ٠ 44'
+2026-08-04 12:34:24  INFO      [12:34:19.392] -- /predict_arabic done --
+2026-08-04 12:34:24  INFO      [12:34:24.580] -- /predict_arabic request received --
+2026-08-04 12:34:24  INFO      [12:34:24.580] Arabic inference: WhatsApp Image 2026-08-03 at 12.17.39.jpeg (245558 bytes)
+2026-08-04 12:34:32  INFO      [12:34:24.580] Detected: True  Plate: 58550 | ب | 40
+2026-08-04 12:34:32  INFO      [12:34:24.580]   left_seq=58550  letter=ب  region=40  city=Tanger
+2026-08-04 12:34:32  INFO      [12:34:24.580]   raw_fast="PlatePrediction(plate='58550I_40', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='50550 4٥ | ب  1٤٧٥~0٧8٤ 60»'
+2026-08-04 12:34:33  INFO      [12:34:24.580] -- /predict_arabic done --
+2026-08-04 12:34:34  INFO      [12:34:34.095] -- /predict_arabic request received --
+2026-08-04 12:34:34  INFO      [12:34:34.095] Arabic inference: WhatsApp Image 2026-08-03 at 18.43.12 (1).jpeg (84174 bytes)
+2026-08-04 12:34:37  INFO      [12:34:34.095] Detected: True  Plate: 19861 | د | 22
+2026-08-04 12:34:37  INFO      [12:34:34.095]   left_seq=19861  letter=د  region=22  city=Fès
+2026-08-04 12:34:37  INFO      [12:34:34.095]   raw_fast="PlatePrediction(plate='19861II22', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='؟2 / د / | 9١ &٥'
+2026-08-04 12:34:39  INFO      [12:34:34.095] -- /predict_arabic done --
+2026-08-04 12:34:39  INFO      [12:34:39.494] -- /predict_arabic request received --
+2026-08-04 12:34:39  INFO      [12:34:39.494] Arabic inference: WhatsApp Image 2026-08-03 at 18.43.12 (2).jpeg (147869 bytes)
+2026-08-04 12:34:44  INFO      [12:34:39.494] Detected: True  Plate: 19861 | د | 26
+2026-08-04 12:34:44  INFO      [12:34:39.494]   left_seq=19861  letter=د  region=26  city=Sefrou
+2026-08-04 12:34:44  INFO      [12:34:39.494]   raw_fast="PlatePrediction(plate='19861II26', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='د / 1&198 25 ه٥5=٥١'
+2026-08-04 12:34:45  INFO      [12:34:39.494] -- /predict_arabic done --
+2026-08-04 12:34:46  INFO      [12:34:46.099] -- /predict_arabic request received --
+2026-08-04 12:34:46  INFO      [12:34:46.099] Arabic inference: WhatsApp Image 2026-08-03 at 18.43.13 (1).jpeg (133256 bytes)
+2026-08-04 12:34:49  INFO      [12:34:46.099] Detected: True  Plate: 91111
+2026-08-04 12:34:49  INFO      [12:34:46.099]   left_seq=91111  letter=  region=  city=Unknown
+2026-08-04 12:34:49  INFO      [12:34:46.099]   raw_fast="PlatePrediction(plate='91111', char_probs=None, region='Qatar', region_prob=None)"  raw_ar='9111 1'
+2026-08-04 12:34:51  INFO      [12:34:46.099] -- /predict_arabic done --
+2026-08-04 12:34:51  INFO      [12:34:51.213] -- /predict_arabic request received --
+2026-08-04 12:34:51  INFO      [12:34:51.213] Arabic inference: WhatsApp Image 2026-08-03 at 18.43.14 (1).jpeg (107409 bytes)
+2026-08-04 12:34:55  INFO      [12:34:51.213] Detected: True  Plate: 3520 | 77
+2026-08-04 12:34:55  INFO      [12:34:51.213]   left_seq=3520  letter=  region=77  city=Unknown
+2026-08-04 12:34:55  INFO      [12:34:51.213]   raw_fast="PlatePrediction(plate='3520I77', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='3520 75'
+2026-08-04 12:34:56  INFO      [12:34:51.213] -- /predict_arabic done --
+2026-08-04 12:34:57  INFO      [12:34:57.039] -- /predict_arabic request received --
+2026-08-04 12:34:57  INFO      [12:34:57.039] Arabic inference: WhatsApp Image 2026-08-03 at 18.43.14 (2).jpeg (140523 bytes)
+2026-08-04 12:35:01  INFO      [12:34:57.039] Detected: True  Plate: 86184 | أ
+2026-08-04 12:35:01  INFO      [12:34:57.039]   left_seq=86184  letter=أ  region=  city=Unknown
+2026-08-04 12:35:01  INFO      [12:34:57.039]   raw_fast="PlatePrediction(plate='86184II', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='061 04 ٥ / أ ١'
+2026-08-04 12:35:02  INFO      [12:34:57.039] -- /predict_arabic done --
+2026-08-04 12:35:02  INFO      [12:35:02.969] -- /predict_arabic request received --
+2026-08-04 12:35:02  INFO      [12:35:02.969] Arabic inference: WhatsApp Image 2026-08-03 at 18.43.14.jpeg (142408 bytes)
+2026-08-04 12:35:06  INFO      [12:35:02.969] Detected: True  Plate: 21774 | أ | 44
+2026-08-04 12:35:06  INFO      [12:35:02.969]   left_seq=21774  letter=أ  region=44  city=Errachidia
+2026-08-04 12:35:06  INFO      [12:35:02.969]   raw_fast="PlatePrediction(plate='21774I44', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='21774 أ| 44'
+2026-08-04 12:35:08  INFO      [12:35:02.969] -- /predict_arabic done --

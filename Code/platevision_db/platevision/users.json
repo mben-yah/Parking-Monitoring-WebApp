@@ -1,4 +1,4 @@
 [
-{"username": "admin", "password_hash": "scrypt:32768:8:1$6y9Yroy11dzpUdkM$544cc974a124172f8dc8f87a26140a35e9e2bf30a9405310d697f3ca9700c44039b32459e5cf8706d48c6f7554f9ba940f53d6d94f506145dd5189e9cb01688d", "role": "ADMIN", "created_at": {"$date": 1785279278480}, "last_login": {"$date": 1785790145034}, "_id": {"$oid": "6a69332ea6c1ccfd28045898"}},
+{"username": "admin", "password_hash": "scrypt:32768:8:1$6y9Yroy11dzpUdkM$544cc974a124172f8dc8f87a26140a35e9e2bf30a9405310d697f3ca9700c44039b32459e5cf8706d48c6f7554f9ba940f53d6d94f506145dd5189e9cb01688d", "role": "ADMIN", "created_at": {"$date": 1785279278480}, "last_login": {"$date": 1785842374644}, "_id": {"$oid": "6a69332ea6c1ccfd28045898"}},
 {"username": "operator", "password_hash": "scrypt:32768:8:1$EzTRqm1kQejfytqQ$2e762ffd99bc180c7d743f3f5a4750cf0fb76a5bdbaa0993076d8cae5951342e27ef76477df5859bce4a2bb31ded831f66b4a6a5f5dd476debcb5ac1ff3219a2", "role": "OPERATOR", "created_at": {"$date": 1785279278775}, "last_login": null, "_id": {"$oid": "6a69332ea6c1ccfd28045899"}}
 ]
