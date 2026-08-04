@@ -147,12 +147,12 @@ def allowed(filename: str) -> bool:
 PUBLIC_ENDPOINTS = {
     "login_page", "api_auth_login", "api_auth_register", 
     "api_auth_logout", "api_auth_me", "static_files", "static",
-    "view_html_ticket", "download_pdf_ticket", "apitemplate_pdf_ticket", "api_create_parking_ticket", "tickets_page", "api_contact_us"
+    "view_html_ticket", "download_pdf_ticket", "apitemplate_pdf_ticket", "api_create_parking_ticket", "tickets_page", "api_contact_us", "landing_page"
 }
 
 @app.before_request
 def require_login():
-    if request.endpoint in PUBLIC_ENDPOINTS or request.path in ("/login", "/tickets"):
+    if request.endpoint in PUBLIC_ENDPOINTS or request.path in ("/login", "/tickets", "/landing"):
         return None
     if request.path.startswith("/api/auth/") or request.path.startswith("/ticket/") or request.path.startswith("/api/parking/ticket"):
         return None
@@ -235,6 +235,11 @@ def api_auth_me():
 @app.route("/")
 def index():
     return send_from_directory("frontend", "index.html")
+
+
+@app.route("/landing")
+def landing_page():
+    return send_from_directory("frontend", "landing.html")
 
 
 @app.route("/video")

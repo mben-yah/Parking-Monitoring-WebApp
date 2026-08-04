@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Magnetite Vision · One Road. One Vision. (by Ben Yahia)</title>
+  <meta name="description" content="Magnetite Vision by Ben Yahia — Next-Generation AI License Plate Recognition & Autonomous Parking Supervision Platform." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-dark: #0b0f17;
+      --card-bg: rgba(17, 24, 39, 0.75);
+      --accent-green: #06d6a0;
+      --accent-cyan: #38bdf8;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border-light: rgba(255, 255, 255, 0.1);
+      --glow-green: rgba(6, 214, 160, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px;
+    }
+
+    /* ── Ambient Fluid Mesh Aurora Background ── */
+    .aurora-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.45;
+      animation: floatOrb 18s ease-in-out infinite alternate;
+    }
+
+    .orb-1 {
+      top: -10%;
+      left: 15%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, #06d6a0 0%, rgba(6, 214, 160, 0) 70%);
+    }
+
+    .orb-2 {
+      bottom: -15%;
+      right: 10%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, #38bdf8 0%, rgba(56, 189, 248, 0) 70%);
+      animation-delay: -9s;
+    }
+
+    .orb-3 {
+      top: 40%;
+      left: 50%;
+      width: 450px;
+      height: 450px;
+      background: radial-gradient(circle, #0f172a 0%, rgba(15, 23, 42, 0) 70%);
+      animation-delay: -5s;
+    }
+
+    @keyframes floatOrb {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(40px, -50px) scale(1.1); }
+      100% { transform: translate(-30px, 30px) scale(0.95); }
+    }
+
+    /* ── Main Outer Glass Shell ── */
+    .landing-shell {
+      width: 100%;
+      max-width: 1200px;
+      background: var(--card-bg);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--border-light);
+      border-radius: 32px;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+      padding: 32px 40px 48px;
+      margin-top: 10px;
+    }
+
+    /* ── Header Nav ── */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 28px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      margin-bottom: 48px;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text-main);
+      font-weight: 800;
+      font-size: 1.15rem;
+      letter-spacing: 0.5px;
+    }
+
+    .brand-logo img {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      object-fit: cover;
+      border: 1px solid rgba(6, 214, 160, 0.5);
+      box-shadow: 0 0 12px var(--glow-green);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      transition: all 0.25s ease;
+    }
+
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--text-main);
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+
+    .btn-nav-signin {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-main);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 10px 22px;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .btn-nav-signin:hover {
+      background: var(--text-main);
+      color: var(--bg-dark);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+      transform: translateY(-2px);
+    }
+
+    /* ── Hero Central Section ── */
+    .hero-center {
+      text-align: center;
+      padding: 60px 20px 80px;
+      max-width: 850px;
+      margin: 0 auto;
+    }
+
+    .motto-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 20px;
+      background: rgba(6, 214, 160, 0.12);
+      border: 1px solid rgba(6, 214, 160, 0.35);
+      border-radius: 40px;
+      color: var(--accent-green);
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 28px;
+      box-shadow: 0 0 20px rgba(6, 214, 160, 0.15);
+    }
+
+    .hero-title {
+      font-size: clamp(2.5rem, 6vw, 4.2rem);
+      font-weight: 900;
+      letter-spacing: 2px;
+      line-height: 1.1;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      background: linear-gradient(180deg, #ffffff 30%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-desc {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      line-height: 1.75;
+      margin-bottom: 40px;
+      font-weight: 400;
+    }
+
+    .cta-group {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .btn-hero-primary {
+      background: #ffffff;
+      color: #0b0f17;
+      font-weight: 800;
+      font-size: 0.92rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 16px 40px;
+      border-radius: 40px;
+      text-decoration: none;
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.35);
+      transition: all 0.3s ease;
+    }
+
+    .btn-hero-primary:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 45px rgba(6, 214, 160, 0.6);
+      background: var(--accent-green);
+      color: #0b0f17;
+    }
+
+    .btn-hero-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-main);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      font-weight: 700;
+      font-size: 0.92rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 16px 36px;
+      border-radius: 40px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .btn-hero-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: var(--text-main);
+      transform: translateY(-2px);
+    }
+
+    /* ── Features Grid ── */
+    .features-section {
+      padding-top: 40px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 32px;
+      text-align: center;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 28px;
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(6, 214, 160, 0.4);
+      transform: translateY(-4px);
+    }
+
+    .feature-icon {
+      font-size: 2.2rem;
+      margin-bottom: 16px;
+      display: inline-block;
+    }
+
+    .feature-h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--text-main);
+    }
+
+    .feature-p {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* ── FAQ Section ── */
+    .faq-section {
+      margin-top: 60px;
+      padding-top: 40px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .faq-item {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      margin-bottom: 14px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .faq-question {
+      padding: 18px 24px;
+      font-weight: 700;
+      font-size: 0.98rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--text-main);
+    }
+
+    .faq-answer {
+      padding: 0 24px 20px;
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      line-height: 1.65;
+      display: none;
+    }
+
+    .faq-item.open .faq-answer {
+      display: block;
+    }
+
+    .faq-item.open {
+      border-color: rgba(6, 214, 160, 0.4);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    /* ── Contact & Footer ── */
+    footer {
+      margin-top: 60px;
+      padding-top: 40px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      text-align: center;
+    }
+
+    .lang-dropdown {
+      background: rgba(255, 255, 255, 0.08);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .lang-dropdown option {
+      background: #111827;
+      color: #ffffff;
+    }
+
+    @media (max-width: 768px) {
+      .landing-shell {
+        padding: 24px 20px 36px;
+      }
+      .nav-links {
+        display: none;
+      }
+      .hero-title {
+        font-size: 2.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient Fluid Mesh Aurora Background -->
+  <div class="aurora-bg">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <!-- Main Glass Shell -->
+  <div class="landing-shell">
+
+    <!-- Top Header Navigation -->
+    <header>
+      <a href="/landing" class="brand-logo">
+        <img src="/magnetite_vision_logo.png" alt="Magnetite Vision Logo" />
+        <span>Magnetite Vision</span>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#home" class="active">Home</a></li>
+          <li><a href="#about" data-i18n="about_title">About Us</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#contact" data-i18n="contact_title">Contact Us</a></li>
+        </ul>
+      </nav>
+
+      <a href="/login" class="btn-nav-signin">Sign In</a>
+    </header>
+
+    <!-- Central Hero Section -->
+    <section class="hero-center" id="home">
+      <div class="motto-badge">
+        <span>✨ BEN YAHIA PRESENTATION</span> · <span data-i18n="motto">One Road. One Vision.</span>
+      </div>
+
+      <h1 class="hero-title">Welcome to Magnetite Vision</h1>
+
+      <p class="hero-desc" data-i18n="hero_subtitle">
+        Pioneering real-time computer vision, edge AI detection, and automated vehicle supervision by Ben Yahia.
+      </p>
+
+      <div class="cta-group">
+        <a href="/" class="btn-hero-primary" data-i18n="form_send">Learn More</a>
+        <a href="/login" class="btn-hero-secondary">Enter Platform</a>
+      </div>
+    </section>
+
+    <!-- Features Showcase Grid -->
+    <section class="features-section" id="features">
+      <h2 class="section-title">⚡ Platform Capabilities</h2>
+
+      <div class="grid-3">
+        <div class="feature-card">
+          <span class="feature-icon">🎯</span>
+          <h3 class="feature-h3" data-i18n="feat_yolo_title">YOLOv8 Edge Intelligence</h3>
+          <p class="feature-p" data-i18n="feat_yolo_desc">Fine-tuned object detection architecture delivering sub-35ms frame processing on standard CPUs without costly GPU reliance.</p>
+        </div>
+
+        <div class="feature-card">
+          <span class="feature-icon">🔤</span>
+          <h3 class="feature-h3" data-i18n="feat_ocr_title">Multi-Engine OCR Consensus</h3>
+          <p class="feature-p" data-i18n="feat_ocr_desc">Combines EasyOCR and PaddleOCR with character-level voting to eliminate text reading errors across diverse lighting.</p>
+        </div>
+
+        <div class="feature-card">
+          <span class="feature-icon">🛡️</span>
+          <h3 class="feature-h3" data-i18n="feat_security_title">RGPD & Privacy Security</h3>
+          <p class="feature-p" data-i18n="feat_security_desc">Fully compliant with European data privacy standards, featuring automated 30-day retention and JWT encrypted sessions.</p>
+        </div>
+
+        <div class="feature-card">
+          <span class="feature-icon">🎬</span>
+          <h3 class="feature-h3">Video & CCTV Analysis</h3>
+          <p class="feature-p">Upload dashcam videos or CCTV recordings to analyze every frame and extract all license plates with accurate timestamps.</p>
+        </div>
+
+        <div class="feature-card">
+          <span class="feature-icon">🔴</span>
+          <h3 class="feature-h3">Live RTSP Stream Monitoring</h3>
+          <p class="feature-p">Stream live video directly from IP cameras or mobile webcams with real-time SSE event streaming and instant alert triggers.</p>
+        </div>
+
+        <div class="feature-card">
+          <span class="feature-icon">🅿️</span>
+          <h3 class="feature-h3" data-i18n="feat_parking_title">Automated Parking & Payments</h3>
+          <p class="feature-p" data-i18n="feat_parking_desc">Real-time entry/exit logging, automated duration fee calculation, thermal PDF ticket receipts, and instant intrusion alerts.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Accordion Section -->
+    <section class="faq-section" id="faq">
+      <h2 class="section-title">❓ Frequently Asked Questions</h2>
+
+      <div style="max-width: 800px; margin: 0 auto;">
+        <div class="faq-item open">
+          <div class="faq-question">What is Magnetite Vision? <span>▼</span></div>
+          <div class="faq-answer">Magnetite Vision is an advanced AI-powered computer vision application engineered by Ben Yahia for real-time automatic license plate recognition (ALPR) and commercial parking supervision.</div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">What AI models are used under the hood? <span>▼</span></div>
+          <div class="faq-answer">It utilizes YOLOv8 fine-tuned on ELPD Commercial v2 (3.2M parameters) paired with a Multi-Engine OCR pipeline (EasyOCR and PaddleOCR) featuring character-level consensus voting.</div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">Is the platform RGPD / GDPR compliant? <span>▼</span></div>
+          <div class="faq-answer">Yes, it fully adheres to data protection guidelines with automated 30-day data retention purging, access controls, and JWT-authenticated sessions.</div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">Who developed Magnetite Vision? <span>▼</span></div>
+          <div class="faq-answer">Developed by Mohamed Walid Ben Yahia (ENSA Tétouan State Engineer in Big Data & AI) for company Ben Yahia in partnership with Flowdesigns Solutions.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact & i18n Footer -->
+    <footer id="contact">
+      <!-- i18n Selector -->
+      <div>
+        <select id="langSelect" class="lang-dropdown" onchange="changeLanguage(this.value)">
+          <option value="en">🌐 English (EN)</option>
+          <option value="fr">🇫🇷 Français (FR)</option>
+          <option value="ar">🇲🇦 العربية (AR - RTL)</option>
+          <option value="hi">🇮🇳 हिन्दी (HI)</option>
+          <option value="ja">🇯🇵 日本語 (JA)</option>
+          <option value="ko">🇰🇷 한국어 (KO)</option>
+          <option value="zh">🇨🇳 中文 (ZH)</option>
+          <option value="ru">🇷🇺 Русский (RU)</option>
+          <option value="tr">🇹🇷 Türkçe (TR)</option>
+        </select>
+      </div>
+
+      <div style="font-size:0.88rem; color:var(--text-muted);" data-i18n="copyright_notice">
+        © 2026 Magnetite Vision by Ben Yahia. All rights reserved. Developed by Mohamed Walid Ben Yahia.
+      </div>
+
+      <div style="display:flex; gap:20px; font-size:0.85rem;">
+        <a href="https://github.com/mben-yah/Parking-Monitoring-WebApp" target="_blank" style="color:var(--accent-green); text-decoration:none;" data-i18n="github_link">GitHub Repository</a>
+        <a href="https://www.linkedin.com/in/medwalid/" target="_blank" style="color:var(--accent-cyan); text-decoration:none;" data-i18n="linkedin_link">LinkedIn Profile</a>
+      </div>
+    </footer>
+
+  </div>
+
+  <script src="/i18n.js"></script>
+  <script>
+    // FAQ Accordion Toggle
+    document.querySelectorAll('.faq-question').forEach(q => {
+      q.addEventListener('click', () => {
+        const item = q.parentElement;
+        item.classList.toggle('open');
+      });
+    });
+  </script>
+</body>
+</html>
