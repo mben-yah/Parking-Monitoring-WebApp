@@ -168,7 +168,7 @@ def require_login():
 @app.route("/login")
 def login_page():
     if session.get("user"):
-        return redirect("/")
+        return redirect("/app")
     return send_from_directory("frontend", "login.html")
 
 
