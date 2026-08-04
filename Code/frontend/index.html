@@ -460,10 +460,69 @@
   <img id="lightbox-img" src="" alt="Full-size plate view" />
 </div>
 
-<!-- Toast -->
-<div id="toast" role="status" aria-live="polite"></div>
-
 <div class="wrapper">
+
+  <!-- ── Landing Page Hero Section ── -->
+  <section class="landing-hero" style="margin-bottom: 40px; padding: 40px 30px; background: linear-gradient(135deg, rgba(17,24,39,0.85), rgba(11,15,23,0.95)); border: 1px solid rgba(6,214,160,0.25); border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); backdrop-filter: blur(12px);">
+    
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap:36px; align-items:center;">
+      
+      <!-- Hero Left Text Content -->
+      <div>
+        <div style="display:inline-flex; align-items:center; gap:8px; padding:6px 14px; background:rgba(6,214,160,0.12); border:1px solid rgba(6,214,160,0.3); border-radius:30px; color:#06d6a0; font-size:0.82rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:16px;">
+          <span>✨ BEN YAHIA</span> · <span data-i18n="motto">One Road. One Vision.</span>
+        </div>
+
+        <h1 style="font-size: clamp(2rem, 4vw, 3rem); font-weight:800; color:#f8fafc; line-height:1.15; margin-bottom:16px; background:linear-gradient(135deg, #ffffff, #cbd5e1); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">
+          Magnetite Vision
+        </h1>
+        
+        <p style="font-size:1.05rem; color:#94a3b8; line-height:1.6; margin-bottom:24px;" data-i18n="hero_subtitle">
+          Pioneering real-time computer vision, edge AI detection, and automated vehicle supervision by Ben Yahia.
+        </p>
+
+        <!-- Feature Badges -->
+        <div style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:28px;">
+          <span style="background:#1e293b; color:#06d6a0; border:1px solid rgba(6,214,160,0.3); padding:6px 12px; border-radius:8px; font-size:0.85rem; font-weight:600;" data-i18n="badge_accuracy">⚡ 98.7% Precision</span>
+          <span style="background:#1e293b; color:#38bdf8; border:1px solid rgba(56,189,248,0.3); padding:6px 12px; border-radius:8px; font-size:0.85rem; font-weight:600;" data-i18n="badge_speed">⏱️ &lt; 35ms CPU Speed</span>
+          <span style="background:#1e293b; color:#f59e0b; border:1px solid rgba(245,158,11,0.3); padding:6px 12px; border-radius:8px; font-size:0.85rem; font-weight:600;" data-i18n="badge_uptime">🛡️ 99% System Availability</span>
+        </div>
+
+        <!-- Quick Platform Navigation Buttons -->
+        <div style="display:flex; flex-wrap:wrap; gap:12px;">
+          <a href="/video" style="background:linear-gradient(135deg, #06d6a0, #059669); color:#0b0f17; font-weight:700; padding:12px 20px; border-radius:10px; text-decoration:none; display:inline-flex; align-items:center; gap:8px; box-shadow:0 8px 20px rgba(6,214,160,0.3);" data-i18n="cta_video">
+            🎬 Launch Video Analysis
+          </a>
+          <a href="/livestream" style="background:rgba(255,255,255,0.06); color:#f8fafc; border:1px solid rgba(255,255,255,0.15); font-weight:600; padding:12px 20px; border-radius:10px; text-decoration:none; display:inline-flex; align-items:center; gap:8px;" data-i18n="cta_stream">
+            🔴 Connect Live Stream
+          </a>
+        </div>
+      </div>
+
+      <!-- Hero Right Image Showcase -->
+      <div style="position:relative;">
+        <div style="position:relative; border-radius:16px; overflow:hidden; border:2px solid rgba(6,214,160,0.3); box-shadow:0 12px 40px rgba(0,0,0,0.6);">
+          <img src="/landing_car.jpg" alt="Magnetite Vision Showcase" style="width:100%; height:260px; object-fit:cover; display:block; filter:brightness(0.95);" />
+          
+          <!-- Scanning Overlay Reticle -->
+          <div style="position:absolute; top:16px; left:16px; right:16px; background:rgba(11,15,23,0.85); backdrop-filter:blur(8px); border:1px solid rgba(6,214,160,0.4); padding:10px 14px; border-radius:10px; display:flex; align-items:center; justify-content:space-between; color:#f8fafc; font-family:'JetBrains Mono', monospace; font-size:0.78rem;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="width:8px; height:8px; background:#06d6a0; border-radius:50%; box-shadow:0 0 8px #06d6a0;"></span>
+              <span style="color:#06d6a0; font-weight:700;">ALPR DETECTED</span>
+            </div>
+            <span style="color:#94a3b8;">CONF: 98.7%</span>
+          </div>
+
+          <!-- Bottom Target Badge -->
+          <div style="position:absolute; bottom:14px; left:14px; background:rgba(6,214,160,0.2); border:1px solid #06d6a0; padding:6px 12px; border-radius:6px; color:#06d6a0; font-family:'JetBrains Mono', monospace; font-size:0.8rem; font-weight:700;">
+            🎯 ROAD VISION · BEN YAHIA
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
 
   <!-- ── Header ── -->
   <header>
