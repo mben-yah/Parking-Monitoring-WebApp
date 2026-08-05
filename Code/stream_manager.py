@@ -28,15 +28,28 @@ import numpy as np
 
 BASE_DIR = Path(__file__).parent
 
-# ─── Auto-resolve best English YOLO weights ────────────────────────────────────
-def _resolve_english_weights() -> Path | None:
+# ─── Auto-resolve best ELPD Commercial YOLO weights ───────────────────────────
+def _resolve_elpd_weights() -> Path | None:
+    """Auto-detect the highest-numbered ELPD Commercial dataset model weights available."""
     search = BASE_DIR / "runs" / "detect" / "runs" / "detect"
     best_pt, best_num = None, -1
     if search.exists():
+        # 1. Primary: ELPD Commercial dataset models
         for d in search.iterdir():
-            m = re.fullmatch(r"english_train(\d+)", d.name)
+            m = re.fullmatch(r"elpd_commercial_train(\d*)", d.name)
             if m:
-                num = int(m.group(1))
+                num = int(m.group(1)) if m.group(1) else 1
+                pt  = d / "weights" / "best.pt"
+                if pt.exists() and num > best_num:
+                    best_num, best_pt = num, pt
+        if best_pt is not None:
+            return best_pt
+
+        # 2. Fallback: English AOLP models
+        for d in search.iterdir():
+            m = re.fullmatch(r"english_train(\d*)", d.name)
+            if m:
+                num = int(m.group(1)) if m.group(1) else 1
                 pt  = d / "weights" / "best.pt"
                 if pt.exists() and num > best_num:
                     best_num, best_pt = num, pt
@@ -93,12 +106,13 @@ class StreamManager:
 
         # Load YOLO model (once)
         if self._model is None:
-            wp = _resolve_english_weights()
+            wp = _resolve_elpd_weights()
             if wp is None:
                 return False
             from ultralytics import YOLO
             self._model        = YOLO(str(wp))
             self._weights_path = wp
+            print(f"[stream_manager] Active ELPD Commercial weights: {wp}")
 
         # Try opening the stream
         cap = cv2.VideoCapture(self.device_url)
