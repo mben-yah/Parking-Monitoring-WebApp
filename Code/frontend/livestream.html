@@ -385,7 +385,7 @@ tbody td { padding: 10px 16px; }
     <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center; width:100%;">
       <span class="device-label" style="font-size:12px; color:var(--muted);">🔑 Phone Auth</span>
       <input id="device-user" class="device-name-input" type="text" value="admin" placeholder="Username (admin)" style="width:130px; font-family:'JetBrains Mono',monospace;" />
-      <input id="device-pass" class="device-name-input" type="password" value="adminmasta" placeholder="Password (adminmasta)" style="width:150px; font-family:'JetBrains Mono',monospace;" />
+      <input id="device-pass" class="device-name-input" type="password" value="adminmasta77" placeholder="Password (adminmasta77)" style="width:160px; font-family:'JetBrains Mono',monospace;" />
       <button id="btn-toggle-pass" type="button" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); color:var(--text); padding:6px 12px; border-radius:8px; font-size:12px; cursor:pointer;" onclick="togglePasswordVisibility()">👁️ Show</button>
       
       <div style="flex:1;"></div>
@@ -394,7 +394,7 @@ tbody td { padding: 10px 16px; }
     </div>
 
     <span class="help-text">
-      💡 Phone IP Webcam Credentials — Default Username: <code style="color:#06d6a0;">admin</code> | Password: <code style="color:#06d6a0;">adminmasta</code>
+      💡 Phone IP Webcam Credentials — Default Username: <code style="color:#06d6a0;">admin</code> | Password: <code style="color:#06d6a0;">adminmasta77</code>
     </span>
   </div>
 
@@ -518,7 +518,7 @@ btnConnect.addEventListener('click', async () => {
   const url      = deviceUrl.value.trim();
   const name     = deviceName.value.trim() || 'IP Webcam';
   const username = (document.getElementById('device-user')?.value || 'admin').trim();
-  const password = (document.getElementById('device-pass')?.value || 'adminmasta').trim();
+  const password = (document.getElementById('device-pass')?.value || 'adminmasta77').trim();
 
   if (!url || url.includes('x.x')) { showToast('⚠️ Please enter a valid IP Webcam URL'); return; }
 

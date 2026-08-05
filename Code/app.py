@@ -945,7 +945,7 @@ def stream_connect():
     url         = data.get("url", "").strip()
     device_name = data.get("name", "IP Webcam").strip()
     username    = data.get("username", "admin").strip()
-    password    = data.get("password", "adminmasta").strip()
+    password    = data.get("password", "adminmasta77").strip()
 
     if not url:
         return jsonify({"error": "url is required"}), 400
