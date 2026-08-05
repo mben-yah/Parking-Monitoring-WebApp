@@ -944,17 +944,20 @@ def stream_connect():
     data        = request.get_json(force=True) or {}
     url         = data.get("url", "").strip()
     device_name = data.get("name", "IP Webcam").strip()
+    username    = data.get("username", "admin").strip()
+    password    = data.get("password", "adminmasta").strip()
+
     if not url:
         return jsonify({"error": "url is required"}), 400
     sm = _get_stream()
-    ok = sm.connect(url, device_name)
+    ok = sm.connect(url, device_name, username, password)
     if not ok:
-        return jsonify({"error": f"Could not open stream at {url}"}), 502
+        return jsonify({"error": f"Could not open stream at {url} (Verify phone credentials: username/password)"}), 502
     try:
         _get_mongo().upsert_device(device_name, url)
     except Exception as _e:
         log.warning(f"MongoDB device save failed: {_e}")
-    log.info(f"[livestream] Connected to {device_name} @ {url}  session={sm.session_id}")
+    log.info(f"[livestream] Connected to {device_name} @ {url}  user={username}  session={sm.session_id}")
     return jsonify({"ok": True, "session_id": sm.session_id, **sm.status()})
 
 

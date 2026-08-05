@@ -5471,3 +5471,25 @@ pytesseract.pytesseract.TesseractNotFoundError: tesseract is not installed or it
 2026-08-05 10:18:46  INFO      English pipeline weights path: C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt
 2026-08-05 10:18:46  INFO        [OK] Weights file exists (18024 KB)
 2026-08-05 10:18:46  INFO      Available models: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-05 11:01:03  INFO      [11:01:03.049] ── /predict_video request received ─────────────────
+2026-08-05 11:01:03  INFO      [11:01:03.049] Video: 'WhatsApp Video 2026-08-03 at 12.17.37.mp4'  mode=english  frame_skip=15  conf=0.15  engine=paddleocr_ar  save_db=True
+2026-08-05 11:01:03  INFO      [11:01:03.049] Video saved: C:\Users\MOHAME~1\AppData\Local\Temp\tmpeu6q498f.mp4  (444 KB)
+2026-08-05 11:01:12  INFO      [11:01:03.049] Video mode=ENGLISH, dataset_type=auto, weights=C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt
+2026-08-05 11:01:13  INFO      [11:01:03.049] Video: fps=29.6  frames=61  duration=2.1s
+2026-08-05 11:01:13  DEBUG     [11:01:03.049] frame=0 ts=0.0s → 0 boxes
+2026-08-05 11:01:13  DEBUG     [11:01:03.049] frame=15 ts=0.51s → 0 boxes
+2026-08-05 11:01:14  DEBUG     [11:01:03.049] frame=30 ts=1.01s → 0 boxes
+2026-08-05 11:01:14  DEBUG     [11:01:03.049] frame=45 ts=1.52s → 0 boxes
+2026-08-05 11:01:14  DEBUG     [11:01:03.049] frame=60 ts=2.03s → 0 boxes
+2026-08-05 11:01:14  INFO      [11:01:03.049] Video done. Plates found: 0  Unique character-voted: 0
+2026-08-05 11:52:07  INFO      [11:52:07.840] ── /predict_video request received ─────────────────
+2026-08-05 11:52:07  INFO      [11:52:07.840] Video: 'WhatsApp Video 2026-08-03 at 12.17.37.mp4'  mode=english  frame_skip=15  conf=0.15  engine=paddleocr_ar  save_db=True
+2026-08-05 11:52:07  INFO      [11:52:07.840] Video saved: C:\Users\MOHAME~1\AppData\Local\Temp\tmpn4muv6pk.mp4  (444 KB)
+2026-08-05 11:52:07  INFO      [11:52:07.840] Video mode=ENGLISH, dataset_type=auto, weights=C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt
+2026-08-05 11:52:08  INFO      [11:52:07.840] Video: fps=29.6  frames=61  duration=2.1s
+2026-08-05 11:52:08  DEBUG     [11:52:07.840] frame=0 ts=0.0s → 0 boxes
+2026-08-05 11:52:08  DEBUG     [11:52:07.840] frame=15 ts=0.51s → 0 boxes
+2026-08-05 11:52:09  DEBUG     [11:52:07.840] frame=30 ts=1.01s → 0 boxes
+2026-08-05 11:52:09  DEBUG     [11:52:07.840] frame=45 ts=1.52s → 0 boxes
+2026-08-05 11:52:09  DEBUG     [11:52:07.840] frame=60 ts=2.03s → 0 boxes
+2026-08-05 11:52:09  INFO      [11:52:07.840] Video done. Plates found: 0  Unique character-voted: 0

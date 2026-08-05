@@ -56,6 +56,23 @@ def _resolve_elpd_weights() -> Path | None:
     return best_pt
 
 
+def format_authenticated_url(url: str, username: str = "", password: str = "") -> str:
+    """Format URL with Basic Auth credentials if username/password are provided."""
+    url = url.strip()
+    if not username and not password:
+        return url
+    if "@" in url:
+        return url
+    from urllib.parse import quote
+    m = re.match(r"^(https?://|rtsp://)(.*)$", url, re.IGNORECASE)
+    if m:
+        scheme, rest = m.group(1), m.group(2)
+        u_enc = quote(username, safe="")
+        p_enc = quote(password, safe="")
+        return f"{scheme}{u_enc}:{p_enc}@{rest}"
+    return url
+
+
 class StreamManager:
     """Singleton-ish class that manages one live camera stream."""
 
@@ -93,11 +110,12 @@ class StreamManager:
 
     # ── Public API ─────────────────────────────────────────────────────────────
 
-    def connect(self, url: str, device_name: str = "IP Webcam") -> bool:
+    def connect(self, url: str, device_name: str = "IP Webcam", username: str = "", password: str = "") -> bool:
         if self.running:
             self.disconnect()
 
-        self.device_url  = url.strip()
+        auth_url = format_authenticated_url(url, username, password)
+        self.device_url  = auth_url
         self.device_name = device_name
         self.session_id  = str(uuid.uuid4())
         self.frame_count = self.detect_count = self.plates_found = 0
