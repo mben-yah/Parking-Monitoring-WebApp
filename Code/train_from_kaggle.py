@@ -16,7 +16,18 @@ import os
 import sys
 import shutil
 import re
+import ssl
 from pathlib import Path
+
+# Bypass SSL certificate verification for local machine network environments
+ssl._create_default_https_context = ssl._create_unverified_context
+os.environ['CURL_CA_BUNDLE'] = ''
+os.environ['PYTHONHTTPSVERIFY'] = '0'
+try:
+    import urllib3
+    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+except Exception:
+    pass
 
 BASE_DIR = Path(__file__).parent.resolve()
 DATASETS_DIR = BASE_DIR / "Dataset_Kaggle"
@@ -34,6 +45,19 @@ def extract_kaggle_handle(dataset_or_url: str) -> str:
 
 def download_from_kaggle(handle_or_url: str) -> Path:
     """Download dataset directly from Kaggle using official kagglehub."""
+    try:
+        import requests
+        import urllib3
+        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+        if not hasattr(requests.Session, '_ssl_disabled_send'):
+            requests.Session._ssl_disabled_send = requests.Session.send
+            def _unverified_send(self, request, **kwargs):
+                kwargs['verify'] = False
+                return self._ssl_disabled_send(request, **kwargs)
+            requests.Session.send = _unverified_send
+    except Exception:
+        pass
+
     try:
         import kagglehub
     except ImportError:
