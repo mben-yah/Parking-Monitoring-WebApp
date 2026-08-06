@@ -5537,3 +5537,11 @@ pytesseract.pytesseract.TesseractNotFoundError: tesseract is not installed or it
 2026-08-06 13:30:15  INFO      English pipeline weights path: C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt
 2026-08-06 13:30:15  INFO        [OK] Weights file exists (18024 KB)
 2026-08-06 13:30:15  INFO      Available models: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-06 13:33:32  INFO      ============================================================
+2026-08-06 13:33:32  INFO      PlateVision server starting
+2026-08-06 13:33:32  INFO      Log file: C:\Users\Mohamed Walid\Desktop\Internship\Code\logs\predict.log
+2026-08-06 13:33:32  INFO      ============================================================
+2026-08-06 13:33:34  INFO      English pipeline weights path: C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt
+2026-08-06 13:33:34  INFO        [OK] Weights file exists (18024 KB)
+2026-08-06 13:33:34  INFO      Available models: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-06 13:40:38  INFO      User logged in: admin (ADMIN)
