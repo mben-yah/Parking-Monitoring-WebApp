@@ -5502,3 +5502,17 @@ pytesseract.pytesseract.TesseractNotFoundError: tesseract is not installed or it
 2026-08-05 15:43:41  INFO      Available models: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
 2026-08-05 15:55:35  INFO      User registered: admin0 (ADMIN)
 2026-08-05 15:55:36  INFO      User logged in: admin0 (ADMIN)
+2026-08-05 16:19:36  INFO      ============================================================
+2026-08-05 16:19:36  INFO      PlateVision server starting
+2026-08-05 16:19:36  INFO      Log file: C:\Users\Mohamed Walid\Desktop\Internship\Code\logs\predict.log
+2026-08-05 16:19:36  INFO      ============================================================
+2026-08-05 16:19:36  INFO      English pipeline weights path: C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt
+2026-08-05 16:19:36  INFO        [OK] Weights file exists (18024 KB)
+2026-08-05 16:19:36  INFO      Available models: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-05 17:44:00  INFO      ============================================================
+2026-08-05 17:44:00  INFO      PlateVision server starting
+2026-08-05 17:44:00  INFO      Log file: C:\Users\Mohamed Walid\Desktop\Internship\Code\logs\predict.log
+2026-08-05 17:44:00  INFO      ============================================================
+2026-08-05 17:44:01  INFO      English pipeline weights path: C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt
+2026-08-05 17:44:01  INFO        [OK] Weights file exists (18024 KB)
+2026-08-05 17:44:01  INFO      Available models: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']

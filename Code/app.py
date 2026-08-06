@@ -1301,11 +1301,52 @@ def api_contact_us():
             "company_recipient": "benyahiamedwalid.com",
             "read": False
         }
-        res = _col("contact_messages").insert_one(doc)
-        return jsonify({"ok": True, "message": "Message received successfully!", "id": str(res.inserted_id)})
-    except Exception as exc:
-        log.error(f"[contact] Failed to save message: {exc}")
+        doc_id = _col("contact_messages").insert_one(doc).inserted_id
+        return jsonify({"ok": True, "message": "Message sent successfully!", "id": str(doc_id)})
+    except Exception as e:
+        log.error(f"[contact] Save error: {e}")
         return jsonify({"ok": True, "message": "Message logged successfully!"})
+
+
+@app.route("/api/train_from_gdrive", methods=["POST"])
+def api_train_from_gdrive():
+    """Triggers background training from a Google Drive link or File ID."""
+    data = request.get_json(force=True) or {}
+    url  = data.get("url", "").strip()
+    epochs = int(data.get("epochs", 40))
+    batch  = int(data.get("batch", 16))
+    name   = data.get("name", "elpd_custom_train").strip()
+
+    if not url:
+        return jsonify({"ok": False, "error": "Google Drive link or File ID is required"}), 400
+
+    import threading
+    def _background_train():
+        try:
+            import subprocess
+            cmd = [
+                sys.executable,
+                str(BASE_DIR / "train_from_gdrive.py"),
+                "--url", url,
+                "--epochs", str(epochs),
+                "--batch", str(batch),
+                "--name", name
+            ]
+            log.info(f"[gdrive_trainer] Starting background training: {' '.join(cmd)}")
+            subprocess.run(cmd, check=True)
+            log.info(f"[gdrive_trainer] Background training completed successfully: {name}")
+        except Exception as err:
+            log.error(f"[gdrive_trainer] Background training error: {err}")
+
+    t = threading.Thread(target=_background_train, daemon=True)
+    t.start()
+
+    return jsonify({
+        "ok": True,
+        "message": "Background training initiated successfully!",
+        "run_name": name,
+        "epochs": epochs
+    })
 
 
 @app.route("/api/parking/alerts")
