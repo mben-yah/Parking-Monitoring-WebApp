@@ -1349,6 +1349,47 @@ def api_train_from_gdrive():
     })
 
 
+@app.route("/api/train_from_kaggle", methods=["POST"])
+def api_train_from_kaggle():
+    """Triggers background training from a Kaggle dataset handle or URL."""
+    data = request.get_json(force=True) or {}
+    dataset = data.get("dataset", "").strip()
+    epochs  = int(data.get("epochs", 40))
+    batch   = int(data.get("batch", 16))
+    name    = data.get("name", "elpd_kaggle_train").strip()
+
+    if not dataset:
+        return jsonify({"ok": False, "error": "Kaggle dataset handle or URL is required"}), 400
+
+    import threading
+    def _background_kaggle_train():
+        try:
+            import subprocess
+            cmd = [
+                sys.executable,
+                str(BASE_DIR / "train_from_kaggle.py"),
+                "--dataset", dataset,
+                "--epochs", str(epochs),
+                "--batch", str(batch),
+                "--name", name
+            ]
+            log.info(f"[kaggle_trainer] Starting background Kaggle training: {' '.join(cmd)}")
+            subprocess.run(cmd, check=True)
+            log.info(f"[kaggle_trainer] Background Kaggle training completed successfully: {name}")
+        except Exception as err:
+            log.error(f"[kaggle_trainer] Background Kaggle training error: {err}")
+
+    t = threading.Thread(target=_background_kaggle_train, daemon=True)
+    t.start()
+
+    return jsonify({
+        "ok": True,
+        "message": "Background Kaggle dataset training initiated successfully!",
+        "run_name": name,
+        "epochs": epochs
+    })
+
+
 @app.route("/api/parking/alerts")
 def parking_alerts():
     from mongodb_client import get_alerts
