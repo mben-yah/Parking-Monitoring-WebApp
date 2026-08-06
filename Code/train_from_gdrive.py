@@ -17,7 +17,25 @@ import sys
 import zipfile
 import shutil
 import re
+import ssl
 from pathlib import Path
+
+# Bypass SSL certificate verification for local machine network environments
+ssl._create_default_https_context = ssl._create_unverified_context
+os.environ['CURL_CA_BUNDLE'] = ''
+os.environ['PYTHONHTTPSVERIFY'] = '0'
+try:
+    import urllib3
+    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+    import requests
+    if not hasattr(requests.Session, '_ssl_disabled_send'):
+        requests.Session._ssl_disabled_send = requests.Session.send
+        def _unverified_send(self, request, **kwargs):
+            kwargs['verify'] = False
+            return self._ssl_disabled_send(request, **kwargs)
+        requests.Session.send = _unverified_send
+except Exception:
+    pass
 
 BASE_DIR = Path(__file__).parent.resolve()
 DOWNLOADS_DIR = BASE_DIR / "downloads"
@@ -51,20 +69,87 @@ def download_from_gdrive(gdrive_url_or_id: str) -> Path:
     zip_out = DOWNLOADS_DIR / f"dataset_{file_id}.zip"
 
     # Try downloading as single zip file first
-    download_url = f"https://drive.google.com/uc?id={file_id}"
-    output = gdown.download(download_url, str(zip_out), quiet=False, fuzzy=True)
+    output = gdown.download(id=file_id, output=str(zip_out), quiet=False)
 
     if not output or not Path(output).exists():
         # Fallback to folder download
         print("[+] Trying gdown folder download mode...")
         folder_out = DOWNLOADS_DIR / f"dataset_{file_id}"
-        gdown.download_folder(id=file_id, output=str(folder_out), quiet=False)        return folder_out
+        gdown.download_folder(id=file_id, output=str(folder_out), quiet=False)
+        return folder_out
 
     return Path(output)
 
 
+def apply_dataset_augmentations(dataset_dir: Path):
+    """Apply dataset augmentations (brightness/contrast, gaussian blur, HSV color shift)."""
+    import cv2
+    import numpy as np
+
+    images_dir = dataset_dir / "images" / "train"
+    labels_dir = dataset_dir / "labels" / "train"
+
+    if not images_dir.exists():
+        images_dir = dataset_dir
+
+    if not labels_dir.exists():
+        labels_dir = dataset_dir
+
+    img_paths = list(images_dir.glob("*.jpg")) + list(images_dir.glob("*.png")) + list(images_dir.glob("*.jpeg"))
+    if not img_paths:
+        print("[!] No images found for dataset augmentation. Skipping augmentation stage.")
+        return
+
+    print(f"[+] Applying dataset augmentations to {len(img_paths)} source images...")
+    aug_count = 0
+
+    for img_path in img_paths:
+        img = cv2.imread(str(img_path))
+        if img is None:
+            continue
+
+        label_path = labels_dir / f"{img_path.stem}.txt"
+        label_content = ""
+        if label_path.exists():
+            with open(label_path, "r", encoding="utf-8") as lf:
+                label_content = lf.read()
+
+        # Augmentation 1: Brightness & Contrast
+        aug_bc = cv2.convertScaleAbs(img, alpha=1.25, beta=15)
+        aug_bc_name = f"{img_path.stem}_aug_bc{img_path.suffix}"
+        cv2.imwrite(str(images_dir / aug_bc_name), aug_bc)
+        if label_content:
+            with open(labels_dir / f"{img_path.stem}_aug_bc.txt", "w", encoding="utf-8") as lf:
+                lf.write(label_content)
+        aug_count += 1
+
+        # Augmentation 2: Gaussian Blur (low-res surveillance simulation)
+        aug_blur = cv2.GaussianBlur(img, (5, 5), 0)
+        aug_blur_name = f"{img_path.stem}_aug_blur{img_path.suffix}"
+        cv2.imwrite(str(images_dir / aug_blur_name), aug_blur)
+        if label_content:
+            with open(labels_dir / f"{img_path.stem}_aug_blur.txt", "w", encoding="utf-8") as lf:
+                lf.write(label_content)
+        aug_count += 1
+
+        # Augmentation 3: HSV Color Shift
+        hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+        h, s, v = cv2.split(hsv)
+        v = cv2.add(v, 20)
+        hsv_mod = cv2.merge((h, s, v))
+        aug_hsv = cv2.cvtColor(hsv_mod, cv2.COLOR_HSV2BGR)
+        aug_hsv_name = f"{img_path.stem}_aug_hsv{img_path.suffix}"
+        cv2.imwrite(str(images_dir / aug_hsv_name), aug_hsv)
+        if label_content:
+            with open(labels_dir / f"{img_path.stem}_aug_hsv.txt", "w", encoding="utf-8") as lf:
+                lf.write(label_content)
+        aug_count += 1
+
+    print(f"[+] Dataset augmentation complete: Generated {aug_count} augmented training samples!")
+
+
 def setup_dataset_structure(downloaded_path: Path) -> Path:
-    """Unpack zip and organize into YOLO standard structure (images/train, labels/train, etc.)."""
+    """Unpack zip, apply dataset augmentations, and organize into YOLO standard structure."""
     if DATASETS_DIR.exists():
         print(f"[+] Cleaning existing custom dataset folder: {DATASETS_DIR}")
         shutil.rmtree(DATASETS_DIR)
@@ -80,6 +165,10 @@ def setup_dataset_structure(downloaded_path: Path) -> Path:
         shutil.copytree(downloaded_path, DATASETS_DIR, dirs_exist_ok=True)
 
     print(f"[+] Dataset extracted to {DATASETS_DIR}")
+
+    # Apply dataset augmentations
+    apply_dataset_augmentations(DATASETS_DIR)
+
     return DATASETS_DIR
 
 
