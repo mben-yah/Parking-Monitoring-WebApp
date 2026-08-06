@@ -93,15 +93,30 @@
     /* ── Main Outer Glass Shell ── */
     .landing-shell {
       width: 100%;
-      max-width: 1200px;
-      background: var(--card-bg);
+      max-width: 1140px;
+      background: #080c14;
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
-      border: 1px solid var(--border-light);
-      border-radius: 32px;
-      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.15);
-      padding: 32px 40px 48px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 28px;
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.75), inset 0 1px 1px rgba(255, 255, 255, 0.12);
+      padding: 24px 36px 48px;
       margin-top: 10px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Ambient Hero Aura Spotlight behind headline */
+    .hero-spotlight {
+      position: absolute;
+      top: -120px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 450px;
+      background: radial-gradient(ellipse at 50% 20%, rgba(6, 214, 160, 0.18) 0%, rgba(56, 189, 248, 0.08) 45%, transparent 75%);
+      pointer-events: none;
+      z-index: 0;
     }
 
     /* ── Header Nav ── */
@@ -109,9 +124,11 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding-bottom: 28px;
+      padding-bottom: 22px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      margin-bottom: 48px;
+      margin-bottom: 56px;
+      position: relative;
+      z-index: 2;
     }
 
     .brand-logo {
@@ -121,49 +138,52 @@
       text-decoration: none;
       color: var(--text-main);
       font-weight: 800;
-      font-size: 1.15rem;
-      letter-spacing: 0.5px;
+      font-size: 1.25rem;
+      letter-spacing: 0.2px;
     }
 
     .brand-logo img {
-      width: 36px;
-      height: 36px;
+      width: 38px;
+      height: 38px;
       border-radius: 10px;
       object-fit: cover;
       border: 1px solid rgba(6, 214, 160, 0.5);
-      box-shadow: 0 0 12px var(--glow-green);
+      box-shadow: 0 0 14px rgba(6, 214, 160, 0.4);
     }
 
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 32px;
+      gap: 28px;
       list-style: none;
     }
 
     .nav-links a {
-      color: var(--text-muted);
+      color: #94a3b8;
       text-decoration: none;
-      font-size: 0.88rem;
-      font-weight: 600;
-      letter-spacing: 0.5px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.8px;
       text-transform: uppercase;
       transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
     .nav-links a:hover, .nav-links a.active {
-      color: var(--text-main);
-      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+      color: #ffffff;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
     }
 
     .btn-nav-signin {
-      background: rgba(255, 255, 255, 0.08);
-      color: var(--text-main);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      padding: 10px 22px;
+      background: rgba(255, 255, 255, 0.04);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      padding: 10px 24px;
       border-radius: 30px;
-      font-size: 0.85rem;
-      font-weight: 700;
+      font-size: 0.8rem;
+      font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 1px;
       cursor: pointer;
@@ -172,55 +192,59 @@
     }
 
     .btn-nav-signin:hover {
-      background: var(--text-main);
-      color: var(--bg-dark);
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
-      transform: translateY(-2px);
+      background: #ffffff;
+      color: #080c14;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+      transform: translateY(-1px);
     }
 
     /* ── Hero Central Section ── */
     .hero-center {
       text-align: center;
-      padding: 60px 20px 80px;
-      max-width: 850px;
+      padding: 40px 20px 70px;
+      max-width: 860px;
       margin: 0 auto;
+      position: relative;
+      z-index: 2;
     }
 
     .motto-badge {
       display: inline-flex;
       align-items: center;
-      gap: 10px;
-      padding: 8px 20px;
-      background: rgba(6, 214, 160, 0.12);
-      border: 1px solid rgba(6, 214, 160, 0.35);
+      gap: 8px;
+      padding: 7px 22px;
+      background: rgba(6, 214, 160, 0.07);
+      border: 1px solid rgba(6, 214, 160, 0.4);
       border-radius: 40px;
-      color: var(--accent-green);
-      font-size: 0.85rem;
-      font-weight: 700;
+      color: #06d6a0;
+      font-size: 0.8rem;
+      font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 1.5px;
-      margin-bottom: 28px;
-      box-shadow: 0 0 20px rgba(6, 214, 160, 0.15);
+      letter-spacing: 1.2px;
+      margin-bottom: 36px;
+      box-shadow: 0 0 25px rgba(6, 214, 160, 0.2), inset 0 0 10px rgba(6, 214, 160, 0.1);
     }
 
     .hero-title {
-      font-size: clamp(2.5rem, 6vw, 4.2rem);
+      font-size: clamp(2.8rem, 6.5vw, 4.5rem);
       font-weight: 900;
-      letter-spacing: 2px;
-      line-height: 1.1;
+      letter-spacing: 1px;
+      line-height: 1.08;
       text-transform: uppercase;
       margin-bottom: 24px;
-      background: linear-gradient(180deg, #ffffff 30%, #94a3b8 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: #ffffff;
+      text-shadow: 0 2px 20px rgba(255, 255, 255, 0.15);
     }
 
     .hero-desc {
-      font-size: 1.1rem;
-      color: var(--text-muted);
-      line-height: 1.75;
-      margin-bottom: 40px;
+      font-size: 1.12rem;
+      color: #94a3b8;
+      line-height: 1.65;
+      margin-bottom: 44px;
       font-weight: 400;
+      max-width: 780px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .cta-group {
@@ -233,16 +257,23 @@
 
     .btn-hero-primary {
       background: #ffffff;
-      color: #0b0f17;
-      font-weight: 800;
-      font-size: 0.92rem;
+      color: #080c14;
+      font-weight: 900;
+      font-size: 0.88rem;
       letter-spacing: 1.5px;
       text-transform: uppercase;
-      padding: 16px 40px;
+      padding: 16px 44px;
       border-radius: 40px;
       text-decoration: none;
-      box-shadow: 0 0 30px rgba(255, 255, 255, 0.35);
+      box-shadow: 0 0 40px rgba(255, 255, 255, 0.65), 0 0 15px rgba(255, 255, 255, 0.9);
       transition: all 0.3s ease;
+    }
+
+    .btn-hero-primary:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 50px rgba(6, 214, 160, 0.75), 0 0 20px rgba(6, 214, 160, 1);
+      background: #06d6a0;
+      color: #080c14;
     }
 
     .btn-hero-primary:hover {
@@ -425,34 +456,35 @@
 
   <!-- Main Glass Shell -->
   <div class="landing-shell">
+    <div class="hero-spotlight"></div>
 
     <!-- Top Header Navigation -->
     <header>
-      <a href="/landing" class="brand-logo">
+      <a href="/" class="brand-logo">
         <img src="/magnetite_vision_logo.png" alt="Magnetite Vision Logo" />
         <span>Magnetite Vision</span>
       </a>
 
       <nav>
         <ul class="nav-links">
-          <li><a href="#home" class="active">Home</a></li>
-          <li><a href="#about" data-i18n="about_title">About Us</a></li>
-          <li><a href="#features">Features</a></li>
+          <li><a href="#home" class="active">HOME</a></li>
+          <li><a href="#about" data-i18n="about_title">🛈 ABOUT MAGNETITE VISION</a></li>
+          <li><a href="#features">FEATURES</a></li>
           <li><a href="#faq">FAQ</a></li>
-          <li><a href="#contact" data-i18n="contact_title">Contact Us</a></li>
+          <li><a href="#contact" data-i18n="contact_title">📩 CONTACT US</a></li>
         </ul>
       </nav>
 
-      <a href="/login" class="btn-nav-signin">Sign In</a>
+      <a href="/login" class="btn-nav-signin">SIGN IN</a>
     </header>
 
     <!-- Central Hero Section -->
     <section class="hero-center" id="home">
       <div class="motto-badge">
-        <span>✨ BEN YAHIA PRESENTATION</span> · <span data-i18n="motto">One Road. One Vision.</span>
+        <span>✨ BEN YAHIA PRESENTATION</span> · <span data-i18n="motto">ONE ROAD. ONE VISION.</span>
       </div>
 
-      <h1 class="hero-title">Welcome to Magnetite Vision</h1>
+      <h1 class="hero-title">WELCOME TO<br />MAGNETITE VISION</h1>
 
       <p class="hero-desc" data-i18n="hero_subtitle">
         Pioneering real-time computer vision, edge AI detection, and automated vehicle supervision by Ben Yahia.
