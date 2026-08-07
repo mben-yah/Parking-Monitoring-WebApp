@@ -220,8 +220,20 @@ def api_auth_register():
 
 @app.route("/api/auth/logout", methods=["POST", "GET"])
 def api_auth_logout():
+    user = session.get("user", {}).get("username", "user")
     session.pop("user", None)
-    return jsonify({"success": True})
+    session.clear()
+    log.info(f"User logged out: {user}")
+    return jsonify({"success": True, "ok": True, "redirect": "/"})
+
+
+@app.route("/logout")
+def logout_page():
+    user = session.get("user", {}).get("username", "user")
+    session.pop("user", None)
+    session.clear()
+    log.info(f"User logged out via page redirect: {user}")
+    return redirect("/")
 
 
 @app.route("/api/auth/me", methods=["GET"])

@@ -1016,19 +1016,20 @@ function truncate(str, n) { return str.length > n ? str.slice(0,n-1)+'…' : str
    AUTHENTICATION CHECK
 ══════════════════════════════════════════════════════ */
 async function checkAuth() {
-  const authLink = document.getElementById('auth-link');
+  const container = document.getElementById('userBadgeContainer') || document.getElementById('auth-link');
   try {
     const resp = await fetch('/api/auth/me');
     const data = await resp.json();
     if (data.authenticated && data.user) {
-      if (authLink) {
-        const u = data.user;
-        const roleBadge = u.role === 'ADMIN' ? '🛡️ Admin' : '👁️ Operator';
-        authLink.style.background = 'rgba(16,185,129,0.12)';
-        authLink.style.borderColor = 'rgba(16,185,129,0.25)';
-        authLink.style.color = '#10b981';
-        authLink.innerHTML = `👤 ${escHtml(u.username)} (${roleBadge}) &nbsp;<span onclick="handleLogout(event)" style="opacity:0.75;font-size:10px;text-decoration:underline;cursor:pointer;">Logout</span>`;
-        authLink.href = 'javascript:void(0)';
+      const u = data.user;
+      const roleColor = u.role === 'ADMIN' ? '#06d6a0' : '#38bdf8';
+      if (container) {
+        container.innerHTML = `
+          <div style="display:flex; align-items:center; gap:10px; background:rgba(255,255,255,0.05); padding:4px 14px; border-radius:30px; border:1px solid rgba(255,255,255,0.12);">
+            <span style="font-size:0.85rem; font-weight:600; color:#f8fafc;">👤 ${escHtml(u.username)}</span>
+            <span style="font-size:0.7rem; padding:2px 8px; border-radius:10px; background:rgba(6,214,160,0.12); color:${roleColor}; border:1px solid rgba(6,214,160,0.25); font-weight:800; text-transform:uppercase;">${u.role}</span>
+            <button onclick="handleLogout(event)" style="background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.35); color:#f43f5e; cursor:pointer; font-size:0.78rem; font-weight:700; padding:4px 12px; border-radius:20px; transition:all 0.25s ease;" onmouseover="this.style.background='#f43f5e';this.style.color='#fff';" onmouseout="this.style.background='rgba(239,68,68,0.15)';this.style.color='#f43f5e';">🚪 Logout</button>
+          </div>`;
       }
     } else {
       window.location.href = '/login';
@@ -1038,9 +1039,11 @@ async function checkAuth() {
 
 async function handleLogout(e) {
   if (e) e.stopPropagation();
-  await fetch('/api/auth/logout', { method: 'POST' });
+  try {
+    await fetch('/api/auth/logout', { method: 'POST' });
+  } catch(err) {}
   localStorage.removeItem('platevision_user');
-  window.location.reload();
+  window.location.href = '/';
 }
 checkAuth();
 </script>

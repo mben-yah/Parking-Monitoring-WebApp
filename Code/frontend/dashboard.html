@@ -352,6 +352,38 @@ function renderSensorsTable(sensors) {
   }).join('');
 }
 
+async function checkAuth() {
+  const container = document.getElementById('userBadgeContainer');
+  try {
+    const res = await fetch('/api/auth/me');
+    const data = await res.json();
+    if (data.authenticated && data.user) {
+      const u = data.user;
+      const roleColor = u.role === 'ADMIN' ? '#06d6a0' : '#38bdf8';
+      if (container) {
+        container.innerHTML = `
+          <div style="display:flex; align-items:center; gap:10px; background:rgba(255,255,255,0.05); padding:4px 14px; border-radius:30px; border:1px solid rgba(255,255,255,0.12);">
+            <span style="font-size:0.85rem; font-weight:600; color:#f8fafc;">👤 ${u.username}</span>
+            <span style="font-size:0.7rem; padding:2px 8px; border-radius:10px; background:rgba(6,214,160,0.12); color:${roleColor}; border:1px solid rgba(6,214,160,0.25); font-weight:800; text-transform:uppercase;">${u.role}</span>
+            <button onclick="handleLogout(event)" style="background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.35); color:#f43f5e; cursor:pointer; font-size:0.78rem; font-weight:700; padding:4px 12px; border-radius:20px; transition:all 0.25s ease;" onmouseover="this.style.background='#f43f5e';this.style.color='#fff';" onmouseout="this.style.background='rgba(239,68,68,0.15)';this.style.color='#f43f5e';">🚪 Logout</button>
+          </div>`;
+      }
+    } else {
+      window.location.href = '/login';
+    }
+  } catch (err) {}
+}
+
+async function handleLogout(e) {
+  if (e) e.stopPropagation();
+  try {
+    await fetch('/api/auth/logout', { method: 'POST' });
+  } catch(err) {}
+  localStorage.removeItem('platevision_user');
+  window.location.href = '/';
+}
+
+checkAuth();
 loadDashboard();
 </script>
 </body>
