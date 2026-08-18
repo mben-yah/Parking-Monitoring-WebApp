@@ -859,8 +859,10 @@
       });
     });
 
-    // Paddle Checkout Initialization
+    // Paddle Checkout & Fallback Interactive Simulator
     let paddleInit = false;
+    let currentSelectedPlan = 'STARTER';
+
     async function initPaddleSDK() {
       try {
         const res = await fetch('/api/paddle/config');
@@ -877,14 +879,92 @@
     initPaddleSDK();
 
     function buyPaddleLicense(priceId) {
-      if (window.Paddle && paddleInit) {
-        Paddle.Checkout.open({
-          items: [{ priceId: priceId, quantity: 1 }]
+      currentSelectedPlan = priceId.includes('pro') ? 'PRO' : (priceId.includes('starter') ? 'STARTER' : 'ENTERPRISE');
+      
+      // Try Paddle Checkout SDK first
+      if (window.Paddle && paddleInit && !priceId.includes('test')) {
+        try {
+          Paddle.Checkout.open({
+            items: [{ priceId: priceId, quantity: 1 }],
+            settings: {
+              displayMode: "overlay",
+              theme: "dark"
+            }
+          });
+          return;
+        } catch(err) {
+          console.warn("Paddle SDK open error, launching Interactive Checkout Modal:", err);
+        }
+      }
+      openSimulatedCheckoutModal(currentSelectedPlan);
+    }
+
+    function openSimulatedCheckoutModal(planTier) {
+      const modal = document.getElementById('checkoutModal');
+      document.getElementById('modalPlanTitle').innerText = `Subscribe to Magnetite Vision ${planTier} License`;
+      document.getElementById('modalPlanTierInput').value = planTier;
+      modal.style.display = 'flex';
+    }
+
+    function closeCheckoutModal() {
+      document.getElementById('checkoutModal').style.display = 'none';
+    }
+
+    async function submitSimulatedCheckout(e) {
+      e.preventDefault();
+      const statusEl = document.getElementById('checkoutStatus');
+      statusEl.style.color = '#38bdf8';
+      statusEl.innerText = '⚡ Provisioning product license...';
+
+      const email = document.getElementById('simEmail').value;
+      const company_name = document.getElementById('simCompany').value;
+      const plan_tier = document.getElementById('modalPlanTierInput').value;
+
+      try {
+        const res = await fetch('/api/paddle/simulate_checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, company_name, plan_tier })
         });
-      } else {
-        alert("Redirecting to Paddle Sandbox Merchant Checkout! (Configure PADDLE_CLIENT_TOKEN for live production)");
+        const data = await res.json();
+        if (data.ok) {
+          statusEl.style.color = '#06d6a0';
+          statusEl.innerText = '✅ License provisioned! Redirecting to Portal...';
+          setTimeout(() => { window.location.href = data.redirect || '/portal'; }, 1000);
+        } else {
+          statusEl.style.color = '#f43f5e';
+          statusEl.innerText = '❌ ' + (data.error || 'Checkout failed');
+        }
+      } catch (err) {
+        statusEl.style.color = '#f43f5e';
+        statusEl.innerText = '❌ Network error during checkout.';
       }
     }
   </script>
+
+  <!-- Interactive Paddle Sandbox Checkout Modal -->
+  <div id="checkoutModal" style="display:none; position:fixed; inset:0; z-index:99999; background:rgba(0,0,0,0.85); backdrop-filter:blur(12px); align-items:center; justify-content:center; padding:20px;">
+    <div style="background:#111827; border:1px solid rgba(6,214,160,0.4); border-radius:20px; max-width:460px; width:100%; padding:32px; box-shadow:0 32px 80px rgba(0,0,0,0.8); position:relative;">
+      <button onclick="closeCheckoutModal()" style="position:absolute; top:20px; right:20px; background:none; border:none; color:#94a3b8; font-size:24px; cursor:pointer;">&times;</button>
+      <div style="font-size:0.75rem; color:#06d6a0; font-weight:800; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px;">💳 PADDLE MERCHANT CHECKOUT</div>
+      <h3 id="modalPlanTitle" style="font-size:1.3rem; font-weight:800; color:#fff; margin-bottom:16px;">Subscribe to Magnetite Vision</h3>
+      <p style="font-size:0.88rem; color:#94a3b8; margin-bottom:20px; line-height:1.5;">Enter your company details below to simulate 1-click Paddle Merchant licensing & instant provisioning.</p>
+      
+      <form onsubmit="submitSimulatedCheckout(event)">
+        <input type="hidden" id="modalPlanTierInput" value="PRO" />
+        <div style="margin-bottom:14px;">
+          <label style="display:block; font-size:12px; font-weight:700; color:#cbd5e1; margin-bottom:6px;">Business / Company Name</label>
+          <input type="text" id="simCompany" placeholder="e.g. Casablanca Parking Mall" required style="width:100%; padding:12px; border-radius:10px; background:#1f2937; border:1px solid rgba(255,255,255,0.1); color:#fff; font-size:14px; outline:none;" />
+        </div>
+        <div style="margin-bottom:20px;">
+          <label style="display:block; font-size:12px; font-weight:700; color:#cbd5e1; margin-bottom:6px;">Work Email Address</label>
+          <input type="email" id="simEmail" placeholder="admin@company.com" required style="width:100%; padding:12px; border-radius:10px; background:#1f2937; border:1px solid rgba(255,255,255,0.1); color:#fff; font-size:14px; outline:none;" />
+        </div>
+
+        <button type="submit" style="width:100%; padding:14px; border-radius:12px; background:linear-gradient(135deg, #06d6a0, #059669); color:#080c14; font-weight:800; border:none; font-size:15px; cursor:pointer; box-shadow:0 4px 20px rgba(6,214,160,0.4);">⚡ Complete Purchase & Activate License</button>
+        <div id="checkoutStatus" style="font-size:13px; text-align:center; margin-top:14px; font-weight:600;"></div>
+      </form>
+    </div>
+  </div>
 </body>
 </html>

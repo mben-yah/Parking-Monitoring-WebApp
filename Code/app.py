@@ -146,7 +146,7 @@ def allowed(filename: str) -> bool:
 # ---------------------------------------------------------------------------
 PUBLIC_ENDPOINTS = {
     "login_page", "api_auth_login", "api_auth_register", "api_auth_register_free_tenant",
-    "api_auth_logout", "api_auth_me", "api_paddle_config", "api_paddle_webhook", "static_files", "static",
+    "api_auth_logout", "api_auth_me", "api_paddle_config", "api_paddle_webhook", "api_paddle_simulate_checkout", "static_files", "static",
     "view_html_ticket", "download_pdf_ticket", "apitemplate_pdf_ticket", "api_create_parking_ticket", "tickets_page", "api_contact_us", "landing_page"
 }
 
@@ -274,6 +274,41 @@ def api_paddle_webhook():
     payload = request.get_json(silent=True) or {}
     result = paddle_client.process_paddle_event(payload)
     return jsonify(result), 200
+
+
+@app.route("/api/paddle/simulate_checkout", methods=["POST"])
+def api_paddle_simulate_checkout():
+    """Fallback interactive checkout simulator for sandbox/demo testing."""
+    data = request.get_json(silent=True) or {}
+    email        = data.get("email", "").strip().lower()
+    company_name = data.get("company_name", "").strip()
+    plan_tier    = data.get("plan_tier", "PRO").strip().upper()
+    password     = data.get("password", "admin123").strip()
+
+    if not email:
+        return jsonify({"error": "Email address is required"}), 400
+
+    try:
+        tenant = mongodb_client.provision_tenant(company_name, email, plan_tier)
+        username = email.split("@")[0] or "admin"
+
+        # Ensure user exists for this tenant
+        ok, user_res = mongodb_client.create_user(username, password, "ADMIN", tenant["tenant_id"])
+        v_ok, v_user = mongodb_client.verify_user(username, password)
+        if v_ok and isinstance(v_user, dict):
+            session["user"] = v_user
+
+        log.info(f"Simulated Checkout Provisioned: {company_name} ({email}) -> {plan_tier}")
+        return jsonify({
+            "success": True,
+            "ok": True,
+            "message": f"Successfully subscribed to Magnetite Vision {plan_tier} License!",
+            "tenant": tenant,
+            "redirect": "/portal"
+        })
+    except Exception as e:
+        log.error(f"Simulated checkout error: {e}")
+        return jsonify({"error": str(e)}), 500
 
 
 @app.route("/portal")

@@ -7220,3 +7220,11 @@ pytesseract.pytesseract.TesseractNotFoundError: tesseract is not installed or it
 2026-08-18 10:22:19  INFO      English pipeline weights path: C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt
 2026-08-18 10:22:19  INFO        [OK] Weights file exists (18024 KB)
 2026-08-18 10:22:19  INFO      Available models: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 10:23:25  INFO      ============================================================
+2026-08-18 10:23:25  INFO      PlateVision server starting
+2026-08-18 10:23:25  INFO      Log file: C:\Users\Mohamed Walid\Desktop\Internship\Code\logs\predict.log
+2026-08-18 10:23:25  INFO      ============================================================
+2026-08-18 10:23:26  INFO      English pipeline weights path: C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt
+2026-08-18 10:23:26  INFO        [OK] Weights file exists (18024 KB)
+2026-08-18 10:23:26  INFO      Available models: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 10:23:33  INFO      Free Tier Tenant provisioned: Ben Yahia Mall (demo@benyahia.com)
