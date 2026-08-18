@@ -402,25 +402,184 @@ def get_sensor_health_stats() -> list[dict]:
 
 # ── User Authentication ──────────────────────────────────────────────────────────
 
-def create_user(username: str, password: str, role: str = "OPERATOR") -> tuple[bool, str]:
-    """Create a new user document in the 'users' collection."""
+# ── Multi-Tenant SaaS & Licensing Helpers ─────────────────────────────────────
+
+def get_tenant(tenant_id: str) -> dict | None:
+    """Retrieve tenant document by tenant_id."""
+    if not tenant_id:
+        return None
+    t = _col("tenants").find_one({"tenant_id": tenant_id.strip().lower()})
+    return _serialise(t) if t else None
+
+
+def get_tenant_by_license(license_key: str) -> dict | None:
+    """Retrieve tenant document by license key."""
+    if not license_key:
+        return None
+    t = _col("tenants").find_one({"license_key": license_key.strip().upper()})
+    return _serialise(t) if t else None
+
+
+def create_free_tenant(company_name: str, email: str, password: str) -> tuple[bool, dict | str]:
+    """Self-service creation of a Free Tier tenant instance."""
+    company_name = company_name.strip()
+    email = email.strip().lower()
+    if not company_name or not email or not password:
+        return False, "Company name, email, and password are required"
+
+    import uuid
+    tenant_id = f"tenant_{uuid.uuid4().hex[:8]}"
+    license_key = f"MV-FREE-{uuid.uuid4().hex[:8].upper()}"
+    now = datetime.now(timezone.utc)
+
+    tenant_doc = {
+        "tenant_id": tenant_id,
+        "company_name": company_name,
+        "email": email,
+        "active_tier": "FREE",
+        "license_key": license_key,
+        "max_cameras": 1,
+        "monthly_detections_limit": 100,
+        "detections_this_month": 0,
+        "created_at": now,
+        "updated_at": now
+    }
+
+    try:
+        _col("tenants").insert_one(tenant_doc)
+        # Create tenant admin user
+        ok, user_res = create_user(
+            username=email.split("@")[0] or "admin",
+            password=password,
+            role="ADMIN",
+            tenant_id=tenant_id
+        )
+        if not ok:
+            return False, user_res
+        return True, _serialise(tenant_doc)
+    except Exception as e:
+        return False, str(e)
+
+
+def provision_tenant(company_name: str, email: str, plan_tier: str = "PRO", license_key: str = "") -> dict:
+    """Provision or upgrade a customer tenant account via Paddle webhook or manual order."""
+    company_name = company_name.strip()
+    email = email.strip().lower()
+    plan_tier = plan_tier.strip().upper()
+
+    tier_limits = {
+        "FREE":       {"max_cameras": 1, "limit": 100},
+        "STARTER":    {"max_cameras": 2, "limit": 1000},
+        "PRO":        {"max_cameras": 5, "limit": -1},       # Unlimited
+        "ENTERPRISE": {"max_cameras": 999, "limit": -1}     # Unlimited
+    }
+    spec = tier_limits.get(plan_tier, tier_limits["PRO"])
+
+    col = _col("tenants")
+    existing = col.find_one({"email": email})
+    now = datetime.now(timezone.utc)
+
+    import uuid
+    if not license_key:
+        license_key = f"MV-LIC-{plan_tier}-{uuid.uuid4().hex[:8].upper()}"
+
+    if existing:
+        col.update_one(
+            {"_id": existing["_id"]},
+            {"$set": {
+                "active_tier": plan_tier,
+                "license_key": license_key,
+                "max_cameras": spec["max_cameras"],
+                "monthly_detections_limit": spec["limit"],
+                "updated_at": now
+            }}
+        )
+        updated = col.find_one({"_id": existing["_id"]})
+        return _serialise(updated)
+
+    tenant_id = f"tenant_{uuid.uuid4().hex[:8]}"
+    tenant_doc = {
+        "tenant_id": tenant_id,
+        "company_name": company_name or email.split("@")[0],
+        "email": email,
+        "active_tier": plan_tier,
+        "license_key": license_key,
+        "max_cameras": spec["max_cameras"],
+        "monthly_detections_limit": spec["limit"],
+        "detections_this_month": 0,
+        "created_at": now,
+        "updated_at": now
+    }
+    col.insert_one(tenant_doc)
+    return _serialise(tenant_doc)
+
+
+def check_tenant_limits(tenant_id: str) -> dict:
+    """Enforce monthly detection and camera streaming caps for a tenant."""
+    if not tenant_id or tenant_id == "default_tenant":
+        return {"ok": True, "tier": "PRO", "used": 0, "limit": -1, "max_cameras": 999}
+
+    t = get_tenant(tenant_id)
+    if not t:
+        return {"ok": True, "tier": "FREE", "used": 0, "limit": 100, "max_cameras": 1}
+
+    tier = t.get("active_tier", "FREE")
+    limit = t.get("monthly_detections_limit", 100)
+    used = t.get("detections_this_month", 0)
+    max_cameras = t.get("max_cameras", 1)
+
+    if limit != -1 and used >= limit:
+        return {
+            "ok": False,
+            "error": f"Monthly detection quota reached ({used}/{limit}). Upgrade to Pro for unlimited detections!",
+            "upgrade_required": True,
+            "tier": tier,
+            "used": used,
+            "limit": limit,
+            "max_cameras": max_cameras
+        }
+
+    return {
+        "ok": True,
+        "tier": tier,
+        "used": used,
+        "limit": limit,
+        "max_cameras": max_cameras
+    }
+
+
+def increment_tenant_detections(tenant_id: str, count: int = 1):
+    """Increment monthly detection count for tenant."""
+    if not tenant_id or tenant_id == "default_tenant":
+        return
+    _col("tenants").update_one(
+        {"tenant_id": tenant_id},
+        {"$inc": {"detections_this_month": count}}
+    )
+
+
+# ── User Authentication ──────────────────────────────────────────────────────────
+
+def create_user(username: str, password: str, role: str = "OPERATOR", tenant_id: str = "default_tenant") -> tuple[bool, str]:
+    """Create a new user document in the 'users' collection with tenant isolation."""
     from werkzeug.security import generate_password_hash
     username = username.strip().lower()
     if not username or not password:
         return False, "Username and password are required"
-    
+
     col = _col("users")
     if col.find_one({"username": username}) is not None:
         return False, "Username already exists"
-    
+
     role_upper = role.strip().upper()
     if role_upper not in ("ADMIN", "OPERATOR"):
         role_upper = "OPERATOR"
-        
+
     doc = {
         "username": username,
         "password_hash": generate_password_hash(password),
         "role": role_upper,
+        "tenant_id": tenant_id,
         "created_at": datetime.now(timezone.utc),
         "last_login": None
     }
@@ -440,20 +599,26 @@ def verify_user(username: str, password: str) -> tuple[bool, dict | str]:
     username = username.strip().lower()
     col = _col("users")
     user = col.find_one({"username": username})
-    
+
     if not user:
         return False, "User not found"
-        
+
     if not check_password_hash(user["password_hash"], password):
         return False, "Invalid password"
-        
+
     now = datetime.now(timezone.utc)
     col.update_one({"_id": user["_id"]}, {"$set": {"last_login": now}})
-    
+
+    tenant_id = user.get("tenant_id", "default_tenant")
+    tenant = get_tenant(tenant_id) or {"active_tier": "PRO", "company_name": "Magnetite Vision"}
+
     user_data = {
         "id": str(user["_id"]),
         "username": user["username"],
         "role": user.get("role", "OPERATOR"),
+        "tenant_id": tenant_id,
+        "active_tier": tenant.get("active_tier", "PRO"),
+        "company_name": tenant.get("company_name", "Magnetite Vision"),
         "last_login": now.isoformat()
     }
     return True, user_data
@@ -463,9 +628,10 @@ def seed_default_users():
     """Ensure default admin and operator users exist for demo."""
     col = _col("users")
     if col.count_documents({}) == 0:
-        create_user("admin", "admin123", "ADMIN")
-        create_user("operator", "operator123", "OPERATOR")
-        print("[platevision-db] Seeded default users: admin / operator")
+        create_user("admin", "admin123", "ADMIN", "default_tenant")
+        create_user("operator", "operator123", "OPERATOR", "default_tenant")
+        provision_tenant("Magnetite Vision Default", "admin@benyahia.com", "PRO", "MV-LIC-DEMO-PRO123")
+        print("[platevision-db] Seeded default users & tenant: admin / operator")
 
 
 # ── Parking Ticket & Payment Helpers ─────────────────────────────────────────

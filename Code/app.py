@@ -145,8 +145,8 @@ def allowed(filename: str) -> bool:
 # Authentication Guard Hook & Routes
 # ---------------------------------------------------------------------------
 PUBLIC_ENDPOINTS = {
-    "login_page", "api_auth_login", "api_auth_register", 
-    "api_auth_logout", "api_auth_me", "static_files", "static",
+    "login_page", "api_auth_login", "api_auth_register", "api_auth_register_free_tenant",
+    "api_auth_logout", "api_auth_me", "api_paddle_config", "api_paddle_webhook", "static_files", "static",
     "view_html_ticket", "download_pdf_ticket", "apitemplate_pdf_ticket", "api_create_parking_ticket", "tickets_page", "api_contact_us", "landing_page"
 }
 
@@ -154,7 +154,7 @@ PUBLIC_ENDPOINTS = {
 def require_login():
     if request.endpoint in PUBLIC_ENDPOINTS or request.path in ("/", "/login", "/tickets", "/landing"):
         return None
-    if request.path.startswith("/api/auth/") or request.path.startswith("/ticket/") or request.path.startswith("/api/parking/ticket"):
+    if request.path.startswith("/api/auth/") or request.path.startswith("/api/paddle/") or request.path.startswith("/ticket/") or request.path.startswith("/api/parking/ticket"):
         return None
     ext = Path(request.path).suffix.lower()
     if ext in {".css", ".js", ".png", ".jpg", ".jpeg", ".svg", ".ico", ".woff", ".woff2", ".ttf", ".webp"}:
@@ -211,11 +211,95 @@ def api_auth_register():
         if not success:
             return jsonify({"error": res}), 400
             
-        log.info(f"User registered: {username} ({role})")
-        return jsonify({"success": True, "user_id": res})
+        role_upper = role.upper() if role else "OPERATOR"
+        user_info = {
+            "id": res,
+            "username": username,
+            "role": role_upper
+        }
+        session["user"] = user_info
+        log.info(f"User registered & logged in: {username} ({role_upper})")
+        return jsonify({"success": True, "user": user_info, "user_id": res})
     except Exception as e:
         log.error(f"Registration error: {e}")
+@app.route("/api/auth/register_free_tenant", methods=["POST"])
+def api_auth_register_free_tenant():
+    """Self-service endpoint for creating a 1-click Free Tier customer instance."""
+    data = request.get_json(silent=True) or {}
+    company_name = data.get("company_name", "").strip()
+    email        = data.get("email", "").strip()
+    password     = data.get("password", "").strip()
+
+    if not company_name or not email or not password:
+        return jsonify({"error": "Company name, email, and password are required"}), 400
+
+    try:
+        ok, res = mongodb_client.create_free_tenant(company_name, email, password)
+        if not ok:
+            return jsonify({"error": res}), 400
+
+        # Auto-login after creating free instance
+        username = email.split("@")[0] or "admin"
+        v_ok, v_user = mongodb_client.verify_user(username, password)
+        if v_ok and isinstance(v_user, dict):
+            session["user"] = v_user
+
+        log.info(f"Free Tier Tenant provisioned: {company_name} ({email})")
+        return jsonify({"success": True, "ok": True, "tenant": res, "redirect": "/app"})
+    except Exception as e:
+        log.error(f"Free tenant registration error: {e}")
         return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/paddle/config", methods=["GET"])
+def api_paddle_config():
+    """Safely expose public Paddle token & environment for frontend checkout."""
+    import paddle_client
+    return jsonify({
+        "client_token": paddle_client.PADDLE_CLIENT_TOKEN,
+        "environment": paddle_client.PADDLE_ENVIRONMENT
+    })
+
+
+@app.route("/api/paddle/webhook", methods=["POST"])
+def api_paddle_webhook():
+    """Merchant of Record Webhook Handler for Paddle Billing v2 events."""
+    import paddle_client
+    sig = request.headers.get("Paddle-Signature", "")
+    raw_body = request.get_data()
+
+    if not paddle_client.verify_paddle_webhook(raw_body, sig):
+        return jsonify({"error": "Invalid webhook signature"}), 401
+
+    payload = request.get_json(silent=True) or {}
+    result = paddle_client.process_paddle_event(payload)
+    return jsonify(result), 200
+
+
+@app.route("/portal")
+def customer_portal_page():
+    """Serves the Customer Instance License & Usage Portal page."""
+    return send_from_directory("frontend", "portal.html")
+
+
+@app.route("/api/tenant/info", methods=["GET"])
+def api_tenant_info():
+    """Get active tenant quota and license details for logged in user."""
+    user = session.get("user") or {}
+    tenant_id = user.get("tenant_id", "default_tenant")
+    info = mongodb_client.check_tenant_limits(tenant_id)
+    t = mongodb_client.get_tenant(tenant_id) or {}
+    return jsonify({
+        "tenant_id": tenant_id,
+        "company_name": t.get("company_name", "Magnetite Vision Instance"),
+        "email": t.get("email", "admin@benyahia.com"),
+        "license_key": t.get("license_key", "MV-LIC-PRO-DEMO"),
+        "active_tier": t.get("active_tier", "PRO"),
+        "max_cameras": info.get("max_cameras", 5),
+        "used": info.get("used", 0),
+        "limit": info.get("limit", -1),
+        "quota_ok": info.get("ok", True)
+    })
 
 
 @app.route("/api/auth/logout", methods=["POST", "GET"])
@@ -466,6 +550,16 @@ def log_viewer():
 def predict():
     req_id = datetime.now().strftime("%H:%M:%S.%f")[:-3]
     log.info(f"[{req_id}] -- /predict request received --")
+
+    # Tenant Quota Check
+    user = session.get("user") or {}
+    tenant_id = user.get("tenant_id", "default_tenant")
+    limit_info = mongodb_client.check_tenant_limits(tenant_id)
+    if not limit_info.get("ok", True):
+        return jsonify({
+            "error": limit_info.get("error", "Monthly detection quota reached"),
+            "upgrade_required": True
+        }), 403
 
     if "image" not in request.files:
         log.error(f"[{req_id}] No image file in request")

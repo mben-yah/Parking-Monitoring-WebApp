@@ -166,57 +166,6 @@
       transform: scale(0.98);
     }
 
-    /* Quick demo login cards */
-    .demo-section {
-      margin-top: 28px;
-      padding-top: 20px;
-      border-top: 1px solid var(--card-border);
-    }
-
-    .demo-title {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 12px;
-      text-align: center;
-    }
-
-    .demo-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-
-    .demo-card {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 10px;
-      padding: 10px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .demo-card:hover {
-      background: rgba(255, 255, 255, 0.07);
-      border-color: rgba(99, 102, 241, 0.4);
-    }
-
-    .demo-role {
-      font-size: 12px;
-      font-weight: 600;
-      color: #fff;
-    }
-
-    .demo-cred {
-      font-size: 10px;
-      font-family: 'JetBrains Mono', monospace;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-
     .alert-banner {
       padding: 10px 14px;
       border-radius: 8px;
@@ -269,7 +218,7 @@
     <form id="auth-form" onsubmit="handleSubmit(event)">
       <div class="form-group">
         <label class="form-label" for="username">Username</label>
-        <input type="text" id="username" class="form-input" placeholder="e.g. admin or operator" required autocomplete="username" />
+        <input type="text" id="username" class="form-input" placeholder="Enter username" required autocomplete="username" />
       </div>
 
       <div class="form-group">
@@ -288,27 +237,19 @@
       <button type="submit" id="btn-text" class="btn-submit">Sign In to Dashboard</button>
     </form>
 
-    <div class="demo-section">
-      <div class="demo-title">⚡ Quick 1-Click Demo Accounts</div>
-      <div class="demo-grid">
-        <div class="demo-card" onclick="quickFill('admin', 'admin123')">
-          <div class="demo-role">🛡️ Administrator</div>
-          <div class="demo-cred">admin / admin123</div>
-        </div>
-        <div class="demo-card" onclick="quickFill('operator', 'operator123')">
-          <div class="demo-role">👁️ Operator</div>
-          <div class="demo-cred">operator / operator123</div>
-        </div>
-      </div>
-    </div>
-
     <div class="footer-link">
-      <a href="/" style="text-decoration:none;">← Return to Main Application</a>
+      <a href="/" style="text-decoration:none;">← Return to Landing Page</a>
     </div>
   </div>
 
   <script>
     let currentMode = 'login';
+
+    // Auto switch tab if ?mode=register is in URL
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('mode') === 'register') {
+      switchTab('register');
+    }
 
     function switchTab(mode) {
       currentMode = mode;
@@ -363,14 +304,16 @@
         }
 
         if (currentMode === 'register') {
-          showAlert('Account created successfully! Signing in...', 'success');
-          setTimeout(() => quickFill(username, password), 800);
-        } else {
-          showAlert('Login successful! Redirecting...', 'success');
-          // Save session locally
+          showAlert('Account created successfully! Redirecting to main page...', 'success');
           localStorage.setItem('platevision_user', JSON.stringify(data.user));
           setTimeout(() => {
-            window.location.href = '/';
+            window.location.href = '/app';
+          }, 600);
+        } else {
+          showAlert('Login successful! Redirecting...', 'success');
+          localStorage.setItem('platevision_user', JSON.stringify(data.user));
+          setTimeout(() => {
+            window.location.href = '/app';
           }, 600);
         }
       } catch (err) {

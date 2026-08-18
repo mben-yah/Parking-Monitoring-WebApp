@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Customer License & Quota Portal · Magnetite Vision</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:        #0b0f17;
+      --surface:   #111827;
+      --surface2:  #1f2937;
+      --glass:     rgba(255,255,255,0.04);
+      --border:    rgba(255,255,255,0.08);
+      --accent:    #06d6a0;
+      --accent2:   #059669;
+      --info:      #38bdf8;
+      --warning:   #f59e0b;
+      --error:     #ef4444;
+      --text:      #f1f5f9;
+      --muted:     #94a3b8;
+      --radius:    16px;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    /* Nav */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; gap: 14px;
+      padding: 0 28px; height: 58px;
+      background: rgba(10,13,18,0.85); backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 17px; text-decoration: none; color: var(--text); }
+    .nav-links { display: flex; gap: 6px; margin-left: 8px; }
+    .nav-link {
+      font-size: 13px; padding: 5px 13px; border-radius: 8px;
+      color: var(--muted); text-decoration: none; transition: all 0.2s; border: 1px solid transparent;
+    }
+    .nav-link:hover { color: var(--text); border-color: var(--border); }
+    .nav-link.active { color: #06d6a0; background: rgba(6,214,160,0.12); border-color: rgba(6,214,160,0.3); font-weight: 600; }
+
+    /* Layout */
+    .container { max-width: 1080px; margin: 40px auto; padding: 0 24px; }
+    .header-card {
+      background: linear-gradient(135deg, rgba(6,214,160,0.1), rgba(5,150,105,0.04));
+      border: 1px solid rgba(6,214,160,0.25);
+      border-radius: var(--radius); padding: 32px; margin-bottom: 32px;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;
+    }
+    .header-info h1 { font-size: 26px; font-weight: 800; color: #fff; margin-bottom: 6px; display: flex; align-items: center; gap: 12px; }
+    .tier-badge { font-size: 12px; padding: 4px 12px; border-radius: 20px; text-transform: uppercase; font-weight: 800; }
+    .tier-free { background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid rgba(245,158,11,0.3); }
+    .tier-pro { background: rgba(6,214,160,0.15); color: #06d6a0; border: 1px solid rgba(6,214,160,0.3); }
+    .header-info p { color: var(--muted); font-size: 14px; }
+
+    /* Grid */
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; }
+    .card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.4);
+    }
+    .card-title { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }
+
+    /* Usage Bar */
+    .progress-bar-bg { background: var(--surface2); border-radius: 99px; height: 12px; overflow: hidden; margin: 14px 0 8px; border: 1px solid var(--border); }
+    .progress-bar-fill { background: linear-gradient(90deg, #06d6a0, #38bdf8); height: 100%; border-radius: 99px; transition: width 0.4s ease; }
+    .license-box {
+      font-family: 'JetBrains Mono', monospace; font-size: 14px; background: rgba(0,0,0,0.4);
+      padding: 12px 16px; border-radius: 10px; border: 1px solid var(--border); color: #38bdf8;
+      display: flex; justify-content: space-between; align-items: center; word-break: break-all;
+    }
+    .btn-upgrade {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff; border: none; padding: 12px 24px; border-radius: 10px; font-weight: 700; cursor: pointer;
+      font-size: 14px; transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 4px 20px rgba(6,214,160,0.3);
+    }
+    .btn-upgrade:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(6,214,160,0.5); }
+  </style>
+  <script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-logo" href="/">
+    <img src="/magnetite_vision_logo.png" alt="Magnetite Vision Logo" style="width:34px; height:34px; border-radius:8px; object-fit:cover; border:1px solid rgba(6,214,160,0.5);" />
+    Magnetite Vision
+  </a>
+  <div class="nav-links">
+    <a class="nav-link" href="/app">📷 Image</a>
+    <a class="nav-link" href="/video">🎬 Video</a>
+    <a class="nav-link" href="/livestream">🔴 Stream</a>
+    <a class="nav-link" href="/tickets">🎟️ Tickets</a>
+    <a class="nav-link" href="/supervisor">🛡️ Supervisor</a>
+    <a class="nav-link" href="/dashboard">📊 Dashboard</a>
+    <a class="nav-link" href="/db">🗄️ DB</a>
+    <a class="nav-link active" href="/portal">💳 Portal & License</a>
+  </div>
+  <span style="flex:1;"></span>
+  <div id="userBadgeContainer"></div>
+</nav>
+
+<div class="container">
+  <div class="header-card">
+    <div class="header-info">
+      <h1 id="companyName">Customer Instance</h1>
+      <p id="companyEmail">Loading license details...</p>
+    </div>
+    <div>
+      <span class="tier-badge tier-free" id="tierBadge">FREE TIER</span>
+    </div>
+  </div>
+
+  <div class="grid">
+    <!-- Quotas & Limits -->
+    <div class="card">
+      <div class="card-title">📊 Instance Usage & Quotas</div>
+      <div style="font-size: 13px; color: var(--muted);">Monthly Detection Quota</div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="usageBar" style="width: 0%;"></div>
+      </div>
+      <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); font-family: 'JetBrains Mono', monospace;">
+        <span id="usageText">0 / 100 detections used</span>
+        <span id="pctText">0%</span>
+      </div>
+
+      <div style="margin-top: 24px; border-top: 1px solid var(--border); padding-top: 16px;">
+        <div style="font-size: 13px; color: var(--muted);">Camera Stream Capacity</div>
+        <div style="font-size: 18px; font-weight: 700; color: #fff; margin-top: 4px;" id="cameraCapacityText">1 Max Stream</div>
+      </div>
+    </div>
+
+    <!-- Active License Key -->
+    <div class="card">
+      <div class="card-title">🔑 Product License Key</div>
+      <p style="font-size: 13px; color: var(--muted); margin-bottom: 12px;">This key authenticates your customer instance with the Magnetite Vision cloud engine.</p>
+      <div class="license-box">
+        <span id="licenseKeyText">MV-LIC-XXXX-YYYY</span>
+        <button onclick="navigator.clipboard.writeText(document.getElementById('licenseKeyText').innerText); alert('License Key Copied!');" style="background:none; border:none; color:var(--accent); cursor:pointer; font-weight:600; font-size:12px;">📋 Copy</button>
+      </div>
+
+      <div style="margin-top: 28px; text-align: center;">
+        <button class="btn-upgrade" onclick="triggerPaddleCheckout()">⚡ Upgrade to Commercial Pro</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let paddleInitialized = false;
+
+async function initPaddle() {
+  try {
+    const r = await fetch('/api/paddle/config');
+    const cfg = await r.json();
+    if (cfg.client_token && window.Paddle) {
+      Paddle.Environment.set(cfg.environment || 'sandbox');
+      Paddle.Initialize({ token: cfg.client_token });
+      paddleInitialized = true;
+    }
+  } catch (e) {
+    console.warn("Paddle config load warning:", e);
+  }
+}
+
+async function loadPortalData() {
+  try {
+    const res = await fetch('/api/tenant/info');
+    const data = await res.json();
+    
+    document.getElementById('companyName').textContent = data.company_name || 'Customer Instance';
+    document.getElementById('companyEmail').textContent = data.email || 'admin@benyahia.com';
+    document.getElementById('licenseKeyText').textContent = data.license_key || 'MV-LIC-FREE-123456';
+    
+    const badge = document.getElementById('tierBadge');
+    badge.textContent = `${data.active_tier} TIER`;
+    if (data.active_tier === 'PRO' || data.active_tier === 'ENTERPRISE') {
+      badge.className = 'tier-badge tier-pro';
+    } else {
+      badge.className = 'tier-badge tier-free';
+    }
+
+    const used = data.used || 0;
+    const limit = data.limit === -1 ? 'Unlimited' : (data.limit || 100);
+    const pct = data.limit === -1 ? 15 : Math.min(100, Math.round((used / data.limit) * 100));
+
+    document.getElementById('usageBar').style.width = pct + '%';
+    document.getElementById('usageText').textContent = `${used} / ${limit} detections used`;
+    document.getElementById('pctText').textContent = data.limit === -1 ? 'Unlimited' : `${pct}%`;
+    document.getElementById('cameraCapacityText').textContent = `${data.max_cameras} Max Stream${data.max_cameras > 1 ? 's' : ''}`;
+  } catch (err) {
+    console.error("Portal data error:", err);
+  }
+}
+
+function triggerPaddleCheckout() {
+  if (window.Paddle && paddleInitialized) {
+    Paddle.Checkout.open({
+      items: [{ priceId: 'pri_pro_monthly', quantity: 1 }]
+    });
+  } else {
+    alert("Paddle Checkout Sandbox initialized! (Configure PADDLE_CLIENT_TOKEN in production)");
+  }
+}
+
+async function checkAuth() {
+  const container = document.getElementById('userBadgeContainer');
+  try {
+    const res = await fetch('/api/auth/me');
+    const data = await res.json();
+    if (data.authenticated && data.user) {
+      const u = data.user;
+      const roleColor = u.role === 'ADMIN' ? '#06d6a0' : '#38bdf8';
+      if (container) {
+        container.innerHTML = `
+          <div style="display:flex; align-items:center; gap:10px; background:rgba(255,255,255,0.05); padding:4px 14px; border-radius:30px; border:1px solid rgba(255,255,255,0.12);">
+            <span style="font-size:0.85rem; font-weight:600; color:#f8fafc;">👤 ${u.username}</span>
+            <span style="font-size:0.7rem; padding:2px 8px; border-radius:10px; background:rgba(6,214,160,0.12); color:${roleColor}; border:1px solid rgba(6,214,160,0.25); font-weight:800; text-transform:uppercase;">${u.role}</span>
+            <button onclick="handleLogout(event)" style="background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.35); color:#f43f5e; cursor:pointer; font-size:0.78rem; font-weight:700; padding:4px 12px; border-radius:20px; transition:all 0.25s ease;">🚪 Logout</button>
+          </div>`;
+      }
+    } else {
+      window.location.href = '/login';
+    }
+  } catch (err) {}
+}
+
+async function handleLogout(e) {
+  if (e) e.stopPropagation();
+  try { await fetch('/api/auth/logout', { method: 'POST' }); } catch(err) {}
+  localStorage.removeItem('platevision_user');
+  window.location.href = '/';
+}
+
+checkAuth();
+initPaddle();
+loadPortalData();
+</script>
+</body>
+</html>
