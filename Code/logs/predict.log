@@ -6145,3 +6145,1006 @@ pytesseract.pytesseract.TesseractNotFoundError: tesseract is not installed or it
 2026-08-07 01:37:59  INFO      [01:37:52.610]   elpd_commercial_train1: OCR result = 'JU-OO'
 2026-08-07 01:38:00  INFO      [01:37:52.610] SUCCESS via elpd_commercial_train1: plate='JU-OO'  conf=0.882
 2026-08-07 01:38:01  INFO      [01:37:52.610] -- /predict done --
+2026-08-18 11:14:13  INFO      ============================================================
+2026-08-18 11:14:13  INFO      PlateVision server starting
+2026-08-18 11:14:13  INFO      Log file: C:\Users\Mohamed Walid\Desktop\Internship\Code\logs\predict.log
+2026-08-18 11:14:13  INFO      ============================================================
+2026-08-18 11:14:13  INFO      English pipeline weights path: C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt
+2026-08-18 11:14:13  INFO        [OK] Weights file exists (18024 KB)
+2026-08-18 11:14:14  INFO      Available models: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 11:14:54  INFO      User logged in: admin0 (ADMIN)
+2026-08-18 11:15:16  INFO      User logged out: admin0
+2026-08-18 11:15:22  INFO      User logged in: admin0 (ADMIN)
+2026-08-18 11:16:57  INFO      User logged out: admin0
+2026-08-18 12:16:56  INFO      User logged in: admin0 (ADMIN)
+2026-08-18 12:19:07  INFO      [12:19:07.069] -- /predict_arabic request received --
+2026-08-18 12:19:07  INFO      [12:19:07.069] Arabic inference: Car_license_plate_of_Morocco_in_Spain.jpg (312204 bytes)
+2026-08-18 12:19:47  INFO      [12:19:07.069] Detected: True  Plate: 60567 | ا
+2026-08-18 12:19:47  INFO      [12:19:07.069]   left_seq=60567  letter=ا  region=  city=Unknown
+2026-08-18 12:19:47  INFO      [12:19:07.069]   raw_fast="PlatePrediction(plate='60567IAI', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='5٥5٥7 ان آ'
+2026-08-18 12:19:51  INFO      [12:19:07.069] -- /predict_arabic done --
+2026-08-18 12:19:51  INFO      [12:19:51.470] -- /predict_arabic request received --
+2026-08-18 12:19:51  INFO      [12:19:51.470] Arabic inference: images (1).jpg (15124 bytes)
+2026-08-18 12:19:54  INFO      [12:19:51.470] Detected: True  Plate: 77777 | ط
+2026-08-18 12:19:54  INFO      [12:19:51.470]   left_seq=77777  letter=ط  region=  city=Unknown
+2026-08-18 12:19:54  INFO      [12:19:51.470]   raw_fast="PlatePrediction(plate='77777I', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='٥ ط  77777'
+2026-08-18 12:19:56  INFO      [12:19:51.470] -- /predict_arabic done --
+2026-08-18 12:19:56  INFO      [12:19:56.699] -- /predict_arabic request received --
+2026-08-18 12:19:56  INFO      [12:19:56.699] Arabic inference: images (2).jpg (15612 bytes)
+2026-08-18 12:19:58  INFO      [12:19:56.699] Detected: True  Plate: 11
+2026-08-18 12:19:58  INFO      [12:19:56.699]   left_seq=11  letter=  region=  city=Unknown
+2026-08-18 12:19:58  INFO      [12:19:56.699]   raw_fast="PlatePrediction(plate='11II', char_probs=None, region='Estonia', region_prob=None)"  raw_ar='٩ ٩'
+2026-08-18 12:20:00  INFO      [12:19:56.699] -- /predict_arabic done --
+2026-08-18 12:20:00  INFO      [12:20:00.254] -- /predict_arabic request received --
+2026-08-18 12:20:00  INFO      [12:20:00.254] Arabic inference: images (3).jpg (15829 bytes)
+2026-08-18 12:20:01  INFO      [12:20:00.254] Detected: True  Plate: 44444 | أ
+2026-08-18 12:20:01  INFO      [12:20:00.254]   left_seq=44444  letter=أ  region=  city=Unknown
+2026-08-18 12:20:01  INFO      [12:20:00.254]   raw_fast="PlatePrediction(plate='44444III', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='/أ | 44444'
+2026-08-18 12:20:02  INFO      [12:20:00.254] -- /predict_arabic done --
+2026-08-18 12:20:02  INFO      [12:20:02.717] -- /predict_arabic request received --
+2026-08-18 12:20:02  INFO      [12:20:02.717] Arabic inference: images (4).jpg (12464 bytes)
+2026-08-18 12:20:04  INFO      [12:20:02.717] Detected: True  Plate: 24896
+2026-08-18 12:20:04  INFO      [12:20:02.717]   left_seq=24896  letter=  region=  city=Unknown
+2026-08-18 12:20:04  INFO      [12:20:02.717]   raw_fast="PlatePrediction(plate='24896A', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='24095'
+2026-08-18 12:20:05  INFO      [12:20:02.717] -- /predict_arabic done --
+2026-08-18 12:20:05  INFO      [12:20:05.162] -- /predict_arabic request received --
+2026-08-18 12:20:05  INFO      [12:20:05.162] Arabic inference: images (5).jpg (24234 bytes)
+2026-08-18 12:20:16  INFO      [12:20:05.162] Detected: True  Plate: 274835 | و
+2026-08-18 12:20:16  INFO      [12:20:05.162]   left_seq=274835  letter=و  region=  city=Unknown
+2026-08-18 12:20:16  INFO      [12:20:05.162]   raw_fast="PlatePrediction(plate='274835', char_probs=None, region='Italy', region_prob=None)"  raw_ar='27483 ) 49  ٤٤5 3٤2  7ق٨$ وماك ك٧طس{ بط٨:  ٥١'
+2026-08-18 12:20:17  INFO      [12:20:05.162] -- /predict_arabic done --
+2026-08-18 12:20:18  INFO      [12:20:18.026] -- /predict_arabic request received --
+2026-08-18 12:20:18  INFO      [12:20:18.026] Arabic inference: images (6).jpg (35131 bytes)
+2026-08-18 12:20:20  INFO      [12:20:18.026] Detected: True  Plate: 41621
+2026-08-18 12:20:20  INFO      [12:20:18.026]   left_seq=41621  letter=  region=  city=Unknown
+2026-08-18 12:20:20  INFO      [12:20:18.026]   raw_fast="PlatePrediction(plate='41621I', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='41521 26'
+2026-08-18 12:20:22  INFO      [12:20:18.026] -- /predict_arabic done --
+2026-08-18 12:20:22  INFO      [12:20:22.090] -- /predict_arabic request received --
+2026-08-18 12:20:22  INFO      [12:20:22.090] Arabic inference: images (7).jpg (12121 bytes)
+2026-08-18 12:20:24  INFO      [12:20:22.090] Detected: True  Plate: 60567 | ه
+2026-08-18 12:20:24  INFO      [12:20:22.090]   left_seq=60567  letter=ه  region=  city=Unknown
+2026-08-18 12:20:24  INFO      [12:20:22.090]   raw_fast="PlatePrediction(plate='60567I', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='50557  ه'
+2026-08-18 12:20:26  INFO      [12:20:22.090] -- /predict_arabic done --
+2026-08-18 12:20:26  INFO      [12:20:26.393] -- /predict_arabic request received --
+2026-08-18 12:20:26  INFO      [12:20:26.393] Arabic inference: images (8).jpg (26292 bytes)
+2026-08-18 12:20:27  INFO      [12:20:26.393] Detected: True  Plate: 77095 | أ | 1
+2026-08-18 12:20:27  INFO      [12:20:26.393]   left_seq=77095  letter=أ  region=1  city=Rabat
+2026-08-18 12:20:27  INFO      [12:20:26.393]   raw_fast="PlatePrediction(plate='77095I1I0', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='[4| أ/95[77'
+2026-08-18 12:20:29  INFO      [12:20:26.393] -- /predict_arabic done --
+2026-08-18 12:20:29  INFO      [12:20:29.033] -- /predict_arabic request received --
+2026-08-18 12:20:29  INFO      [12:20:29.033] Arabic inference: images (9).jpg (26414 bytes)
+2026-08-18 12:20:36  INFO      [12:20:29.033] Detected: True  Plate: 7631 | ب | 8
+2026-08-18 12:20:36  INFO      [12:20:29.033]   left_seq=7631  letter=ب  region=8  city=Settat
+2026-08-18 12:20:36  INFO      [12:20:29.033]   raw_fast="PlatePrediction(plate='7631IH8', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='٥ ١ب١ 7531 0٤7٧05[03,$060?33!8/03330/3003 0 70225182  83000579   ٠:؟'
+2026-08-18 12:20:38  INFO      [12:20:29.033] -- /predict_arabic done --
+2026-08-18 12:20:38  INFO      [12:20:38.341] -- /predict_arabic request received --
+2026-08-18 12:20:38  INFO      [12:20:38.341] Arabic inference: images (10).jpg (26292 bytes)
+2026-08-18 12:20:41  INFO      [12:20:38.341] Detected: True  Plate: 77095 | أ | 1
+2026-08-18 12:20:41  INFO      [12:20:38.341]   left_seq=77095  letter=أ  region=1  city=Rabat
+2026-08-18 12:20:41  INFO      [12:20:38.341]   raw_fast="PlatePrediction(plate='77095I1I0', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='[4| أ/95[77'
+2026-08-18 12:20:43  INFO      [12:20:38.341] -- /predict_arabic done --
+2026-08-18 12:20:43  INFO      [12:20:43.180] -- /predict_arabic request received --
+2026-08-18 12:20:43  INFO      [12:20:43.180] Arabic inference: images (11).jpg (23371 bytes)
+2026-08-18 12:20:46  INFO      [12:20:43.180] Detected: True  Plate: 32930 | د
+2026-08-18 12:20:46  INFO      [12:20:43.180]   left_seq=32930  letter=د  region=  city=Unknown
+2026-08-18 12:20:46  INFO      [12:20:43.180]   raw_fast="PlatePrediction(plate='32930', char_probs=None, region='Israel', region_prob=None)"  raw_ar='١٩ /دا 32930,'
+2026-08-18 12:20:48  INFO      [12:20:43.180] -- /predict_arabic done --
+2026-08-18 12:20:48  INFO      [12:20:48.726] -- /predict_arabic request received --
+2026-08-18 12:20:48  INFO      [12:20:48.726] Arabic inference: images (12).jpg (20238 bytes)
+2026-08-18 12:20:51  INFO      [12:20:48.726] Detected: True  Plate: 4946 | 4
+2026-08-18 12:20:51  INFO      [12:20:48.726]   left_seq=4946  letter=  region=4  city=Témara
+2026-08-18 12:20:51  INFO      [12:20:48.726]   raw_fast="PlatePrediction(plate='4946III4', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='4945 ١ ١ ١ 4'
+2026-08-18 12:20:53  INFO      [12:20:48.726] -- /predict_arabic done --
+2026-08-18 12:20:53  INFO      [12:20:53.198] -- /predict_arabic request received --
+2026-08-18 12:20:53  INFO      [12:20:53.198] Arabic inference: images (13).jpg (24224 bytes)
+2026-08-18 12:20:56  INFO      [12:20:53.198] Detected: True  Plate: 38310 | 40
+2026-08-18 12:20:56  INFO      [12:20:53.198]   left_seq=38310  letter=  region=40  city=Tanger
+2026-08-18 12:20:56  INFO      [12:20:53.198]   raw_fast="PlatePrediction(plate='38310I40', char_probs=None, region='Armenia', region_prob=None)"  raw_ar='3831٥ 4٥'
+2026-08-18 12:20:57  INFO      [12:20:53.198] -- /predict_arabic done --
+2026-08-18 12:20:57  INFO      [12:20:57.978] -- /predict_arabic request received --
+2026-08-18 12:20:57  INFO      [12:20:57.978] Arabic inference: images (14).jpg (16185 bytes)
+2026-08-18 12:21:00  INFO      [12:20:57.978] Detected: True  Plate: 77143 | د
+2026-08-18 12:21:00  INFO      [12:20:57.978]   left_seq=77143  letter=د  region=  city=Unknown
+2026-08-18 12:21:00  INFO      [12:20:57.978]   raw_fast="PlatePrediction(plate='77143IOI', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='/ د / 77143'
+2026-08-18 12:21:02  INFO      [12:20:57.978] -- /predict_arabic done --
+2026-08-18 12:21:02  INFO      [12:21:02.549] -- /predict_arabic request received --
+2026-08-18 12:21:02  INFO      [12:21:02.549] Arabic inference: images (15).jpg (24234 bytes)
+2026-08-18 12:21:10  INFO      [12:21:02.549] Detected: True  Plate: 274835 | و
+2026-08-18 12:21:10  INFO      [12:21:02.549]   left_seq=274835  letter=و  region=  city=Unknown
+2026-08-18 12:21:10  INFO      [12:21:02.549]   raw_fast="PlatePrediction(plate='274835', char_probs=None, region='Italy', region_prob=None)"  raw_ar='27483 ) 49  ٤٤5 3٤2  7ق٨$ وماك ك٧طس{ بط٨:  ٥١'
+2026-08-18 12:21:12  INFO      [12:21:02.549] -- /predict_arabic done --
+2026-08-18 12:21:12  INFO      [12:21:12.154] -- /predict_arabic request received --
+2026-08-18 12:21:12  INFO      [12:21:12.154] Arabic inference: images (16).jpg (16185 bytes)
+2026-08-18 12:21:14  INFO      [12:21:12.154] Detected: True  Plate: 77143 | د
+2026-08-18 12:21:14  INFO      [12:21:12.154]   left_seq=77143  letter=د  region=  city=Unknown
+2026-08-18 12:21:14  INFO      [12:21:12.154]   raw_fast="PlatePrediction(plate='77143IOI', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='/ د / 77143'
+2026-08-18 12:21:16  INFO      [12:21:12.154] -- /predict_arabic done --
+2026-08-18 12:21:16  INFO      [12:21:16.457] -- /predict_arabic request received --
+2026-08-18 12:21:16  INFO      [12:21:16.457] Arabic inference: images (17).jpg (24234 bytes)
+2026-08-18 12:21:27  INFO      [12:21:16.457] Detected: True  Plate: 274835 | و
+2026-08-18 12:21:27  INFO      [12:21:16.457]   left_seq=274835  letter=و  region=  city=Unknown
+2026-08-18 12:21:27  INFO      [12:21:16.457]   raw_fast="PlatePrediction(plate='274835', char_probs=None, region='Italy', region_prob=None)"  raw_ar='27483 ) 49  ٤٤5 3٤2  7ق٨$ وماك ك٧طس{ بط٨:  ٥١'
+2026-08-18 12:21:29  INFO      [12:21:16.457] -- /predict_arabic done --
+2026-08-18 12:21:29  INFO      [12:21:29.085] -- /predict_arabic request received --
+2026-08-18 12:21:29  INFO      [12:21:29.085] Arabic inference: images (18).jpg (26307 bytes)
+2026-08-18 12:21:31  INFO      [12:21:29.085] Detected: True  Plate: 97695 | د | 1
+2026-08-18 12:21:31  INFO      [12:21:29.085]   left_seq=97695  letter=د  region=1  city=Rabat
+2026-08-18 12:21:31  INFO      [12:21:29.085]   raw_fast="PlatePrediction(plate='97695I1_6', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='97695 5 /د'
+2026-08-18 12:21:33  INFO      [12:21:29.085] -- /predict_arabic done --
+2026-08-18 12:21:33  INFO      [12:21:33.651] -- /predict_arabic request received --
+2026-08-18 12:21:33  INFO      [12:21:33.651] Arabic inference: images (19).jpg (12437 bytes)
+2026-08-18 12:21:36  INFO      [12:21:33.651] Detected: True  Plate: 24896 | 1
+2026-08-18 12:21:36  INFO      [12:21:33.651]   left_seq=24896  letter=  region=1  city=Rabat
+2026-08-18 12:21:36  INFO      [12:21:33.651]   raw_fast="PlatePrediction(plate='24896A1', char_probs=None, region='Belarus', region_prob=None)"  raw_ar=']4095'
+2026-08-18 12:21:37  INFO      [12:21:33.651] -- /predict_arabic done --
+2026-08-18 12:21:37  INFO      [12:21:37.922] -- /predict_arabic request received --
+2026-08-18 12:21:37  INFO      [12:21:37.922] Arabic inference: images (20).jpg (19644 bytes)
+2026-08-18 12:21:43  INFO      [12:21:37.922] Detected: True  Plate: 36335 | ا
+2026-08-18 12:21:43  INFO      [12:21:37.922]   left_seq=36335  letter=ا  region=  city=Unknown
+2026-08-18 12:21:43  INFO      [12:21:37.922]   raw_fast="PlatePrediction(plate='36335', char_probs=None, region='Qatar', region_prob=None)"  raw_ar='36335/ ظ6 لشناء ٤00:ك8ح0- 8~٤$؟ق8'
+2026-08-18 12:21:45  INFO      [12:21:37.922] -- /predict_arabic done --
+2026-08-18 12:21:45  INFO      [12:21:45.531] -- /predict_arabic request received --
+2026-08-18 12:21:45  INFO      [12:21:45.531] Arabic inference: images (21).jpg (23371 bytes)
+2026-08-18 12:21:49  INFO      [12:21:45.531] Detected: True  Plate: 32930 | د
+2026-08-18 12:21:49  INFO      [12:21:45.531]   left_seq=32930  letter=د  region=  city=Unknown
+2026-08-18 12:21:49  INFO      [12:21:45.531]   raw_fast="PlatePrediction(plate='32930', char_probs=None, region='Israel', region_prob=None)"  raw_ar='١٩ /دا 32930,'
+2026-08-18 12:21:51  INFO      [12:21:45.531] -- /predict_arabic done --
+2026-08-18 12:21:51  INFO      [12:21:51.086] -- /predict_arabic request received --
+2026-08-18 12:21:51  INFO      [12:21:51.086] Arabic inference: images (22).jpg (17488 bytes)
+2026-08-18 12:21:53  INFO      [12:21:51.086] Detected: True  Plate: 1083 | أ
+2026-08-18 12:21:53  INFO      [12:21:51.086]   left_seq=1083  letter=أ  region=  city=Unknown
+2026-08-18 12:21:53  INFO      [12:21:51.086]   raw_fast="PlatePrediction(plate='1083II121', char_probs=None, region='France', region_prob=None)"  raw_ar='1003 21 / أ /'
+2026-08-18 12:21:55  INFO      [12:21:51.086] -- /predict_arabic done --
+2026-08-18 12:21:55  INFO      [12:21:55.702] -- /predict_arabic request received --
+2026-08-18 12:21:55  INFO      [12:21:55.702] Arabic inference: images (23).jpg (26292 bytes)
+2026-08-18 12:21:58  INFO      [12:21:55.702] Detected: True  Plate: 77095 | أ | 1
+2026-08-18 12:21:58  INFO      [12:21:55.702]   left_seq=77095  letter=أ  region=1  city=Rabat
+2026-08-18 12:21:58  INFO      [12:21:55.702]   raw_fast="PlatePrediction(plate='77095I1I0', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='[4| أ/95[77'
+2026-08-18 12:22:00  INFO      [12:21:55.702] -- /predict_arabic done --
+2026-08-18 12:22:00  INFO      [12:22:00.142] -- /predict_arabic request received --
+2026-08-18 12:22:00  INFO      [12:22:00.142] Arabic inference: images (24).jpg (17488 bytes)
+2026-08-18 12:22:02  INFO      [12:22:00.142] Detected: True  Plate: 1083 | أ
+2026-08-18 12:22:02  INFO      [12:22:00.142]   left_seq=1083  letter=أ  region=  city=Unknown
+2026-08-18 12:22:02  INFO      [12:22:00.142]   raw_fast="PlatePrediction(plate='1083II121', char_probs=None, region='France', region_prob=None)"  raw_ar='1003 21 / أ /'
+2026-08-18 12:22:04  INFO      [12:22:00.142] -- /predict_arabic done --
+2026-08-18 12:22:04  INFO      [12:22:04.786] -- /predict_arabic request received --
+2026-08-18 12:22:04  INFO      [12:22:04.786] Arabic inference: images (25).jpg (20238 bytes)
+2026-08-18 12:22:07  INFO      [12:22:04.786] Detected: True  Plate: 4946 | 4
+2026-08-18 12:22:07  INFO      [12:22:04.786]   left_seq=4946  letter=  region=4  city=Témara
+2026-08-18 12:22:07  INFO      [12:22:04.786]   raw_fast="PlatePrediction(plate='4946III4', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='4945 ١ ١ ١ 4'
+2026-08-18 12:22:09  INFO      [12:22:04.786] -- /predict_arabic done --
+2026-08-18 12:22:09  INFO      [12:22:09.280] -- /predict_arabic request received --
+2026-08-18 12:22:09  INFO      [12:22:09.280] Arabic inference: images (26).jpg (28147 bytes)
+2026-08-18 12:22:12  INFO      [12:22:09.280] Detected: True  Plate: 88888
+2026-08-18 12:22:12  INFO      [12:22:09.280]   left_seq=88888  letter=  region=  city=Unknown
+2026-08-18 12:22:12  INFO      [12:22:09.280]   raw_fast="PlatePrediction(plate='88888IJI', char_probs=None, region='Unknown', region_prob=None)"  raw_ar='٥0888 ل'
+2026-08-18 12:22:14  INFO      [12:22:09.280] -- /predict_arabic done --
+2026-08-18 12:22:14  INFO      [12:22:14.622] -- /predict_arabic request received --
+2026-08-18 12:22:14  INFO      [12:22:14.622] Arabic inference: images (27).jpg (20238 bytes)
+2026-08-18 12:22:17  INFO      [12:22:14.622] Detected: True  Plate: 4946 | 4
+2026-08-18 12:22:17  INFO      [12:22:14.622]   left_seq=4946  letter=  region=4  city=Témara
+2026-08-18 12:22:17  INFO      [12:22:14.622]   raw_fast="PlatePrediction(plate='4946III4', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='4945 ١ ١ ١ 4'
+2026-08-18 12:22:19  INFO      [12:22:14.622] -- /predict_arabic done --
+2026-08-18 12:22:19  INFO      [12:22:19.069] -- /predict_arabic request received --
+2026-08-18 12:22:19  INFO      [12:22:19.069] Arabic inference: images (28).jpg (16394 bytes)
+2026-08-18 12:22:21  INFO      [12:22:19.069] Detected: True  Plate: 9503 | ب
+2026-08-18 12:22:21  INFO      [12:22:19.069]   left_seq=9503  letter=ب  region=  city=Unknown
+2026-08-18 12:22:21  INFO      [12:22:19.069]   raw_fast="PlatePrediction(plate='9503II', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='9503 ب !'
+2026-08-18 12:22:23  INFO      [12:22:19.069] -- /predict_arabic done --
+2026-08-18 12:22:23  INFO      [12:22:23.427] -- /predict_arabic request received --
+2026-08-18 12:22:23  INFO      [12:22:23.427] Arabic inference: images (29).jpg (16952 bytes)
+2026-08-18 12:22:25  INFO      [12:22:23.427] Detected: True  Plate: 4281 | 2
+2026-08-18 12:22:25  INFO      [12:22:23.427]   left_seq=4281  letter=  region=2  city=Salé
+2026-08-18 12:22:25  INFO      [12:22:23.427]   raw_fast="PlatePrediction(plate='4281II2', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='4201'
+2026-08-18 12:22:27  INFO      [12:22:23.427] -- /predict_arabic done --
+2026-08-18 12:22:27  INFO      [12:22:27.462] -- /predict_arabic request received --
+2026-08-18 12:22:27  INFO      [12:22:27.462] Arabic inference: images (30).jpg (22545 bytes)
+2026-08-18 12:22:30  INFO      [12:22:27.462] Detected: True  Plate: 46495 | 1
+2026-08-18 12:22:30  INFO      [12:22:27.462]   left_seq=46495  letter=  region=1  city=Rabat
+2026-08-18 12:22:30  INFO      [12:22:27.462]   raw_fast="PlatePrediction(plate='46495I1', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='46495 ١ / 1'
+2026-08-18 12:22:32  INFO      [12:22:27.462] -- /predict_arabic done --
+2026-08-18 12:22:32  INFO      [12:22:32.153] -- /predict_arabic request received --
+2026-08-18 12:22:32  INFO      [12:22:32.153] Arabic inference: images (31).jpg (17488 bytes)
+2026-08-18 12:22:34  INFO      [12:22:32.153] Detected: True  Plate: 1083 | أ
+2026-08-18 12:22:34  INFO      [12:22:32.153]   left_seq=1083  letter=أ  region=  city=Unknown
+2026-08-18 12:22:34  INFO      [12:22:32.153]   raw_fast="PlatePrediction(plate='1083II121', char_probs=None, region='France', region_prob=None)"  raw_ar='1003 21 / أ /'
+2026-08-18 12:22:36  INFO      [12:22:32.153] -- /predict_arabic done --
+2026-08-18 12:22:36  INFO      [12:22:36.599] -- /predict_arabic request received --
+2026-08-18 12:22:36  INFO      [12:22:36.599] Arabic inference: images (32).jpg (26292 bytes)
+2026-08-18 12:22:39  INFO      [12:22:36.599] Detected: True  Plate: 77095 | أ | 1
+2026-08-18 12:22:39  INFO      [12:22:36.599]   left_seq=77095  letter=أ  region=1  city=Rabat
+2026-08-18 12:22:39  INFO      [12:22:36.599]   raw_fast="PlatePrediction(plate='77095I1I0', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='[4| أ/95[77'
+2026-08-18 12:22:41  INFO      [12:22:36.599] -- /predict_arabic done --
+2026-08-18 12:22:41  INFO      [12:22:41.247] -- /predict_arabic request received --
+2026-08-18 12:22:41  INFO      [12:22:41.247] Arabic inference: images (33).jpg (17488 bytes)
+2026-08-18 12:22:43  INFO      [12:22:41.247] Detected: True  Plate: 1083 | أ
+2026-08-18 12:22:43  INFO      [12:22:41.247]   left_seq=1083  letter=أ  region=  city=Unknown
+2026-08-18 12:22:43  INFO      [12:22:41.247]   raw_fast="PlatePrediction(plate='1083II121', char_probs=None, region='France', region_prob=None)"  raw_ar='1003 21 / أ /'
+2026-08-18 12:22:45  INFO      [12:22:41.247] -- /predict_arabic done --
+2026-08-18 12:22:45  INFO      [12:22:45.891] -- /predict_arabic request received --
+2026-08-18 12:22:45  INFO      [12:22:45.891] Arabic inference: images (34).jpg (23842 bytes)
+2026-08-18 12:22:47  INFO      [12:22:45.891] Detected: True  Plate: 21300 | 5
+2026-08-18 12:22:47  INFO      [12:22:45.891]   left_seq=21300  letter=  region=5  city=Khémisset
+2026-08-18 12:22:47  INFO      [12:22:45.891]   raw_fast="PlatePrediction(plate='21300III5', char_probs=None, region='Unknown', region_prob=None)"  raw_ar='21300| 50'
+2026-08-18 12:22:48  INFO      [12:22:45.891] -- /predict_arabic done --
+2026-08-18 12:22:48  INFO      [12:22:48.323] -- /predict_arabic request received --
+2026-08-18 12:22:48  INFO      [12:22:48.323] Arabic inference: images (35).jpg (20832 bytes)
+2026-08-18 12:22:49  INFO      [12:22:48.323] Detected: True  Plate: 25391 | ا
+2026-08-18 12:22:49  INFO      [12:22:48.323]   left_seq=25391  letter=ا  region=  city=Unknown
+2026-08-18 12:22:49  INFO      [12:22:48.323]   raw_fast="PlatePrediction(plate='25391', char_probs=None, region='Belgium', region_prob=None)"  raw_ar='253-91 المغرب'
+2026-08-18 12:22:50  INFO      [12:22:48.323] -- /predict_arabic done --
+2026-08-18 12:22:50  INFO      [12:22:50.833] -- /predict_arabic request received --
+2026-08-18 12:22:50  INFO      [12:22:50.833] Arabic inference: images (36).jpg (24664 bytes)
+2026-08-18 12:22:53  INFO      [12:22:50.833] Detected: True  Plate: 27221
+2026-08-18 12:22:53  INFO      [12:22:50.833]   left_seq=27221  letter=  region=  city=Unknown
+2026-08-18 12:22:53  INFO      [12:22:50.833]   raw_fast="PlatePrediction(plate='27221I154', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='54/.ئ /2722'
+2026-08-18 12:22:55  INFO      [12:22:50.833] -- /predict_arabic done --
+2026-08-18 12:22:55  INFO      [12:22:55.348] -- /predict_arabic request received --
+2026-08-18 12:22:55  INFO      [12:22:55.348] Arabic inference: images (37).jpg (15476 bytes)
+2026-08-18 12:22:57  INFO      [12:22:55.348] Detected: True  Plate: 66 | ي
+2026-08-18 12:22:57  INFO      [12:22:55.348]   left_seq=66  letter=ي  region=  city=Unknown
+2026-08-18 12:22:57  INFO      [12:22:55.348]   raw_fast="PlatePrediction(plate='66IG', char_probs=None, region='United Kingdom', region_prob=None)"  raw_ar='5٥ ي'
+2026-08-18 12:22:59  INFO      [12:22:55.348] -- /predict_arabic done --
+2026-08-18 12:22:59  INFO      [12:22:59.781] -- /predict_arabic request received --
+2026-08-18 12:22:59  INFO      [12:22:59.781] Arabic inference: images (38).jpg (21008 bytes)
+2026-08-18 12:23:08  INFO      [12:22:59.781] Detected: True  Plate: 4578 | ب
+2026-08-18 12:23:08  INFO      [12:22:59.781]   left_seq=4578  letter=ب  region=  city=Unknown
+2026-08-18 12:23:08  INFO      [12:22:59.781]   raw_fast="PlatePrediction(plate='4578HA', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='26  با 4578 ^ءا0ق٢٥٤ ؟٧?آ & ٥ 48.1ن071`0'
+2026-08-18 12:23:10  INFO      [12:22:59.781] -- /predict_arabic done --
+2026-08-18 12:23:10  INFO      [12:23:10.027] -- /predict_arabic request received --
+2026-08-18 12:23:10  INFO      [12:23:10.027] Arabic inference: images (39).jpg (16617 bytes)
+2026-08-18 12:23:12  INFO      [12:23:10.027] Detected: True  Plate: 54814
+2026-08-18 12:23:12  INFO      [12:23:10.027]   left_seq=54814  letter=  region=  city=Unknown
+2026-08-18 12:23:12  INFO      [12:23:10.027]   raw_fast="PlatePrediction(plate='54814IJ', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='54014 9 / 1'
+2026-08-18 12:23:14  INFO      [12:23:10.027] -- /predict_arabic done --
+2026-08-18 12:23:14  INFO      [12:23:14.790] -- /predict_arabic request received --
+2026-08-18 12:23:14  INFO      [12:23:14.790] Arabic inference: images (40).jpg (12437 bytes)
+2026-08-18 12:23:17  INFO      [12:23:14.790] Detected: True  Plate: 24896 | 1
+2026-08-18 12:23:17  INFO      [12:23:14.790]   left_seq=24896  letter=  region=1  city=Rabat
+2026-08-18 12:23:17  INFO      [12:23:14.790]   raw_fast="PlatePrediction(plate='24896A1', char_probs=None, region='Belarus', region_prob=None)"  raw_ar=']4095'
+2026-08-18 12:23:19  INFO      [12:23:14.790] -- /predict_arabic done --
+2026-08-18 12:23:19  INFO      [12:23:19.043] -- /predict_arabic request received --
+2026-08-18 12:23:19  INFO      [12:23:19.043] Arabic inference: images (41).jpg (24234 bytes)
+2026-08-18 12:23:29  INFO      [12:23:19.043] Detected: True  Plate: 274835 | و
+2026-08-18 12:23:29  INFO      [12:23:19.043]   left_seq=274835  letter=و  region=  city=Unknown
+2026-08-18 12:23:29  INFO      [12:23:19.043]   raw_fast="PlatePrediction(plate='274835', char_probs=None, region='Italy', region_prob=None)"  raw_ar='27483 ) 49  ٤٤5 3٤2  7ق٨$ وماك ك٧طس{ بط٨:  ٥١'
+2026-08-18 12:23:31  INFO      [12:23:19.043] -- /predict_arabic done --
+2026-08-18 12:23:31  INFO      [12:23:31.639] -- /predict_arabic request received --
+2026-08-18 12:23:31  INFO      [12:23:31.639] Arabic inference: images (42).jpg (16185 bytes)
+2026-08-18 12:23:34  INFO      [12:23:31.639] Detected: True  Plate: 77143 | د
+2026-08-18 12:23:34  INFO      [12:23:31.639]   left_seq=77143  letter=د  region=  city=Unknown
+2026-08-18 12:23:34  INFO      [12:23:31.639]   raw_fast="PlatePrediction(plate='77143IOI', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='/ د / 77143'
+2026-08-18 12:23:36  INFO      [12:23:31.639] -- /predict_arabic done --
+2026-08-18 12:23:36  INFO      [12:23:36.041] -- /predict_arabic request received --
+2026-08-18 12:23:36  INFO      [12:23:36.041] Arabic inference: marokko_1 (1).jpg (147308 bytes)
+2026-08-18 12:23:38  INFO      [12:23:36.041] Detected: True  Plate: 24896
+2026-08-18 12:23:38  INFO      [12:23:36.041]   left_seq=24896  letter=  region=  city=Unknown
+2026-08-18 12:23:38  INFO      [12:23:36.041]   raw_fast="PlatePrediction(plate='24896AI', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='24٥95'
+2026-08-18 12:23:40  INFO      [12:23:36.041] -- /predict_arabic done --
+2026-08-18 12:23:40  INFO      [12:23:40.435] -- /predict_arabic request received --
+2026-08-18 12:23:40  INFO      [12:23:40.435] Arabic inference: marokko_1.jpg (147308 bytes)
+2026-08-18 12:23:44  INFO      [12:23:40.435] Detected: True  Plate: 24896
+2026-08-18 12:23:44  INFO      [12:23:40.435]   left_seq=24896  letter=  region=  city=Unknown
+2026-08-18 12:23:44  INFO      [12:23:40.435]   raw_fast="PlatePrediction(plate='24896AI', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='24٥95'
+2026-08-18 12:23:46  INFO      [12:23:40.435] -- /predict_arabic done --
+2026-08-18 12:23:46  INFO      [12:23:46.608] -- /predict_arabic request received --
+2026-08-18 12:23:46  INFO      [12:23:46.608] Arabic inference: marokko_4.jpg (25991 bytes)
+2026-08-18 12:23:49  INFO      [12:23:46.608] Detected: True  Plate: 4946 | 4
+2026-08-18 12:23:49  INFO      [12:23:46.608]   left_seq=4946  letter=  region=4  city=Témara
+2026-08-18 12:23:49  INFO      [12:23:46.608]   raw_fast="PlatePrediction(plate='4946III4', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='4945 ١ ١ ١ 4'
+2026-08-18 12:23:51  INFO      [12:23:46.608] -- /predict_arabic done --
+2026-08-18 12:23:51  INFO      [12:23:51.076] -- /predict_arabic request received --
+2026-08-18 12:23:51  INFO      [12:23:51.076] Arabic inference: marokko_6.jpg (27255 bytes)
+2026-08-18 12:23:53  INFO      [12:23:51.076] Detected: True  Plate: 77143 | د
+2026-08-18 12:23:53  INFO      [12:23:51.076]   left_seq=77143  letter=د  region=  city=Unknown
+2026-08-18 12:23:53  INFO      [12:23:51.076]   raw_fast="PlatePrediction(plate='77143I', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='/ د / 77143'
+2026-08-18 12:23:55  INFO      [12:23:51.076] -- /predict_arabic done --
+2026-08-18 12:23:55  INFO      [12:23:55.582] -- /predict_arabic request received --
+2026-08-18 12:23:55  INFO      [12:23:55.582] Arabic inference: marokko_8.jpg (32613 bytes)
+2026-08-18 12:24:06  INFO      [12:23:55.582] Detected: True  Plate: 7631 | ب | 8
+2026-08-18 12:24:06  INFO      [12:23:55.582]   left_seq=7631  letter=ب  region=8  city=Settat
+2026-08-18 12:24:06  INFO      [12:23:55.582]   raw_fast="PlatePrediction(plate='7631II8', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='٥ ١ب١ 7531 ٨٤٨3٧١{ |8٢0 ةطع   55٤و ش82 54 022 4  9^عى/83  :ع3؟'
+2026-08-18 12:24:08  INFO      [12:23:55.582] -- /predict_arabic done --
+2026-08-18 12:24:08  INFO      [12:24:08.564] -- /predict_arabic request received --
+2026-08-18 12:24:08  INFO      [12:24:08.564] Arabic inference: marokko8.jpg (30185 bytes)
+2026-08-18 12:24:11  INFO      [12:24:08.564] Detected: True  Plate: 21300 | أ | 5
+2026-08-18 12:24:11  INFO      [12:24:08.564]   left_seq=21300  letter=أ  region=5  city=Khémisset
+2026-08-18 12:24:11  INFO      [12:24:08.564]   raw_fast="PlatePrediction(plate='21300III5', char_probs=None, region='Unknown', region_prob=None)"  raw_ar='أ |21300 50'
+2026-08-18 12:24:13  INFO      [12:24:08.564] -- /predict_arabic done --
+2026-08-18 12:24:13  INFO      [12:24:13.287] -- /predict_arabic request received --
+2026-08-18 12:24:13  INFO      [12:24:13.287] Arabic inference: marokko26.jpg (35517 bytes)
+2026-08-18 12:24:16  INFO      [12:24:13.287] Detected: True  Plate: 77095 | أ | 44
+2026-08-18 12:24:16  INFO      [12:24:13.287]   left_seq=77095  letter=أ  region=44  city=Errachidia
+2026-08-18 12:24:16  INFO      [12:24:13.287]   raw_fast="PlatePrediction(plate='77095II44', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='[4| أ/95[77'
+2026-08-18 12:24:18  INFO      [12:24:13.287] -- /predict_arabic done --
+2026-08-18 12:24:18  INFO      [12:24:18.904] -- /predict_arabic request received --
+2026-08-18 12:24:18  INFO      [12:24:18.904] Arabic inference: marokko36.jpg (34089 bytes)
+2026-08-18 12:24:29  INFO      [12:24:18.904] Detected: True  Plate: 4578 | ب
+2026-08-18 12:24:29  INFO      [12:24:18.904]   left_seq=4578  letter=ب  region=  city=Unknown
+2026-08-18 12:24:29  INFO      [12:24:18.904]   raw_fast="PlatePrediction(plate='4578OA', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='2٢ ربا 4578 و ^8شقطفت «3& ?٥ 07128.'
+2026-08-18 12:24:31  INFO      [12:24:18.904] -- /predict_arabic done --
+2026-08-18 12:24:31  INFO      [12:24:31.481] -- /predict_arabic request received --
+2026-08-18 12:24:31  INFO      [12:24:31.481] Arabic inference: marokko46.jpg (133467 bytes)
+2026-08-18 12:24:46  INFO      [12:24:31.481] Detected: True  Plate: 2748354 | ط
+2026-08-18 12:24:46  INFO      [12:24:31.481]   left_seq=2748354  letter=ط  region=  city=Unknown
+2026-08-18 12:24:46  INFO      [12:24:31.481]   raw_fast="PlatePrediction(plate='2748354', char_probs=None, region='Israel', region_prob=None)"  raw_ar='27483 ) 49 3٨2  ع  {/{ئ$ 4٧ط%٧^ ٨9أ$ عع| ٨ع_٨ع6'
+2026-08-18 12:24:48  INFO      [12:24:31.481] -- /predict_arabic done --
+2026-08-18 12:24:48  INFO      [12:24:48.945] -- /predict_arabic request received --
+2026-08-18 12:24:48  INFO      [12:24:48.945] Arabic inference: new-licence-plate-idea-for-morocco-thoughts-v0-e0ogbawsa65f1.webp (22784 bytes)
+2026-08-18 12:24:59  INFO      [12:24:48.945] Detected: True  Plate: 13456 | ب | 27
+2026-08-18 12:24:59  INFO      [12:24:48.945]   left_seq=13456  letter=ب  region=27  city=Taounate
+2026-08-18 12:24:59  INFO      [12:24:48.945]   raw_fast="PlatePrediction(plate='13456IJ27', char_probs=None, region='Unknown', region_prob=None)"  raw_ar='13450 ب 27'
+2026-08-18 12:25:01  INFO      [12:24:48.945] -- /predict_arabic done --
+2026-08-18 12:25:01  INFO      [12:25:01.378] -- /predict_arabic request received --
+2026-08-18 12:25:01  INFO      [12:25:01.378] Arabic inference: Screenshot 2026-07-15 133740.png (864956 bytes)
+2026-08-18 12:25:05  INFO      [12:25:01.378] Detected: True  Plate: 65997 | أ
+2026-08-18 12:25:05  INFO      [12:25:01.378]   left_seq=65997  letter=أ  region=  city=Unknown
+2026-08-18 12:25:05  INFO      [12:25:01.378]   raw_fast="PlatePrediction(plate='65997III', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='55997 أ ٠ 44'
+2026-08-18 12:25:07  INFO      [12:25:01.378] -- /predict_arabic done --
+2026-08-18 12:25:07  INFO      [12:25:07.323] -- /predict_arabic request received --
+2026-08-18 12:25:07  INFO      [12:25:07.323] Arabic inference: WhatsApp Image 2026-08-03 at 12.17.39.jpeg (245558 bytes)
+2026-08-18 12:25:15  INFO      [12:25:07.323] Detected: True  Plate: 58550 | ب | 40
+2026-08-18 12:25:15  INFO      [12:25:07.323]   left_seq=58550  letter=ب  region=40  city=Tanger
+2026-08-18 12:25:15  INFO      [12:25:07.323]   raw_fast="PlatePrediction(plate='58550I_40', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='50550 4٥ | ب  1٤٧٥~0٧8٤ 60»'
+2026-08-18 12:25:17  INFO      [12:25:07.323] -- /predict_arabic done --
+2026-08-18 12:25:17  INFO      [12:25:17.439] -- /predict_arabic request received --
+2026-08-18 12:25:17  INFO      [12:25:17.439] Arabic inference: WhatsApp Image 2026-08-03 at 18.43.12 (1).jpeg (84174 bytes)
+2026-08-18 12:25:21  INFO      [12:25:17.439] Detected: True  Plate: 19861 | د | 22
+2026-08-18 12:25:21  INFO      [12:25:17.439]   left_seq=19861  letter=د  region=22  city=Fès
+2026-08-18 12:25:21  INFO      [12:25:17.439]   raw_fast="PlatePrediction(plate='19861II22', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='؟2 / د / | 9١ &٥'
+2026-08-18 12:25:23  INFO      [12:25:17.439] -- /predict_arabic done --
+2026-08-18 12:25:23  INFO      [12:25:23.264] -- /predict_arabic request received --
+2026-08-18 12:25:23  INFO      [12:25:23.264] Arabic inference: WhatsApp Image 2026-08-03 at 18.43.12 (2).jpeg (147869 bytes)
+2026-08-18 12:25:28  INFO      [12:25:23.264] Detected: True  Plate: 19861 | د | 26
+2026-08-18 12:25:28  INFO      [12:25:23.264]   left_seq=19861  letter=د  region=26  city=Sefrou
+2026-08-18 12:25:28  INFO      [12:25:23.264]   raw_fast="PlatePrediction(plate='19861II26', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='د / 1&198 25 ه٥5=٥١'
+2026-08-18 12:25:30  INFO      [12:25:23.264] -- /predict_arabic done --
+2026-08-18 12:25:30  INFO      [12:25:30.527] -- /predict_arabic request received --
+2026-08-18 12:25:30  INFO      [12:25:30.527] Arabic inference: WhatsApp Image 2026-08-03 at 18.43.13 (1).jpeg (133256 bytes)
+2026-08-18 12:25:34  INFO      [12:25:30.527] Detected: True  Plate: 91111
+2026-08-18 12:25:34  INFO      [12:25:30.527]   left_seq=91111  letter=  region=  city=Unknown
+2026-08-18 12:25:34  INFO      [12:25:30.527]   raw_fast="PlatePrediction(plate='91111', char_probs=None, region='Qatar', region_prob=None)"  raw_ar='9111 1'
+2026-08-18 12:25:36  INFO      [12:25:30.527] -- /predict_arabic done --
+2026-08-18 12:25:36  INFO      [12:25:36.358] -- /predict_arabic request received --
+2026-08-18 12:25:36  INFO      [12:25:36.358] Arabic inference: WhatsApp Image 2026-08-03 at 18.43.14 (1).jpeg (107409 bytes)
+2026-08-18 12:25:40  INFO      [12:25:36.358] Detected: True  Plate: 3520 | 77
+2026-08-18 12:25:40  INFO      [12:25:36.358]   left_seq=3520  letter=  region=77  city=Unknown
+2026-08-18 12:25:40  INFO      [12:25:36.358]   raw_fast="PlatePrediction(plate='3520I77', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='3520 75'
+2026-08-18 12:25:42  INFO      [12:25:36.358] -- /predict_arabic done --
+2026-08-18 12:25:42  INFO      [12:25:42.158] -- /predict_arabic request received --
+2026-08-18 12:25:42  INFO      [12:25:42.158] Arabic inference: WhatsApp Image 2026-08-03 at 18.43.14 (2).jpeg (140523 bytes)
+2026-08-18 12:25:46  INFO      [12:25:42.158] Detected: True  Plate: 86184 | أ
+2026-08-18 12:25:46  INFO      [12:25:42.158]   left_seq=86184  letter=أ  region=  city=Unknown
+2026-08-18 12:25:46  INFO      [12:25:42.158]   raw_fast="PlatePrediction(plate='86184II', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='061 04 ٥ / أ ١'
+2026-08-18 12:25:48  INFO      [12:25:42.158] -- /predict_arabic done --
+2026-08-18 12:25:48  INFO      [12:25:48.476] -- /predict_arabic request received --
+2026-08-18 12:25:48  INFO      [12:25:48.476] Arabic inference: WhatsApp Image 2026-08-03 at 18.43.14.jpeg (142408 bytes)
+2026-08-18 12:25:52  INFO      [12:25:48.476] Detected: True  Plate: 21774 | أ | 44
+2026-08-18 12:25:52  INFO      [12:25:48.476]   left_seq=21774  letter=أ  region=44  city=Errachidia
+2026-08-18 12:25:52  INFO      [12:25:48.476]   raw_fast="PlatePrediction(plate='21774I44', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='21774 أ| 44'
+2026-08-18 12:25:54  INFO      [12:25:48.476] -- /predict_arabic done --
+2026-08-18 12:27:05  INFO      [12:27:05.733] -- /predict request received --
+2026-08-18 12:27:05  INFO      [12:27:05.733] File: '51p3rjYg5eL._AC_UF894,1000_QL80_.jpg'
+2026-08-18 12:27:05  INFO      [12:27:05.733] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmpuvmwombd.jpg  (20966 bytes)
+2026-08-18 12:27:05  INFO      [12:27:05.733] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:27:05  INFO      [12:27:05.733] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:27:06  INFO      [12:27:05.733]   elpd_commercial_train2: no boxes — skipping
+2026-08-18 12:27:06  INFO      [12:27:05.733] Trying model: elpd_commercial_train1 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train1\weights\best.pt)
+2026-08-18 12:27:06  INFO      [12:27:05.733]   elpd_commercial_train1: no boxes — skipping
+2026-08-18 12:27:06  INFO      [12:27:05.733] Trying model: english_train33 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train33\weights\best.pt)
+2026-08-18 12:27:06  INFO      [12:27:05.733]   english_train33: no boxes — skipping
+2026-08-18 12:27:06  INFO      [12:27:05.733] Trying model: english_train32 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train32\weights\best.pt)
+2026-08-18 12:27:07  INFO      [12:27:05.733]   english_train32: no boxes — skipping
+2026-08-18 12:27:07  INFO      [12:27:05.733] Trying model: english_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train2\weights\best.pt)
+2026-08-18 12:27:07  INFO      [12:27:05.733]   english_train2: no boxes — skipping
+2026-08-18 12:27:07  INFO      [12:27:05.733] Trying model: english_train (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train\weights\best.pt)
+2026-08-18 12:27:08  INFO      [12:27:05.733]   english_train: no boxes — skipping
+2026-08-18 12:27:08  WARNING   [12:27:05.733] FAIL: no model detected a plate
+2026-08-18 12:27:08  INFO      [12:27:05.733] -- /predict done --
+2026-08-18 12:27:08  INFO      [12:27:08.157] -- /predict request received --
+2026-08-18 12:27:08  INFO      [12:27:08.157] File: '619cXygMJPL.jpg'
+2026-08-18 12:27:08  INFO      [12:27:08.157] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmpb_b1ii08.jpg  (95018 bytes)
+2026-08-18 12:27:08  INFO      [12:27:08.157] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:27:08  INFO      [12:27:08.157] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:27:08  INFO      [12:27:08.157]   elpd_commercial_train2: no boxes — skipping
+2026-08-18 12:27:08  INFO      [12:27:08.157] Trying model: elpd_commercial_train1 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train1\weights\best.pt)
+2026-08-18 12:27:09  INFO      [12:27:08.157]   elpd_commercial_train1: no boxes — skipping
+2026-08-18 12:27:09  INFO      [12:27:08.157] Trying model: english_train33 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train33\weights\best.pt)
+2026-08-18 12:27:09  INFO      [12:27:08.157]   english_train33: box conf=0.187 xyxy=[483,356,1495,729]
+2026-08-18 12:27:17  INFO      [12:27:08.157]   english_train33: OCR result = 'ZI 6071'
+2026-08-18 12:27:17  INFO      [12:27:08.157] SUCCESS via english_train33: plate='ZI 6071'  conf=0.187
+2026-08-18 12:27:19  INFO      [12:27:08.157] -- /predict done --
+2026-08-18 12:27:19  INFO      [12:27:19.311] -- /predict request received --
+2026-08-18 12:27:19  INFO      [12:27:19.311] File: '6171W91UPhL.jpg'
+2026-08-18 12:27:19  INFO      [12:27:19.311] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmpqjgxsnwo.jpg  (86420 bytes)
+2026-08-18 12:27:19  INFO      [12:27:19.311] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:27:19  INFO      [12:27:19.311] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:27:19  INFO      [12:27:19.311]   elpd_commercial_train2: no boxes — skipping
+2026-08-18 12:27:19  INFO      [12:27:19.311] Trying model: elpd_commercial_train1 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train1\weights\best.pt)
+2026-08-18 12:27:20  INFO      [12:27:19.311]   elpd_commercial_train1: no boxes — skipping
+2026-08-18 12:27:20  INFO      [12:27:19.311] Trying model: english_train33 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train33\weights\best.pt)
+2026-08-18 12:27:21  INFO      [12:27:19.311]   english_train33: box conf=0.173 xyxy=[307,357,1351,668]
+2026-08-18 12:27:29  INFO      [12:27:19.311]   english_train33: OCR result = '6792 GD 05'
+2026-08-18 12:27:29  INFO      [12:27:19.311] SUCCESS via english_train33: plate='6792 GD 05'  conf=0.173
+2026-08-18 12:27:31  INFO      [12:27:19.311] -- /predict done --
+2026-08-18 12:27:31  INFO      [12:27:31.790] -- /predict request received --
+2026-08-18 12:27:31  INFO      [12:27:31.790] File: '031782e7e7-450.webp'
+2026-08-18 12:27:31  INFO      [12:27:31.790] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmpxg6lrbw9.webp  (27550 bytes)
+2026-08-18 12:27:31  INFO      [12:27:31.790] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:27:31  INFO      [12:27:31.790] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:27:32  INFO      [12:27:31.790]   elpd_commercial_train2: no boxes — skipping
+2026-08-18 12:27:32  INFO      [12:27:31.790] Trying model: elpd_commercial_train1 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train1\weights\best.pt)
+2026-08-18 12:27:33  INFO      [12:27:31.790]   elpd_commercial_train1: no boxes — skipping
+2026-08-18 12:27:33  INFO      [12:27:31.790] Trying model: english_train33 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train33\weights\best.pt)
+2026-08-18 12:27:33  INFO      [12:27:31.790]   english_train33: box conf=0.556 xyxy=[98,74,426,178]
+2026-08-18 12:27:39  INFO      [12:27:31.790]   english_train33: OCR result = '4671 CCC'
+2026-08-18 12:27:39  INFO      [12:27:31.790] SUCCESS via english_train33: plate='4671 CCC'  conf=0.556
+2026-08-18 12:27:40  INFO      [12:27:31.790] -- /predict done --
+2026-08-18 12:27:40  INFO      [12:27:40.418] -- /predict request received --
+2026-08-18 12:27:40  INFO      [12:27:40.418] File: 'images (43).jpg'
+2026-08-18 12:27:40  INFO      [12:27:40.418] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmp31_bv4jx.jpg  (26688 bytes)
+2026-08-18 12:27:40  INFO      [12:27:40.418] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:27:40  INFO      [12:27:40.418] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:27:40  INFO      [12:27:40.418]   elpd_commercial_train2: no boxes — skipping
+2026-08-18 12:27:40  INFO      [12:27:40.418] Trying model: elpd_commercial_train1 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train1\weights\best.pt)
+2026-08-18 12:27:41  INFO      [12:27:40.418]   elpd_commercial_train1: box conf=0.882 xyxy=[121,275,374,331]
+2026-08-18 12:27:44  INFO      [12:27:40.418]   elpd_commercial_train1: OCR result = 'JU-OO'
+2026-08-18 12:27:44  INFO      [12:27:40.418] SUCCESS via elpd_commercial_train1: plate='JU-OO'  conf=0.882
+2026-08-18 12:27:46  INFO      [12:27:40.418] -- /predict done --
+2026-08-18 12:27:46  INFO      [12:27:46.536] -- /predict request received --
+2026-08-18 12:27:46  INFO      [12:27:46.536] File: 'images (44).jpg'
+2026-08-18 12:27:46  INFO      [12:27:46.536] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmp2pz9yxq4.jpg  (19887 bytes)
+2026-08-18 12:27:46  INFO      [12:27:46.536] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:27:46  INFO      [12:27:46.536] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:27:47  INFO      [12:27:46.536]   elpd_commercial_train2: no boxes — skipping
+2026-08-18 12:27:47  INFO      [12:27:46.536] Trying model: elpd_commercial_train1 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train1\weights\best.pt)
+2026-08-18 12:27:47  INFO      [12:27:46.536]   elpd_commercial_train1: box conf=0.238 xyxy=[51,120,332,200]
+2026-08-18 12:27:54  INFO      [12:27:46.536]   elpd_commercial_train1: OCR result = '4889-45 | 114.96.4 CASA CERINI GAAVUAE RI'
+2026-08-18 12:27:54  INFO      [12:27:46.536] SUCCESS via elpd_commercial_train1: plate='4889-45 | 114.96.4 CASA CERINI GAAVUAE RI'  conf=0.238
+2026-08-18 12:27:56  INFO      [12:27:46.536] -- /predict done --
+2026-08-18 12:27:56  INFO      [12:27:56.857] -- /predict request received --
+2026-08-18 12:27:56  INFO      [12:27:56.857] File: 'images (45).jpg'
+2026-08-18 12:27:56  INFO      [12:27:56.857] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmposl5ky1i.jpg  (22621 bytes)
+2026-08-18 12:27:56  INFO      [12:27:56.857] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:27:56  INFO      [12:27:56.857] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:27:57  INFO      [12:27:56.857]   elpd_commercial_train2: no boxes — skipping
+2026-08-18 12:27:57  INFO      [12:27:56.857] Trying model: elpd_commercial_train1 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train1\weights\best.pt)
+2026-08-18 12:27:58  INFO      [12:27:56.857]   elpd_commercial_train1: box conf=0.480 xyxy=[6,311,95,326]
+2026-08-18 12:28:04  INFO      [12:27:56.857]   elpd_commercial_train1: OCR result = '0 ^ BREKKE 2002'
+2026-08-18 12:28:04  INFO      [12:27:56.857] SUCCESS via elpd_commercial_train1: plate='0 ^ BREKKE 2002'  conf=0.480
+2026-08-18 12:28:06  INFO      [12:27:56.857] -- /predict done --
+2026-08-18 12:28:06  INFO      [12:28:06.285] -- /predict request received --
+2026-08-18 12:28:06  INFO      [12:28:06.285] File: 'images (46).jpg'
+2026-08-18 12:28:06  INFO      [12:28:06.285] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmp8mkga5xp.jpg  (38748 bytes)
+2026-08-18 12:28:06  INFO      [12:28:06.285] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:28:06  INFO      [12:28:06.285] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:28:06  INFO      [12:28:06.285]   elpd_commercial_train2: no boxes — skipping
+2026-08-18 12:28:06  INFO      [12:28:06.285] Trying model: elpd_commercial_train1 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train1\weights\best.pt)
+2026-08-18 12:28:07  INFO      [12:28:06.285]   elpd_commercial_train1: no boxes — skipping
+2026-08-18 12:28:07  INFO      [12:28:06.285] Trying model: english_train33 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train33\weights\best.pt)
+2026-08-18 12:28:08  INFO      [12:28:06.285]   english_train33: no boxes — skipping
+2026-08-18 12:28:08  INFO      [12:28:06.285] Trying model: english_train32 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train32\weights\best.pt)
+2026-08-18 12:28:08  INFO      [12:28:06.285]   english_train32: no boxes — skipping
+2026-08-18 12:28:08  INFO      [12:28:06.285] Trying model: english_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train2\weights\best.pt)
+2026-08-18 12:28:09  INFO      [12:28:06.285]   english_train2: no boxes — skipping
+2026-08-18 12:28:09  INFO      [12:28:06.285] Trying model: english_train (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train\weights\best.pt)
+2026-08-18 12:28:09  INFO      [12:28:06.285]   english_train: no boxes — skipping
+2026-08-18 12:28:09  WARNING   [12:28:06.285] FAIL: no model detected a plate
+2026-08-18 12:28:09  INFO      [12:28:06.285] -- /predict done --
+2026-08-18 12:28:09  INFO      [12:28:09.938] -- /predict request received --
+2026-08-18 12:28:09  INFO      [12:28:09.938] File: 'images (49).jpg'
+2026-08-18 12:28:09  INFO      [12:28:09.938] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmpd0w5g4y5.jpg  (40250 bytes)
+2026-08-18 12:28:09  INFO      [12:28:09.938] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:28:09  INFO      [12:28:09.938] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:28:10  INFO      [12:28:09.938]   elpd_commercial_train2: no boxes — skipping
+2026-08-18 12:28:10  INFO      [12:28:09.938] Trying model: elpd_commercial_train1 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train1\weights\best.pt)
+2026-08-18 12:28:11  INFO      [12:28:09.938]   elpd_commercial_train1: no boxes — skipping
+2026-08-18 12:28:11  INFO      [12:28:09.938] Trying model: english_train33 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train33\weights\best.pt)
+2026-08-18 12:28:12  INFO      [12:28:09.938]   english_train33: no boxes — skipping
+2026-08-18 12:28:12  INFO      [12:28:09.938] Trying model: english_train32 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train32\weights\best.pt)
+2026-08-18 12:28:12  INFO      [12:28:09.938]   english_train32: box conf=0.158 xyxy=[6,41,559,262]
+2026-08-18 12:28:18  INFO      [12:28:09.938]   english_train32: OCR result = '7047A56 MAY VIRGINIA 09 8223MR SEMPER FIDELIS'
+2026-08-18 12:28:18  INFO      [12:28:09.938] SUCCESS via english_train32: plate='7047A56 MAY VIRGINIA 09 8223MR SEMPER FIDELIS'  conf=0.158
+2026-08-18 12:28:20  INFO      [12:28:09.938] -- /predict done --
+2026-08-18 12:28:20  INFO      [12:28:20.066] -- /predict request received --
+2026-08-18 12:28:20  INFO      [12:28:20.066] File: 'images.png'
+2026-08-18 12:28:20  INFO      [12:28:20.066] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmpu_zljyxl.png  (15517 bytes)
+2026-08-18 12:28:20  INFO      [12:28:20.066] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:28:20  INFO      [12:28:20.066] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:28:20  INFO      [12:28:20.066]   elpd_commercial_train2: box conf=0.633 xyxy=[6,243,143,285]
+2026-08-18 12:28:23  INFO      [12:28:20.066]   elpd_commercial_train2: OCR result = 'XED-D203='
+2026-08-18 12:28:23  INFO      [12:28:20.066] SUCCESS via elpd_commercial_train2: plate='XED-D203='  conf=0.633
+2026-08-18 12:28:25  INFO      [12:28:20.066] -- /predict done --
+2026-08-18 12:28:25  INFO      [12:28:25.327] -- /predict request received --
+2026-08-18 12:28:25  INFO      [12:28:25.327] File: 'ph-11134207-7r98z-lqq87r4i7zqz7f.jpg'
+2026-08-18 12:28:25  INFO      [12:28:25.327] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmp8fnhb10o.jpg  (668444 bytes)
+2026-08-18 12:28:25  INFO      [12:28:25.327] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:28:25  INFO      [12:28:25.327] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:28:26  INFO      [12:28:25.327]   elpd_commercial_train2: no boxes — skipping
+2026-08-18 12:28:26  INFO      [12:28:25.327] Trying model: elpd_commercial_train1 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train1\weights\best.pt)
+2026-08-18 12:28:26  INFO      [12:28:25.327]   elpd_commercial_train1: box conf=0.761 xyxy=[109,134,407,197]
+2026-08-18 12:28:32  INFO      [12:28:25.327]   elpd_commercial_train1: OCR result = 'EUROVISION'
+2026-08-18 12:28:32  INFO      [12:28:25.327] SUCCESS via elpd_commercial_train1: plate='EUROVISION'  conf=0.761
+2026-08-18 12:28:35  INFO      [12:28:25.327] -- /predict done --
+2026-08-18 12:28:35  INFO      [12:28:35.082] -- /predict request received --
+2026-08-18 12:28:35  INFO      [12:28:35.082] File: 'Sa0ebd4b74c2e40098b085584d9c80a49p.jpg_720x720q80.jpg'
+2026-08-18 12:28:35  INFO      [12:28:35.082] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmplcfqd6rn.jpg  (52392 bytes)
+2026-08-18 12:28:35  INFO      [12:28:35.082] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:28:35  INFO      [12:28:35.082] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:28:35  INFO      [12:28:35.082]   elpd_commercial_train2: no boxes — skipping
+2026-08-18 12:28:35  INFO      [12:28:35.082] Trying model: elpd_commercial_train1 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train1\weights\best.pt)
+2026-08-18 12:28:36  INFO      [12:28:35.082]   elpd_commercial_train1: no boxes — skipping
+2026-08-18 12:28:36  INFO      [12:28:35.082] Trying model: english_train33 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train33\weights\best.pt)
+2026-08-18 12:28:37  INFO      [12:28:35.082]   english_train33: box conf=0.557 xyxy=[197,325,685,476]
+2026-08-18 12:28:43  INFO      [12:28:35.082]   english_train33: OCR result = "0 1 'DM 353 98"
+2026-08-18 12:28:43  INFO      [12:28:35.082] SUCCESS via english_train33: plate='0 1 'DM 353 98'  conf=0.557
+2026-08-18 12:28:45  INFO      [12:28:35.082] -- /predict done --
+2026-08-18 12:28:45  INFO      [12:28:45.793] -- /predict request received --
+2026-08-18 12:28:45  INFO      [12:28:45.793] File: 's-l400.jpg'
+2026-08-18 12:28:45  INFO      [12:28:45.793] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmpjhcd8qdw.jpg  (65936 bytes)
+2026-08-18 12:28:45  INFO      [12:28:45.793] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:28:45  INFO      [12:28:45.793] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:28:46  INFO      [12:28:45.793]   elpd_commercial_train2: no boxes — skipping
+2026-08-18 12:28:46  INFO      [12:28:45.793] Trying model: elpd_commercial_train1 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train1\weights\best.pt)
+2026-08-18 12:28:47  INFO      [12:28:45.793]   elpd_commercial_train1: box conf=0.598 xyxy=[310,212,353,226]
+2026-08-18 12:28:53  INFO      [12:28:45.793]   elpd_commercial_train1: OCR result = 'WMINS'
+2026-08-18 12:28:53  INFO      [12:28:45.793] SUCCESS via elpd_commercial_train1: plate='WMINS'  conf=0.598
+2026-08-18 12:28:55  INFO      [12:28:45.793] -- /predict done --
+2026-08-18 12:28:55  INFO      [12:28:55.286] -- /predict request received --
+2026-08-18 12:28:55  INFO      [12:28:55.286] File: 's-l1200 (1).jpg'
+2026-08-18 12:28:55  INFO      [12:28:55.286] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmpevmvwjyb.jpg  (159842 bytes)
+2026-08-18 12:28:55  INFO      [12:28:55.286] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:28:55  INFO      [12:28:55.286] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:28:56  INFO      [12:28:55.286]   elpd_commercial_train2: no boxes — skipping
+2026-08-18 12:28:56  INFO      [12:28:55.286] Trying model: elpd_commercial_train1 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train1\weights\best.pt)
+2026-08-18 12:28:56  INFO      [12:28:55.286]   elpd_commercial_train1: no boxes — skipping
+2026-08-18 12:28:56  INFO      [12:28:55.286] Trying model: english_train33 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train33\weights\best.pt)
+2026-08-18 12:28:57  INFO      [12:28:55.286]   english_train33: no boxes — skipping
+2026-08-18 12:28:57  INFO      [12:28:55.286] Trying model: english_train32 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train32\weights\best.pt)
+2026-08-18 12:28:57  INFO      [12:28:55.286]   english_train32: no boxes — skipping
+2026-08-18 12:28:57  INFO      [12:28:55.286] Trying model: english_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train2\weights\best.pt)
+2026-08-18 12:28:58  INFO      [12:28:55.286]   english_train2: no boxes — skipping
+2026-08-18 12:28:58  INFO      [12:28:55.286] Trying model: english_train (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train\weights\best.pt)
+2026-08-18 12:28:59  INFO      [12:28:55.286]   english_train: no boxes — skipping
+2026-08-18 12:28:59  WARNING   [12:28:55.286] FAIL: no model detected a plate
+2026-08-18 12:28:59  INFO      [12:28:55.286] -- /predict done --
+2026-08-18 12:28:59  INFO      [12:28:59.052] -- /predict request received --
+2026-08-18 12:28:59  INFO      [12:28:59.052] File: 's-l1200.jpg'
+2026-08-18 12:28:59  INFO      [12:28:59.052] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmplxubv603.jpg  (159842 bytes)
+2026-08-18 12:28:59  INFO      [12:28:59.052] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:28:59  INFO      [12:28:59.052] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:28:59  INFO      [12:28:59.052]   elpd_commercial_train2: no boxes — skipping
+2026-08-18 12:28:59  INFO      [12:28:59.052] Trying model: elpd_commercial_train1 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train1\weights\best.pt)
+2026-08-18 12:29:00  INFO      [12:28:59.052]   elpd_commercial_train1: no boxes — skipping
+2026-08-18 12:29:00  INFO      [12:28:59.052] Trying model: english_train33 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train33\weights\best.pt)
+2026-08-18 12:29:00  INFO      [12:28:59.052]   english_train33: no boxes — skipping
+2026-08-18 12:29:00  INFO      [12:28:59.052] Trying model: english_train32 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train32\weights\best.pt)
+2026-08-18 12:29:01  INFO      [12:28:59.052]   english_train32: no boxes — skipping
+2026-08-18 12:29:01  INFO      [12:28:59.052] Trying model: english_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train2\weights\best.pt)
+2026-08-18 12:29:01  INFO      [12:28:59.052]   english_train2: no boxes — skipping
+2026-08-18 12:29:01  INFO      [12:28:59.052] Trying model: english_train (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train\weights\best.pt)
+2026-08-18 12:29:02  INFO      [12:28:59.052]   english_train: no boxes — skipping
+2026-08-18 12:29:02  WARNING   [12:28:59.052] FAIL: no model detected a plate
+2026-08-18 12:29:02  INFO      [12:28:59.052] -- /predict done --
+2026-08-18 12:29:02  INFO      [12:29:02.533] -- /predict request received --
+2026-08-18 12:29:02  INFO      [12:29:02.533] File: 'virginia15.jpg'
+2026-08-18 12:29:02  INFO      [12:29:02.533] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmpreiluqen.jpg  (42354 bytes)
+2026-08-18 12:29:02  INFO      [12:29:02.533] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:29:02  INFO      [12:29:02.533] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:29:03  INFO      [12:29:02.533]   elpd_commercial_train2: no boxes — skipping
+2026-08-18 12:29:03  INFO      [12:29:02.533] Trying model: elpd_commercial_train1 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train1\weights\best.pt)
+2026-08-18 12:29:03  INFO      [12:29:02.533]   elpd_commercial_train1: box conf=0.354 xyxy=[86,79,136,125]
+2026-08-18 12:29:08  INFO      [12:29:02.533]   elpd_commercial_train1: OCR result = '0A50422 SEP'
+2026-08-18 12:29:08  INFO      [12:29:02.533] SUCCESS via elpd_commercial_train1: plate='0A50422 SEP'  conf=0.354
+2026-08-18 12:29:09  INFO      [12:29:02.533] -- /predict done --
+2026-08-18 12:29:09  INFO      [12:29:09.556] -- /predict request received --
+2026-08-18 12:29:09  INFO      [12:29:09.556] File: 'virginia-jamestown-americas-400th-anniversary-vehicle-license-plate-c5kgpw.jpg'
+2026-08-18 12:29:09  INFO      [12:29:09.556] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmpodqubwpb.jpg  (56167 bytes)
+2026-08-18 12:29:09  INFO      [12:29:09.556] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:29:09  INFO      [12:29:09.556] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:29:09  INFO      [12:29:09.556]   elpd_commercial_train2: no boxes — skipping
+2026-08-18 12:29:09  INFO      [12:29:09.556] Trying model: elpd_commercial_train1 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train1\weights\best.pt)
+2026-08-18 12:29:10  INFO      [12:29:09.556]   elpd_commercial_train1: no boxes — skipping
+2026-08-18 12:29:10  INFO      [12:29:09.556] Trying model: english_train33 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train33\weights\best.pt)
+2026-08-18 12:29:10  INFO      [12:29:09.556]   english_train33: box conf=0.411 xyxy=[220,299,273,317]
+2026-08-18 12:29:14  INFO      [12:29:09.556]   english_train33: OCR result = 'CSKGPW'
+2026-08-18 12:29:14  INFO      [12:29:09.556] SUCCESS via english_train33: plate='CSKGPW'  conf=0.411
+2026-08-18 12:29:16  INFO      [12:29:09.556] -- /predict done --
+2026-08-18 12:29:16  INFO      [12:29:16.456] -- /predict request received --
+2026-08-18 12:29:16  INFO      [12:29:16.456] File: 'WhatsApp Image 2026-08-03 at 12.17.37 (1).jpeg'
+2026-08-18 12:29:16  INFO      [12:29:16.456] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmpczaulm87.jpeg  (158968 bytes)
+2026-08-18 12:29:16  INFO      [12:29:16.456] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:29:16  INFO      [12:29:16.456] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:29:17  INFO      [12:29:16.456]   elpd_commercial_train2: box conf=0.849 xyxy=[459,480,1047,647]
+2026-08-18 12:29:24  INFO      [12:29:16.456]   elpd_commercial_train2: OCR result = 'E BI 9506CV QD OHD AUTO PREMIUM'
+2026-08-18 12:29:24  INFO      [12:29:16.456] SUCCESS via elpd_commercial_train2: plate='E BI 9506CV QD OHD AUTO PREMIUM'  conf=0.849
+2026-08-18 12:29:26  INFO      [12:29:16.456] -- /predict done --
+2026-08-18 12:29:27  INFO      [12:29:27.002] -- /predict request received --
+2026-08-18 12:29:27  INFO      [12:29:27.002] File: 'WhatsApp Image 2026-08-03 at 12.17.37.jpeg'
+2026-08-18 12:29:27  INFO      [12:29:27.002] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmp172a2jn8.jpeg  (158968 bytes)
+2026-08-18 12:29:27  INFO      [12:29:27.002] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:29:27  INFO      [12:29:27.002] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:29:27  INFO      [12:29:27.002]   elpd_commercial_train2: box conf=0.849 xyxy=[459,480,1047,647]
+2026-08-18 12:29:35  INFO      [12:29:27.002]   elpd_commercial_train2: OCR result = 'E BI 9506CV QD OHD AUTO PREMIUM'
+2026-08-18 12:29:35  INFO      [12:29:27.002] SUCCESS via elpd_commercial_train2: plate='E BI 9506CV QD OHD AUTO PREMIUM'  conf=0.849
+2026-08-18 12:29:37  INFO      [12:29:27.002] -- /predict done --
+2026-08-18 12:29:37  INFO      [12:29:37.566] -- /predict request received --
+2026-08-18 12:29:37  INFO      [12:29:37.566] File: 'WhatsApp Image 2026-08-03 at 12.17.38 (1).jpeg'
+2026-08-18 12:29:37  INFO      [12:29:37.566] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmphypk35dl.jpeg  (160780 bytes)
+2026-08-18 12:29:37  INFO      [12:29:37.566] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:29:37  INFO      [12:29:37.566] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:29:38  INFO      [12:29:37.566]   elpd_commercial_train2: box conf=0.638 xyxy=[396,325,1209,529]
+2026-08-18 12:29:46  INFO      [12:29:37.566]   elpd_commercial_train2: OCR result = 'F 0B 828 JL N(EAL AUFOMOBILES 46 GALAXIE'
+2026-08-18 12:29:46  INFO      [12:29:37.566] SUCCESS via elpd_commercial_train2: plate='F 0B 828 JL N(EAL AUFOMOBILES 46 GALAXIE'  conf=0.638
+2026-08-18 12:29:48  INFO      [12:29:37.566] -- /predict done --
+2026-08-18 12:29:48  INFO      [12:29:48.661] -- /predict request received --
+2026-08-18 12:29:48  INFO      [12:29:48.661] File: 'WhatsApp Image 2026-08-03 at 12.17.38 (2).jpeg'
+2026-08-18 12:29:48  INFO      [12:29:48.661] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmpkhpoaneb.jpeg  (175678 bytes)
+2026-08-18 12:29:48  INFO      [12:29:48.661] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:29:48  INFO      [12:29:48.661] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:29:49  INFO      [12:29:48.661]   elpd_commercial_train2: box conf=0.878 xyxy=[627,595,952,720]
+2026-08-18 12:29:53  INFO      [12:29:48.661]   elpd_commercial_train2: OCR result = 'GFF 88 17'
+2026-08-18 12:29:53  INFO      [12:29:48.661] SUCCESS via elpd_commercial_train2: plate='GFF 88 17'  conf=0.878
+2026-08-18 12:29:55  INFO      [12:29:48.661] -- /predict done --
+2026-08-18 12:29:55  INFO      [12:29:55.197] -- /predict request received --
+2026-08-18 12:29:55  INFO      [12:29:55.197] File: 'WhatsApp Image 2026-08-03 at 12.17.38.jpeg'
+2026-08-18 12:29:55  INFO      [12:29:55.197] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmpwo3dsshz.jpeg  (241110 bytes)
+2026-08-18 12:29:55  INFO      [12:29:55.197] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:29:55  INFO      [12:29:55.197] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:29:55  INFO      [12:29:55.197]   elpd_commercial_train2: no boxes — skipping
+2026-08-18 12:29:55  INFO      [12:29:55.197] Trying model: elpd_commercial_train1 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train1\weights\best.pt)
+2026-08-18 12:29:56  INFO      [12:29:55.197]   elpd_commercial_train1: box conf=0.865 xyxy=[513,374,1127,556]
+2026-08-18 12:30:01  INFO      [12:29:55.197]   elpd_commercial_train1: OCR result = '1883 DYT'
+2026-08-18 12:30:01  INFO      [12:29:55.197] SUCCESS via elpd_commercial_train1: plate='1883 DYT'  conf=0.865
+2026-08-18 12:30:03  INFO      [12:29:55.197] -- /predict done --
+2026-08-18 12:30:03  INFO      [12:30:03.314] -- /predict request received --
+2026-08-18 12:30:03  INFO      [12:30:03.314] File: 'WhatsApp Image 2026-08-03 at 18.43.13.jpeg'
+2026-08-18 12:30:03  INFO      [12:30:03.314] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmp39gl0sda.jpeg  (165106 bytes)
+2026-08-18 12:30:03  INFO      [12:30:03.314] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:30:03  INFO      [12:30:03.314] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:30:04  INFO      [12:30:03.314]   elpd_commercial_train2: box conf=0.862 xyxy=[532,456,1017,580]
+2026-08-18 12:30:11  INFO      [12:30:03.314]   elpd_commercial_train2: OCR result = 'PL-484-YGB'
+2026-08-18 12:30:11  INFO      [12:30:03.314] SUCCESS via elpd_commercial_train2: plate='PL-484-YGB'  conf=0.862
+2026-08-18 12:30:13  INFO      [12:30:03.314] -- /predict done --
+2026-08-18 12:35:41  INFO      [12:35:41.938] -- /predict request received --
+2026-08-18 12:35:41  INFO      [12:35:41.938] File: '6171W91UPhL.jpg'
+2026-08-18 12:35:41  INFO      [12:35:41.938] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmpznjdkn8e.jpg  (86420 bytes)
+2026-08-18 12:35:41  INFO      [12:35:41.938] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:35:41  INFO      [12:35:41.938] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:35:42  INFO      [12:35:41.938]   elpd_commercial_train2: no boxes — skipping
+2026-08-18 12:35:42  INFO      [12:35:41.938] Trying model: elpd_commercial_train1 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train1\weights\best.pt)
+2026-08-18 12:35:42  INFO      [12:35:41.938]   elpd_commercial_train1: no boxes — skipping
+2026-08-18 12:35:42  INFO      [12:35:41.938] Trying model: english_train33 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train33\weights\best.pt)
+2026-08-18 12:35:43  INFO      [12:35:41.938]   english_train33: box conf=0.173 xyxy=[307,357,1351,668]
+2026-08-18 12:35:47  INFO      [12:35:41.938]   english_train33: OCR result = '6792 GD 05'
+2026-08-18 12:35:47  INFO      [12:35:41.938] SUCCESS via english_train33: plate='6792 GD 05'  conf=0.173
+2026-08-18 12:35:48  INFO      [12:35:41.938] -- /predict done --
+2026-08-18 12:35:48  INFO      [12:35:48.728] -- /predict request received --
+2026-08-18 12:35:48  INFO      [12:35:48.728] File: '031782e7e7-450.webp'
+2026-08-18 12:35:48  INFO      [12:35:48.728] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmpfpjio0gk.webp  (27550 bytes)
+2026-08-18 12:35:48  INFO      [12:35:48.728] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:35:48  INFO      [12:35:48.728] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:35:49  INFO      [12:35:48.728]   elpd_commercial_train2: no boxes — skipping
+2026-08-18 12:35:49  INFO      [12:35:48.728] Trying model: elpd_commercial_train1 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train1\weights\best.pt)
+2026-08-18 12:35:49  INFO      [12:35:48.728]   elpd_commercial_train1: no boxes — skipping
+2026-08-18 12:35:49  INFO      [12:35:48.728] Trying model: english_train33 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train33\weights\best.pt)
+2026-08-18 12:35:50  INFO      [12:35:48.728]   english_train33: box conf=0.556 xyxy=[98,74,426,178]
+2026-08-18 12:35:55  INFO      [12:35:48.728]   english_train33: OCR result = '4671 CCC'
+2026-08-18 12:35:55  INFO      [12:35:48.728] SUCCESS via english_train33: plate='4671 CCC'  conf=0.556
+2026-08-18 12:35:58  INFO      [12:35:48.728] -- /predict done --
+2026-08-18 12:35:58  INFO      [12:35:58.579] -- /predict request received --
+2026-08-18 12:35:58  INFO      [12:35:58.579] File: 'images (44).jpg'
+2026-08-18 12:35:58  INFO      [12:35:58.579] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmpljd9hcbr.jpg  (19887 bytes)
+2026-08-18 12:35:58  INFO      [12:35:58.579] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:35:58  INFO      [12:35:58.579] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:35:59  INFO      [12:35:58.579]   elpd_commercial_train2: no boxes — skipping
+2026-08-18 12:35:59  INFO      [12:35:58.579] Trying model: elpd_commercial_train1 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train1\weights\best.pt)
+2026-08-18 12:35:59  INFO      [12:35:58.579]   elpd_commercial_train1: box conf=0.238 xyxy=[51,120,332,200]
+2026-08-18 12:36:06  INFO      [12:35:58.579]   elpd_commercial_train1: OCR result = '4889-45 | 114.96.4 CASA CERINI GAAVUAE RI'
+2026-08-18 12:36:06  INFO      [12:35:58.579] SUCCESS via elpd_commercial_train1: plate='4889-45 | 114.96.4 CASA CERINI GAAVUAE RI'  conf=0.238
+2026-08-18 12:36:09  INFO      [12:35:58.579] -- /predict done --
+2026-08-18 12:36:09  INFO      [12:36:09.489] -- /predict request received --
+2026-08-18 12:36:09  INFO      [12:36:09.489] File: 'images (49).jpg'
+2026-08-18 12:36:09  INFO      [12:36:09.489] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmp09s5e13b.jpg  (40250 bytes)
+2026-08-18 12:36:09  INFO      [12:36:09.489] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:36:09  INFO      [12:36:09.489] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:36:10  INFO      [12:36:09.489]   elpd_commercial_train2: no boxes — skipping
+2026-08-18 12:36:10  INFO      [12:36:09.489] Trying model: elpd_commercial_train1 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train1\weights\best.pt)
+2026-08-18 12:36:10  INFO      [12:36:09.489]   elpd_commercial_train1: no boxes — skipping
+2026-08-18 12:36:10  INFO      [12:36:09.489] Trying model: english_train33 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train33\weights\best.pt)
+2026-08-18 12:36:11  INFO      [12:36:09.489]   english_train33: no boxes — skipping
+2026-08-18 12:36:11  INFO      [12:36:09.489] Trying model: english_train32 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train32\weights\best.pt)
+2026-08-18 12:36:12  INFO      [12:36:09.489]   english_train32: box conf=0.158 xyxy=[6,41,559,262]
+2026-08-18 12:36:16  INFO      [12:36:09.489]   english_train32: OCR result = '7047A56 MAY VIRGINIA 09 8223MR SEMPER FIDELIS'
+2026-08-18 12:36:16  INFO      [12:36:09.489] SUCCESS via english_train32: plate='7047A56 MAY VIRGINIA 09 8223MR SEMPER FIDELIS'  conf=0.158
+2026-08-18 12:36:18  INFO      [12:36:09.489] -- /predict done --
+2026-08-18 12:36:18  INFO      [12:36:18.028] -- /predict request received --
+2026-08-18 12:36:18  INFO      [12:36:18.028] File: 'Sa0ebd4b74c2e40098b085584d9c80a49p.jpg_720x720q80.jpg'
+2026-08-18 12:36:18  INFO      [12:36:18.028] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmp44f0m8g8.jpg  (52392 bytes)
+2026-08-18 12:36:18  INFO      [12:36:18.028] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:36:18  INFO      [12:36:18.028] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:36:18  INFO      [12:36:18.028]   elpd_commercial_train2: no boxes — skipping
+2026-08-18 12:36:18  INFO      [12:36:18.028] Trying model: elpd_commercial_train1 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train1\weights\best.pt)
+2026-08-18 12:36:18  INFO      [12:36:18.028]   elpd_commercial_train1: no boxes — skipping
+2026-08-18 12:36:18  INFO      [12:36:18.028] Trying model: english_train33 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train33\weights\best.pt)
+2026-08-18 12:36:19  INFO      [12:36:18.028]   english_train33: box conf=0.557 xyxy=[197,325,685,476]
+2026-08-18 12:36:26  INFO      [12:36:18.028]   english_train33: OCR result = "0 1 'DM 353 98"
+2026-08-18 12:36:26  INFO      [12:36:18.028] SUCCESS via english_train33: plate='0 1 'DM 353 98'  conf=0.557
+2026-08-18 12:36:28  INFO      [12:36:18.028] -- /predict done --
+2026-08-18 12:36:28  INFO      [12:36:28.487] -- /predict request received --
+2026-08-18 12:36:28  INFO      [12:36:28.487] File: 'WhatsApp Image 2026-08-03 at 12.17.37 (1).jpeg'
+2026-08-18 12:36:28  INFO      [12:36:28.487] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmpduppro_2.jpeg  (158968 bytes)
+2026-08-18 12:36:28  INFO      [12:36:28.487] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:36:28  INFO      [12:36:28.487] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:36:29  INFO      [12:36:28.487]   elpd_commercial_train2: box conf=0.849 xyxy=[459,480,1047,647]
+2026-08-18 12:36:37  INFO      [12:36:28.487]   elpd_commercial_train2: OCR result = 'E BI 9506CV QD OHD AUTO PREMIUM'
+2026-08-18 12:36:37  INFO      [12:36:28.487] SUCCESS via elpd_commercial_train2: plate='E BI 9506CV QD OHD AUTO PREMIUM'  conf=0.849
+2026-08-18 12:36:39  INFO      [12:36:28.487] -- /predict done --
+2026-08-18 12:36:39  INFO      [12:36:39.349] -- /predict request received --
+2026-08-18 12:36:39  INFO      [12:36:39.349] File: 'WhatsApp Image 2026-08-03 at 12.17.38 (1).jpeg'
+2026-08-18 12:36:39  INFO      [12:36:39.349] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmpjo570v3u.jpeg  (160780 bytes)
+2026-08-18 12:36:39  INFO      [12:36:39.349] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:36:39  INFO      [12:36:39.349] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:36:40  INFO      [12:36:39.349]   elpd_commercial_train2: box conf=0.638 xyxy=[396,325,1209,529]
+2026-08-18 12:36:41  INFO      [12:36:41.252] -- /predict request received --
+2026-08-18 12:36:41  INFO      [12:36:41.252] File: 'images (46).jpg'
+2026-08-18 12:36:41  INFO      [12:36:41.252] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmpxpll2kbm.jpg  (38748 bytes)
+2026-08-18 12:36:41  INFO      [12:36:41.252] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:36:41  INFO      [12:36:41.252] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:36:42  INFO      [12:36:41.252]   elpd_commercial_train2: no boxes — skipping
+2026-08-18 12:36:42  INFO      [12:36:41.252] Trying model: elpd_commercial_train1 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train1\weights\best.pt)
+2026-08-18 12:36:42  INFO      [12:36:41.252]   elpd_commercial_train1: no boxes — skipping
+2026-08-18 12:36:42  INFO      [12:36:41.252] Trying model: english_train33 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train33\weights\best.pt)
+2026-08-18 12:36:43  INFO      [12:36:41.252]   english_train33: no boxes — skipping
+2026-08-18 12:36:43  INFO      [12:36:41.252] Trying model: english_train32 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train32\weights\best.pt)
+2026-08-18 12:36:44  INFO      [12:36:41.252]   english_train32: no boxes — skipping
+2026-08-18 12:36:44  INFO      [12:36:41.252] Trying model: english_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train2\weights\best.pt)
+2026-08-18 12:36:45  INFO      [12:36:41.252]   english_train2: no boxes — skipping
+2026-08-18 12:36:45  INFO      [12:36:41.252] Trying model: english_train (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train\weights\best.pt)
+2026-08-18 12:36:45  INFO      [12:36:41.252]   english_train: no boxes — skipping
+2026-08-18 12:36:45  WARNING   [12:36:41.252] FAIL: no model detected a plate
+2026-08-18 12:36:45  INFO      [12:36:41.252] -- /predict done --
+2026-08-18 12:36:46  INFO      [12:36:46.008] -- /predict request received --
+2026-08-18 12:36:46  INFO      [12:36:46.008] File: 'images.png'
+2026-08-18 12:36:46  INFO      [12:36:46.008] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmpkonj1hf0.png  (15517 bytes)
+2026-08-18 12:36:46  INFO      [12:36:46.008] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:36:46  INFO      [12:36:46.008] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:36:46  INFO      [12:36:46.008]   elpd_commercial_train2: box conf=0.633 xyxy=[6,243,143,285]
+2026-08-18 12:36:54  INFO      [12:36:39.349]   elpd_commercial_train2: OCR result = 'F 0B 828 JL N(EAL AUFOMOBILES 46 GALAXIE'
+2026-08-18 12:36:54  INFO      [12:36:39.349] SUCCESS via elpd_commercial_train2: plate='F 0B 828 JL N(EAL AUFOMOBILES 46 GALAXIE'  conf=0.638
+2026-08-18 12:36:57  INFO      [12:36:39.349] -- /predict done --
+2026-08-18 12:36:57  INFO      [12:36:57.086] -- /predict request received --
+2026-08-18 12:36:57  INFO      [12:36:57.086] File: 'WhatsApp Image 2026-08-03 at 12.17.38 (2).jpeg'
+2026-08-18 12:36:57  INFO      [12:36:57.086] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmps3724k77.jpeg  (175678 bytes)
+2026-08-18 12:36:57  INFO      [12:36:57.086] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:36:57  INFO      [12:36:57.086] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:36:57  INFO      [12:36:46.008]   elpd_commercial_train2: OCR result = 'XED-D203='
+2026-08-18 12:36:57  INFO      [12:36:46.008] SUCCESS via elpd_commercial_train2: plate='XED-D203='  conf=0.633
+2026-08-18 12:37:01  INFO      [12:36:57.086]   elpd_commercial_train2: box conf=0.878 xyxy=[627,595,952,720]
+2026-08-18 12:37:01  INFO      [12:36:46.008] -- /predict done --
+2026-08-18 12:37:01  INFO      [12:37:01.329] -- /predict request received --
+2026-08-18 12:37:01  INFO      [12:37:01.329] File: 'ph-11134207-7r98z-lqq87r4i7zqz7f.jpg'
+2026-08-18 12:37:01  INFO      [12:37:01.329] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmpt8tbz5lp.jpg  (668444 bytes)
+2026-08-18 12:37:01  INFO      [12:37:01.329] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:37:01  INFO      [12:37:01.329] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:37:02  INFO      [12:37:01.329]   elpd_commercial_train2: no boxes — skipping
+2026-08-18 12:37:02  INFO      [12:37:01.329] Trying model: elpd_commercial_train1 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train1\weights\best.pt)
+2026-08-18 12:37:03  INFO      [12:37:01.329]   elpd_commercial_train1: box conf=0.761 xyxy=[109,134,407,197]
+2026-08-18 12:37:14  INFO      [12:36:57.086]   elpd_commercial_train2: OCR result = 'GFF 88 17'
+2026-08-18 12:37:14  INFO      [12:36:57.086] SUCCESS via elpd_commercial_train2: plate='GFF 88 17'  conf=0.878
+2026-08-18 12:37:14  INFO      [12:37:01.329]   elpd_commercial_train1: OCR result = 'EUROVISION'
+2026-08-18 12:37:15  INFO      [12:37:01.329] SUCCESS via elpd_commercial_train1: plate='EUROVISION'  conf=0.761
+2026-08-18 12:37:15  INFO      [12:36:57.086] -- /predict done --
+2026-08-18 12:37:16  INFO      [12:37:16.715] -- /predict request received --
+2026-08-18 12:37:16  INFO      [12:37:16.715] File: 'WhatsApp Image 2026-08-03 at 12.17.38.jpeg'
+2026-08-18 12:37:17  INFO      [12:37:16.715] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmpae049jny.jpeg  (241110 bytes)
+2026-08-18 12:37:17  INFO      [12:37:16.715] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:37:17  INFO      [12:37:16.715] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:37:18  INFO      [12:37:01.329] -- /predict done --
+2026-08-18 12:37:18  INFO      [12:37:18.244] -- /predict request received --
+2026-08-18 12:37:18  INFO      [12:37:18.244] File: 's-l400.jpg'
+2026-08-18 12:37:18  INFO      [12:37:18.244] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmpdph17xgm.jpg  (65936 bytes)
+2026-08-18 12:37:18  INFO      [12:37:18.244] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:37:18  INFO      [12:37:18.244] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:37:19  INFO      [12:37:16.715]   elpd_commercial_train2: no boxes — skipping
+2026-08-18 12:37:19  INFO      [12:37:16.715] Trying model: elpd_commercial_train1 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train1\weights\best.pt)
+2026-08-18 12:37:19  INFO      [12:37:18.244]   elpd_commercial_train2: no boxes — skipping
+2026-08-18 12:37:19  INFO      [12:37:18.244] Trying model: elpd_commercial_train1 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train1\weights\best.pt)
+2026-08-18 12:37:20  INFO      [12:37:16.715]   elpd_commercial_train1: box conf=0.865 xyxy=[513,374,1127,556]
+2026-08-18 12:37:20  INFO      [12:37:18.244]   elpd_commercial_train1: box conf=0.598 xyxy=[310,212,353,226]
+2026-08-18 12:37:29  INFO      [12:37:18.244]   elpd_commercial_train1: OCR result = 'WMINS'
+2026-08-18 12:37:29  INFO      [12:37:18.244] SUCCESS via elpd_commercial_train1: plate='WMINS'  conf=0.598
+2026-08-18 12:37:30  INFO      [12:37:16.715]   elpd_commercial_train1: OCR result = '1883 DYT'
+2026-08-18 12:37:30  INFO      [12:37:16.715] SUCCESS via elpd_commercial_train1: plate='1883 DYT'  conf=0.865
+2026-08-18 12:37:31  INFO      [12:37:18.244] -- /predict done --
+2026-08-18 12:37:32  INFO      [12:37:32.830] -- /predict request received --
+2026-08-18 12:37:32  INFO      [12:37:32.830] File: 's-l1200 (1).jpg'
+2026-08-18 12:37:32  INFO      [12:37:32.830] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmpjkyqpsj_.jpg  (159842 bytes)
+2026-08-18 12:37:32  INFO      [12:37:32.830] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:37:32  INFO      [12:37:32.830] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:37:33  INFO      [12:37:16.715] -- /predict done --
+2026-08-18 12:37:33  INFO      [12:37:33.100] -- /predict request received --
+2026-08-18 12:37:33  INFO      [12:37:33.100] File: 'WhatsApp Image 2026-08-03 at 18.43.13.jpeg'
+2026-08-18 12:37:33  INFO      [12:37:33.100] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmp7k1g42vc.jpeg  (165106 bytes)
+2026-08-18 12:37:33  INFO      [12:37:33.100] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:37:33  INFO      [12:37:33.100] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:37:34  INFO      [12:37:32.830]   elpd_commercial_train2: no boxes — skipping
+2026-08-18 12:37:34  INFO      [12:37:32.830] Trying model: elpd_commercial_train1 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train1\weights\best.pt)
+2026-08-18 12:37:34  INFO      [12:37:33.100]   elpd_commercial_train2: box conf=0.862 xyxy=[532,456,1017,580]
+2026-08-18 12:37:35  INFO      [12:37:32.830]   elpd_commercial_train1: no boxes — skipping
+2026-08-18 12:37:35  INFO      [12:37:32.830] Trying model: english_train33 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train33\weights\best.pt)
+2026-08-18 12:37:36  INFO      [12:37:32.830]   english_train33: no boxes — skipping
+2026-08-18 12:37:36  INFO      [12:37:32.830] Trying model: english_train32 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train32\weights\best.pt)
+2026-08-18 12:37:37  INFO      [12:37:32.830]   english_train32: no boxes — skipping
+2026-08-18 12:37:37  INFO      [12:37:32.830] Trying model: english_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train2\weights\best.pt)
+2026-08-18 12:37:37  INFO      [12:37:32.830]   english_train2: no boxes — skipping
+2026-08-18 12:37:37  INFO      [12:37:32.830] Trying model: english_train (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train\weights\best.pt)
+2026-08-18 12:37:38  INFO      [12:37:32.830]   english_train: no boxes — skipping
+2026-08-18 12:37:38  WARNING   [12:37:32.830] FAIL: no model detected a plate
+2026-08-18 12:37:38  INFO      [12:37:32.830] -- /predict done --
+2026-08-18 12:37:38  INFO      [12:37:38.526] -- /predict request received --
+2026-08-18 12:37:38  INFO      [12:37:38.526] File: 's-l1200.jpg'
+2026-08-18 12:37:38  INFO      [12:37:38.526] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmp4hrw43es.jpg  (159842 bytes)
+2026-08-18 12:37:38  INFO      [12:37:38.526] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:37:38  INFO      [12:37:38.526] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:37:39  INFO      [12:37:38.526]   elpd_commercial_train2: no boxes — skipping
+2026-08-18 12:37:39  INFO      [12:37:38.526] Trying model: elpd_commercial_train1 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train1\weights\best.pt)
+2026-08-18 12:37:39  INFO      [12:37:38.526]   elpd_commercial_train1: no boxes — skipping
+2026-08-18 12:37:39  INFO      [12:37:38.526] Trying model: english_train33 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train33\weights\best.pt)
+2026-08-18 12:37:40  INFO      [12:37:38.526]   english_train33: no boxes — skipping
+2026-08-18 12:37:40  INFO      [12:37:38.526] Trying model: english_train32 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train32\weights\best.pt)
+2026-08-18 12:37:41  INFO      [12:37:38.526]   english_train32: no boxes — skipping
+2026-08-18 12:37:41  INFO      [12:37:38.526] Trying model: english_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train2\weights\best.pt)
+2026-08-18 12:37:41  INFO      [12:37:38.526]   english_train2: no boxes — skipping
+2026-08-18 12:37:41  INFO      [12:37:38.526] Trying model: english_train (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train\weights\best.pt)
+2026-08-18 12:37:42  INFO      [12:37:38.526]   english_train: no boxes — skipping
+2026-08-18 12:37:42  WARNING   [12:37:38.526] FAIL: no model detected a plate
+2026-08-18 12:37:42  INFO      [12:37:38.526] -- /predict done --
+2026-08-18 12:37:42  INFO      [12:37:42.440] -- /predict request received --
+2026-08-18 12:37:42  INFO      [12:37:42.440] File: 'virginia15.jpg'
+2026-08-18 12:37:42  INFO      [12:37:42.440] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmp44i7jr49.jpg  (42354 bytes)
+2026-08-18 12:37:42  INFO      [12:37:42.440] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:37:42  INFO      [12:37:42.440] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:37:43  INFO      [12:37:42.440]   elpd_commercial_train2: no boxes — skipping
+2026-08-18 12:37:43  INFO      [12:37:42.440] Trying model: elpd_commercial_train1 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train1\weights\best.pt)
+2026-08-18 12:37:44  INFO      [12:37:42.440]   elpd_commercial_train1: box conf=0.354 xyxy=[86,79,136,125]
+2026-08-18 12:37:47  INFO      [12:37:33.100]   elpd_commercial_train2: OCR result = 'PL-484-YGB'
+2026-08-18 12:37:47  INFO      [12:37:33.100] SUCCESS via elpd_commercial_train2: plate='PL-484-YGB'  conf=0.862
+2026-08-18 12:37:50  INFO      [12:37:33.100] -- /predict done --
+2026-08-18 12:37:52  INFO      [12:37:42.440]   elpd_commercial_train1: OCR result = '0A50422 SEP'
+2026-08-18 12:37:52  INFO      [12:37:42.440] SUCCESS via elpd_commercial_train1: plate='0A50422 SEP'  conf=0.354
+2026-08-18 12:37:54  INFO      [12:37:42.440] -- /predict done --
+2026-08-18 12:37:54  INFO      [12:37:54.603] -- /predict request received --
+2026-08-18 12:37:54  INFO      [12:37:54.603] File: 'virginia-jamestown-americas-400th-anniversary-vehicle-license-plate-c5kgpw.jpg'
+2026-08-18 12:37:54  INFO      [12:37:54.603] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmp08l3yk3e.jpg  (56167 bytes)
+2026-08-18 12:37:54  INFO      [12:37:54.603] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:37:54  INFO      [12:37:54.603] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:37:55  INFO      [12:37:54.603]   elpd_commercial_train2: no boxes — skipping
+2026-08-18 12:37:55  INFO      [12:37:54.603] Trying model: elpd_commercial_train1 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train1\weights\best.pt)
+2026-08-18 12:37:55  INFO      [12:37:54.603]   elpd_commercial_train1: no boxes — skipping
+2026-08-18 12:37:55  INFO      [12:37:54.603] Trying model: english_train33 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train33\weights\best.pt)
+2026-08-18 12:37:56  INFO      [12:37:54.603]   english_train33: box conf=0.411 xyxy=[220,299,273,317]
+2026-08-18 12:38:02  INFO      [12:37:54.603]   english_train33: OCR result = 'CSKGPW'
+2026-08-18 12:38:02  INFO      [12:37:54.603] SUCCESS via english_train33: plate='CSKGPW'  conf=0.411
+2026-08-18 12:38:04  INFO      [12:37:54.603] -- /predict done --
+2026-08-18 12:38:04  INFO      [12:38:04.877] -- /predict request received --
+2026-08-18 12:38:04  INFO      [12:38:04.877] File: 'WhatsApp Image 2026-08-03 at 12.17.37.jpeg'
+2026-08-18 12:38:04  INFO      [12:38:04.877] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmpgic5gchm.jpeg  (158968 bytes)
+2026-08-18 12:38:04  INFO      [12:38:04.877] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:38:04  INFO      [12:38:04.877] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:38:05  INFO      [12:38:04.877]   elpd_commercial_train2: box conf=0.849 xyxy=[459,480,1047,647]
+2026-08-18 12:38:11  INFO      [12:38:04.877]   elpd_commercial_train2: OCR result = 'E BI 9506CV QD OHD AUTO PREMIUM'
+2026-08-18 12:38:11  INFO      [12:38:04.877] SUCCESS via elpd_commercial_train2: plate='E BI 9506CV QD OHD AUTO PREMIUM'  conf=0.849
+2026-08-18 12:38:13  INFO      [12:38:04.877] -- /predict done --
+2026-08-18 12:52:26  INFO      [12:52:26.909] -- /predict request received --
+2026-08-18 12:52:26  INFO      [12:52:26.909] File: 'Screenshot 2026-07-06 033959.png'
+2026-08-18 12:52:26  INFO      [12:52:26.909] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmpbbirbg3f.png  (36891 bytes)
+2026-08-18 12:52:26  INFO      [12:52:26.909] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:52:26  INFO      [12:52:26.909] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:52:27  INFO      [12:52:26.909]   elpd_commercial_train2: no boxes — skipping
+2026-08-18 12:52:27  INFO      [12:52:26.909] Trying model: elpd_commercial_train1 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train1\weights\best.pt)
+2026-08-18 12:52:27  INFO      [12:52:26.909]   elpd_commercial_train1: no boxes — skipping
+2026-08-18 12:52:27  INFO      [12:52:26.909] Trying model: english_train33 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\english_train33\weights\best.pt)
+2026-08-18 12:52:27  INFO      [12:52:26.909]   english_train33: box conf=0.476 xyxy=[7,0,261,81]
+2026-08-18 12:52:30  INFO      [12:52:26.909]   english_train33: OCR result = 'FX 477 SE'
+2026-08-18 12:52:30  INFO      [12:52:26.909] SUCCESS via english_train33: plate='FX 477 SE'  conf=0.476
+2026-08-18 12:52:32  INFO      [12:52:26.909] -- /predict done --
+2026-08-18 12:52:32  INFO      [12:52:32.164] -- /predict request received --
+2026-08-18 12:52:32  INFO      [12:52:32.164] File: 'WhatsApp Image 2026-07-15 at 21.04.21.jpeg'
+2026-08-18 12:52:32  INFO      [12:52:32.164] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmp2bru3kof.jpeg  (192187 bytes)
+2026-08-18 12:52:32  INFO      [12:52:32.164] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:52:32  INFO      [12:52:32.164] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:52:32  INFO      [12:52:32.164]   elpd_commercial_train2: no boxes — skipping
+2026-08-18 12:52:32  INFO      [12:52:32.164] Trying model: elpd_commercial_train1 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train1\weights\best.pt)
+2026-08-18 12:52:33  INFO      [12:52:32.164]   elpd_commercial_train1: box conf=0.815 xyxy=[281,405,1247,625]
+2026-08-18 12:52:41  INFO      [12:52:32.164]   elpd_commercial_train1: OCR result = 'AQUITAINE F DG " 368 HPE 40 14038'
+2026-08-18 12:52:41  INFO      [12:52:32.164] SUCCESS via elpd_commercial_train1: plate='AQUITAINE F DG " 368 HPE 40 14038'  conf=0.815
+2026-08-18 12:52:43  INFO      [12:52:32.164] -- /predict done --
+2026-08-18 12:52:43  INFO      [12:52:43.987] -- /predict request received --
+2026-08-18 12:52:43  INFO      [12:52:43.987] File: 'WhatsApp Image 2026-08-12 at 15.39.06 (2).jpeg'
+2026-08-18 12:52:44  INFO      [12:52:43.987] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmpdojncgyy.jpeg  (220441 bytes)
+2026-08-18 12:52:44  INFO      [12:52:43.987] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:52:44  INFO      [12:52:43.987] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:52:44  INFO      [12:52:43.987]   elpd_commercial_train2: no boxes — skipping
+2026-08-18 12:52:44  INFO      [12:52:43.987] Trying model: elpd_commercial_train1 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train1\weights\best.pt)
+2026-08-18 12:52:45  INFO      [12:52:43.987]   elpd_commercial_train1: box conf=0.463 xyxy=[727,526,1150,655]
+2026-08-18 12:52:51  INFO      [12:52:43.987]   elpd_commercial_train1: OCR result = 'RK-ZX'
+2026-08-18 12:52:51  INFO      [12:52:43.987] SUCCESS via elpd_commercial_train1: plate='RK-ZX'  conf=0.463
+2026-08-18 12:52:54  INFO      [12:52:43.987] -- /predict done --
+2026-08-18 12:53:41  INFO      [12:53:41.261] -- /predict request received --
+2026-08-18 12:53:41  INFO      [12:53:41.261] File: 'WhatsApp Image 2026-08-12 at 15.39.06.jpeg'
+2026-08-18 12:53:41  INFO      [12:53:41.261] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmptlw9u31a.jpeg  (180881 bytes)
+2026-08-18 12:53:41  INFO      [12:53:41.261] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:53:41  INFO      [12:53:41.261] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:53:41  INFO      [12:53:41.261]   elpd_commercial_train2: box conf=0.811 xyxy=[395,537,912,663]
+2026-08-18 12:53:45  INFO      [12:53:41.261]   elpd_commercial_train2: OCR result = 'EZO1L1F LL 2AUC'
+2026-08-18 12:53:45  INFO      [12:53:41.261] SUCCESS via elpd_commercial_train2: plate='EZO1L1F LL 2AUC'  conf=0.811
+2026-08-18 12:53:46  INFO      [12:53:41.261] -- /predict done --
+2026-08-18 12:53:46  INFO      [12:53:46.753] -- /predict request received --
+2026-08-18 12:53:46  INFO      [12:53:46.753] File: 'WhatsApp Image 2026-08-12 at 15.39.07 (1).jpeg'
+2026-08-18 12:53:46  INFO      [12:53:46.753] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmpocpblha5.jpeg  (186164 bytes)
+2026-08-18 12:53:46  INFO      [12:53:46.753] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:53:46  INFO      [12:53:46.753] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:53:47  INFO      [12:53:46.753]   elpd_commercial_train2: box conf=0.608 xyxy=[498,600,1019,704]
+2026-08-18 12:53:54  INFO      [12:53:46.753]   elpd_commercial_train2: OCR result = '19004 .|3 | 6'
+2026-08-18 12:53:54  INFO      [12:53:46.753] SUCCESS via elpd_commercial_train2: plate='19004 .|3 | 6'  conf=0.608
+2026-08-18 12:53:56  INFO      [12:53:46.753] -- /predict done --
+2026-08-18 12:53:56  INFO      [12:53:56.857] -- /predict request received --
+2026-08-18 12:53:56  INFO      [12:53:56.857] File: 'WhatsApp Image 2026-08-12 at 15.39.07.jpeg'
+2026-08-18 12:53:56  INFO      [12:53:56.857] Saved to temp: C:\Users\MOHAME~1\AppData\Local\Temp\tmprstz5isv.jpeg  (265472 bytes)
+2026-08-18 12:53:56  INFO      [12:53:56.857] Trying 6 model(s) [dataset_type=auto]: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-18 12:53:56  INFO      [12:53:56.857] Trying model: elpd_commercial_train2 (C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt)
+2026-08-18 12:53:58  INFO      [12:53:56.857]   elpd_commercial_train2: box conf=0.337 xyxy=[678,652,1114,746]
+2026-08-18 12:54:05  INFO      [12:53:56.857]   elpd_commercial_train2: OCR result = '73362 HALL PASK'
+2026-08-18 12:54:05  INFO      [12:53:56.857] SUCCESS via elpd_commercial_train2: plate='73362 HALL PASK'  conf=0.337
+2026-08-18 12:54:07  INFO      [12:53:56.857] -- /predict done --
+2026-08-18 12:54:16  INFO      [12:54:16.159] -- /predict_arabic request received --
+2026-08-18 12:54:16  INFO      [12:54:16.159] Arabic inference: WhatsApp Image 2026-08-12 at 15.39.06.jpeg (180881 bytes)
+2026-08-18 12:54:18  INFO      [12:54:16.159] Detected: True  Plate: 82014 | 44
+2026-08-18 12:54:18  INFO      [12:54:16.159]   left_seq=82014  letter=  region=44  city=Errachidia
+2026-08-18 12:54:18  INFO      [12:54:16.159]   raw_fast="PlatePrediction(plate='82014A44', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='020{4 14/ 44'
+2026-08-18 12:54:19  INFO      [12:54:16.159] -- /predict_arabic done --
+2026-08-18 12:54:19  INFO      [12:54:19.526] -- /predict_arabic request received --
+2026-08-18 12:54:19  INFO      [12:54:19.526] Arabic inference: WhatsApp Image 2026-08-12 at 15.39.07 (1).jpeg (186164 bytes)
+2026-08-18 12:54:21  INFO      [12:54:19.526] Detected: True  Plate: 19804 | ه
+2026-08-18 12:54:21  INFO      [12:54:19.526]   left_seq=19804  letter=ه  region=  city=Unknown
+2026-08-18 12:54:21  INFO      [12:54:19.526]   raw_fast="PlatePrediction(plate='19804AI', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='/ ه /٠ 19804 ['
+2026-08-18 12:54:24  INFO      [12:54:19.526] -- /predict_arabic done --
+2026-08-18 12:54:24  INFO      [12:54:24.583] -- /predict_arabic request received --
+2026-08-18 12:54:24  INFO      [12:54:24.583] Arabic inference: WhatsApp Image 2026-08-12 at 15.39.07.jpeg (265472 bytes)
+2026-08-18 12:54:29  INFO      [12:54:24.583] Detected: True  Plate: 73362 | ا
+2026-08-18 12:54:29  INFO      [12:54:24.583]   left_seq=73362  letter=ا  region=  city=Unknown
+2026-08-18 12:54:29  INFO      [12:54:24.583]   raw_fast="PlatePrediction(plate='73362I', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='73362 /4- 44  مام'
+2026-08-18 12:54:32  INFO      [12:54:24.583] -- /predict_arabic done --
+2026-08-18 12:54:32  INFO      [12:54:32.159] -- /predict_arabic request received --
+2026-08-18 12:54:32  INFO      [12:54:32.159] Arabic inference: WhatsApp Image 2026-08-12 at 15.39.08 (1).jpeg (269827 bytes)
+2026-08-18 12:54:37  INFO      [12:54:32.159] Detected: True  Plate: 76994 | أ | 4
+2026-08-18 12:54:37  INFO      [12:54:32.159]   left_seq=76994  letter=أ  region=4  city=Témara
+2026-08-18 12:54:37  INFO      [12:54:32.159]   raw_fast="PlatePrediction(plate='76994II4', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='44 | أ / 7&994 7ش===>'
+2026-08-18 12:54:40  INFO      [12:54:32.159] -- /predict_arabic done --
+2026-08-18 12:54:40  INFO      [12:54:40.232] -- /predict_arabic request received --
+2026-08-18 12:54:40  INFO      [12:54:40.232] Arabic inference: WhatsApp Image 2026-08-12 at 15.39.08 (2).jpeg (202525 bytes)
+2026-08-18 12:54:50  INFO      [12:54:40.232] Detected: True  Plate: 0404
+2026-08-18 12:54:50  INFO      [12:54:40.232]   left_seq=0404  letter=  region=  city=Unknown
+2026-08-18 12:54:50  INFO      [12:54:40.232]   raw_fast="PlatePrediction(plate='0404JGY', char_probs=None, region='Spain', region_prob=None)"  raw_ar='٩٤٥ 0404  ٧6٧ 735 33941132 /85|3"[| * غةؤؤ٨ؤ ئؤ6 إ%08[ ٥{'
+2026-08-18 12:54:52  INFO      [12:54:40.232] -- /predict_arabic done --
+2026-08-18 12:54:52  INFO      [12:54:52.617] -- /predict_arabic request received --
+2026-08-18 12:54:52  INFO      [12:54:52.617] Arabic inference: WhatsApp Image 2026-08-12 at 15.39.08 (3).jpeg (165318 bytes)
+2026-08-18 12:54:55  INFO      [12:54:52.617] Detected: True  Plate: 12005 | 44
+2026-08-18 12:54:55  INFO      [12:54:52.617]   left_seq=12005  letter=  region=44  city=Errachidia
+2026-08-18 12:54:55  INFO      [12:54:52.617]   raw_fast="PlatePrediction(plate='12005II44', char_probs=None, region='Belarus', region_prob=None)"  raw_ar='١١  ١ ١١'
+2026-08-18 12:54:57  INFO      [12:54:52.617] -- /predict_arabic done --
+2026-08-18 12:54:57  INFO      [12:54:57.911] -- /predict_arabic request received --
+2026-08-18 12:54:57  INFO      [12:54:57.911] Arabic inference: WhatsApp Image 2026-08-12 at 15.39.08.jpeg (243584 bytes)
+2026-08-18 12:55:00  INFO      [12:54:57.911] Detected: True  Plate: 2116667
+2026-08-18 12:55:00  INFO      [12:54:57.911]   left_seq=2116667  letter=  region=  city=Unknown
+2026-08-18 12:55:00  INFO      [12:54:57.911]   raw_fast="PlatePrediction(plate='2116667', char_probs=None, region='Italy', region_prob=None)"  raw_ar='211679'
+2026-08-18 12:55:02  INFO      [12:54:57.911] -- /predict_arabic done --
+2026-08-18 21:21:52  INFO      ============================================================
+2026-08-18 21:21:52  INFO      PlateVision server starting
+2026-08-18 21:21:52  INFO      Log file: C:\Users\Mohamed Walid\Desktop\Internship\Code\logs\predict.log
+2026-08-18 21:21:52  INFO      ============================================================
+2026-08-18 21:21:54  INFO      English pipeline weights path: C:\Users\Mohamed Walid\Desktop\Internship\Code\runs\detect\runs\detect\elpd_commercial_train2\weights\best.pt
+2026-08-18 21:21:54  INFO        [OK] Weights file exists (18024 KB)
+2026-08-18 21:21:54  INFO      Available models: ['elpd_commercial_train2', 'elpd_commercial_train1', 'english_train33', 'english_train32', 'english_train2', 'english_train']
+2026-08-19 07:08:01  INFO      User logged out: admin
