@@ -1,0 +1,8 @@
+# Additional OCR training dependencies
+
+torch>=1.12
+torchvision
+editdistance
+python-Levenshtein
+Pillow
+albumentations
